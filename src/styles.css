@@ -1,1 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~admin-lte/dist/css/adminlte.min.css';
+@import '~admin-lte/plugins/fontawesome-free/css/all.min.css';
+@import '~admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css';
+@import '~admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css';
+@import '~admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css';
+@import '../node_modules/datatables.net-dt/css/jquery.dataTables.min.css';

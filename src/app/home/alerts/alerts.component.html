@@ -1,0 +1,6 @@
+<div class="col-12" *ngIf= "valida">
+
+    <ngb-alert #selfClosingAlert *ngIf="alert.getMessage()"  type="{{alert.getType()}}" (closed)="alert.setMessage('')">{{ alert.getMessage() }}
+    </ngb-alert>
+
+</div>

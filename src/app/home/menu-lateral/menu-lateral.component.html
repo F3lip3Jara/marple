@@ -1,0 +1,79 @@
+<nav class="mt-2">
+    <ul  class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+      <!-- Add icons to the links using the .nav-icon class
+           with font-awesome or any other icon font library -->
+           <li  class="nav-item has-treeview">
+            <a  class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Seguridad
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a  (click) = "elinks('users')" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Usuario</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a  (click) = "elinks('roles')" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Roles</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a  (click) = "elinks('etapas')" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Etapas</p>
+                </a>
+              </li>
+
+            </ul>
+          </li>
+
+
+      <li  class="nav-item has-treeview">
+        <a  class="nav-link">
+          <i class="nav-icon fas fa-tachometer-alt"></i>
+          <p>
+            Parámetros
+            <i class="right fas fa-angle-left"></i>
+          </p>
+        </a>
+        <ul class="nav nav-treeview">
+          <li class="nav-item">
+            <a  (click) = "elinks('almacen')" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Almacen</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a    class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Centro</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a  (click) = "elinks('pallet')" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Pallet</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a  (click) = "elinks('bultos')"  class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Bultos</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a (click) = "elinks('productos')" class="nav-link">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Productos</p>
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nav>

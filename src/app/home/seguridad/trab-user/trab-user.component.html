@@ -1,0 +1,133 @@
+<div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Usuarios</h3>
+
+      <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+          <i class="fas fa-minus"></i></button>
+      </div>
+    </div>
+    <div class="card-body">
+        <h3 class="card-title">Filtros</h3>
+        <form
+     >
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <td>Usuario</td>
+              <td>
+              <td>Fecha de Creación</td>
+              <td>
+                <div class="input-group">
+                  <input class="form-control" placeholder="yyyy-mm-dd"
+                         name="dp"  ngbDatepicker #d="ngbDatepicker">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
+                  </div>
+                </div>
+              </td>
+
+            </tr>
+
+          </tbody>
+        </table>
+        <button type = 'button' class="btn  btn-outline-primary btn-sm"><i class="fas fa-search"></i>Buscar</button>
+        <button type = 'button' class="btn  btn-outline-primary btn-sm" ><i class="fas fa-sync-alt"></i>Refrescar</button>
+        <button type = 'button' class="btn  btn-outline-primary btn-sm" ><i class="fas fa-file-csv"></i>Excel</button>
+        <a  (click) = "userNuevo(modalIns)" class="btn  btn-outline-primary btn-sm" ><i class="fas fa-address-card" ></i>Nuevo</a>
+      </form>
+
+      <div class="loading" *ngIf= "loading" >
+        <img src = "../../../assets/Circles-menu-3.gif">
+       </div>
+
+   <div>
+    <br>
+    <div  *ngIf="tblUsuarios?.length > 0" >
+      <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Descripción</th>
+            <th>Email</th>
+            <th>Activado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let usuarios of tblUsuarios">
+            <th>{{usuarios.id}}</th>
+            <th>{{usuarios.name}}</th>
+            <th>{{usuarios.email}}</th>
+            <th>{{usuarios.activado}}</th>
+            <th><a class="btn btn-warning btn-xs" placeholder="actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a></th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+  </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+      Marple
+    </div>
+    <!-- /.card-footer-->
+  </div>
+  <ng-template #modalIns let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Modal Ingreso de Usuario</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form
+    [formGroup] = "insUser"
+    (ngSubmit)  = "guardar(insUser.controls['nombre'].value , insUser.controls['url'].value)">
+    <div class="modal-body">
+
+          <div class="form-group">
+              <label for="nombre">Nombre</label>
+              <input type="text" class="form-control" id="nombre" placeholder="Ingresar nombre..." formControlName = 'nombre'  >
+            </div>
+            <div *ngIf = "insUser.controls['nombre'].hasError('required')">
+            </div>
+
+            <div class="form-group">
+              <label for="nombre">Email</label>
+              <input type="text" class="form-control" id="email" placeholder="Ingresar emial..." formControlName = 'email'  >
+              <div *ngIf = "insUser.controls['email'].hasError('email')">
+                <div class="alert alert-danger" role="alert">
+                  Ingrese un mail correcto!
+              </div>
+            </div>
+            </div>
+
+            <div class="form-group">
+              <label for="nombre">Rol</label>
+              <input type="text" class="form-control" id="nombre" placeholder="Ingresar nombre..." formControlName = 'nombre'  >
+            </div>
+
+            <div class="form-group">
+              <label for="nombre">Avatar</label>
+              <div *ngIf="previsualizador" >
+                  <img [src] = "previsualizador" class="previsualizar-img">
+              </div>
+
+              <div class="input-group mb-3">
+                <div class="custom-file">
+                  <input (change) = "capturarFile($event)" type="file" class="custom-file-input" >
+                  <label class="custom-file-label"><i class="fas fa-search"></i> Seleccione archivo</label>
+                </div>
+              </div>
+            </div>
+
+
+
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary"  *ngIf ="insUser.valid">Guardar</button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+
+  </form>
+  </ng-template>

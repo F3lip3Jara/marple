@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Marple | Login</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <a href="../../index2.html"><b>Marple</b>SD</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="card">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg">Regístrese para iniciar su sesión</p>
+      <form
+      [formGroup] = "login"
+      (ngSubmit)  = "guardar(login.controls['email'].value , login.controls['password'].value)">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" id="email" placeholder="Ingresar email..." formControlName = 'email' >
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+          <div *ngIf = "login.controls['email'].hasError('required')">
+
+        </div>
+          <div *ngIf = "login.controls['email'].hasError('email')">
+            <div class="alert alert-danger" role="alert">
+              Ingrese un mail correcto!
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" class="form-control" placeholder="Password" id="password" formControlName ='password'>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf = "login.controls['password'].hasError('required')">
+
+      </div>
+
+        <div class="row">
+          <!-- /.col -->
+          <div class="col-9">
+            <button type="submit" class="btn btn-primary btn-block"  *ngIf ="login.valid">
+              <div *ngIf= "log">
+                Ingresando..
+                <span class="spinner-border spinner-border-sm mr-2"></span>
+              </div>
+              <div *ngIf= "!log">
+                Ingresar
+              </div>
+
+            </button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+      <p class="mb-0">
+        <a class="text-center">Olvide mi password</a>
+      </p>
+    </div>
+   <div class="col-12">
+    <app-alerts></app-alerts>
+   </div>
+    <!-- /.login-card-body -->
+  </div>
+</div>
+
+
+</body>
+</html>
