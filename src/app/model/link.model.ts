@@ -1,6 +1,5 @@
 export class Links {
         constructor(private link : string ){
-
         }
 
         getLink() {

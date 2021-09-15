@@ -19,9 +19,9 @@ export interface MensajesSystem{
 })
 export class InterceptorsErrorService implements HttpInterceptor  {
 
-  //private servidor: string = 'http://marpleapp.agileticl.com/';
+  private servidor: string = 'http://marpleapp.agileticl.com/';
 
-  private servidor: string = 'http://127.0.0.1:8000/';
+ // private servidor: string = 'http://127.0.0.1:8000/';
 
   mensajex : MensajesSystem []= [
      {url:  this.servidor  + 'updproducto',  mensaje : 'Producto actualizado', type : 'success'},

@@ -1,3 +1,5 @@
+import { InsUserComponent } from './seguridad/trab-user/ins-user/ins-user.component';
+import { LinksService } from './../servicios/links.service';
 import { TrabEtapasComponent } from './parametros/trab-etapas/trab-etapas.component';
 import { TrabRolesComponent } from './seguridad/trab-roles/trab-roles.component';
 import { Component, OnInit , EventEmitter ,Output , ComponentFactoryResolver , ViewChild, AfterViewInit} from '@angular/core';
@@ -25,6 +27,8 @@ export class HomeComponent implements OnInit , AfterViewInit {
   parametros   : any []  = [];
   rol          : string  = '';
 
+
+
   time  = new Observable(observer => {
     setInterval(()=> observer.next(new Date().toString()), 1000);
   });
@@ -34,7 +38,8 @@ export class HomeComponent implements OnInit , AfterViewInit {
   constructor( private componentFactoryResolver: ComponentFactoryResolver ,
                private servicioAler : AlertasService,
                private servicioget :  RestService ,
-               private servicioUser:  UsersService){
+               private servicioUser:  UsersService,
+               private servicioLink:  LinksService){
 
           this.token  =this.servicioUser.getToken();
           this.onItemAdded     = new EventEmitter();
@@ -46,11 +51,16 @@ export class HomeComponent implements OnInit , AfterViewInit {
 
   ngOnInit(): void {
     this.servicioAler.disparador.subscribe();
+    this.servicioLink.disparador.subscribe(data => {
+        this.links(data);
+    });
+
     this.getUsuario();
   }
 
   public links(link: any){
-   let miComponent : any;
+
+    let miComponent : any;
 
     switch (link) {
       case 'productos':
@@ -68,8 +78,14 @@ export class HomeComponent implements OnInit , AfterViewInit {
       case 'etapas':
             miComponent = TrabEtapasComponent;
             break;
-
+      case 'insUsuario':
+              miComponent = InsUserComponent;
+              break;
     }
+
+
+  //  console.log(link);
+
       let componentFactory = this.componentFactoryResolver.resolveComponentFactory(miComponent);
       this.receptor?.viewContainerRef.clear();
       this.receptor?.viewContainerRef.createComponent(componentFactory);

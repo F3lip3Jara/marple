@@ -22,8 +22,7 @@ export class LoginComponent implements OnInit {
               private servicioAler : AlertasService) {
     this.login = fb.group({
       email : ['' , Validators.compose([
-       Validators.required,
-       Validators.email
+       Validators.required
       ])],
       password : ['' , Validators.compose([
         Validators.required
@@ -37,9 +36,11 @@ export class LoginComponent implements OnInit {
   }
 
   guardar(email : string , password:string  ) : boolean {
+    this.log = true;
      const userx = new Usuario(1,'' , password , '', email);
+
      this.UsersService.login(userx).subscribe( data => {
-          this.log = true;
+
       data.forEach((element:any) => {
          if(element.error == "1"){
             setTimeout(()=>{

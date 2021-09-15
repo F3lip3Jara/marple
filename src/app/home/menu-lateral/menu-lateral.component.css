@@ -1,0 +1,5 @@
+.nav-sidebar .nav-treeview {
+  display: block !important;
+  list-style: none;
+  padding: 0;
+}

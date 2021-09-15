@@ -19,6 +19,7 @@ import { AlertsComponent } from './home/alerts/alerts.component';
 import { TrabUserComponent } from './home/seguridad/trab-user/trab-user.component';
 import { TrabRolesComponent } from './home/seguridad/trab-roles/trab-roles.component';
 import { TrabEtapasComponent } from './home/parametros/trab-etapas/trab-etapas.component';
+import { InsUserComponent } from './home/seguridad/trab-user/ins-user/ins-user.component';
 
 
 
@@ -26,8 +27,8 @@ const routes: Routes = [
 
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: 'home', component: HomeComponent }
-
+  { path: 'home', component: HomeComponent },
+  { path: '*', redirectTo: 'login', pathMatch: 'full'  }
 ];
 
 @NgModule({
@@ -42,6 +43,7 @@ const routes: Routes = [
     TrabUserComponent,
     TrabRolesComponent,
     TrabEtapasComponent,
+    InsUserComponent,
 
   ],
   imports: [

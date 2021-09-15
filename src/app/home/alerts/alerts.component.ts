@@ -25,8 +25,6 @@ export class AlertsComponent implements OnInit , AfterViewInit {
 
     ngOnInit() {
       this.servicio.disparador.emit(this.alert);
-
-
     }
 
     ngAfterViewInit(){

@@ -1,14 +1,11 @@
+import { LinksService } from './../../../servicios/links.service';
 import { DataTableDirective } from 'angular-datatables';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal , NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
-import { resolve } from '@angular/compiler-cli/src/ngtsc/file_system';
-
-
-
 
 
 @Component({
@@ -19,8 +16,6 @@ import { resolve } from '@angular/compiler-cli/src/ngtsc/file_system';
 export class TrabUserComponent implements OnInit {
   @ViewChild(DataTableDirective, {static: false})
   datatableElement?: DataTableDirective;
-
-
 
 
   loading         : boolean              = true;
@@ -38,7 +33,8 @@ export class TrabUserComponent implements OnInit {
     private servicio : UsersService,
     private rest : RestService,
     private modal : NgbModal,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private servicioLink : LinksService
     ) {
 
     this.insUser = fgInsUser.group({
@@ -50,9 +46,6 @@ export class TrabUserComponent implements OnInit {
          Validators.required
         ])],
     });
-
-
-
     this.token = this.servicio.getToken();
 
    }
@@ -96,8 +89,15 @@ export class TrabUserComponent implements OnInit {
    }
 
    public userNuevo(content : any):boolean{
-     this.modal.open(content);
-     return false;
+    // this.modal.open(content);
+    const d = 'insUsuario';
+    //this.onItemAdded.emit(d);
+    this.servicioLink.disparador.emit(d);
+
+    console.log(d);
+    return false;
+
+
    }
 
    public guardar(nombre: string , emial: string){
@@ -114,16 +114,12 @@ export class TrabUserComponent implements OnInit {
         this.previsualizador  =event.target?.result;
         console.log(event.target?.result);
       }
-
     }
     catch(e: any){
       console.log(e);
     }
-
-
-
-
    }
+
 
 
 
