@@ -24,22 +24,22 @@ export class Usuario {
     getPassword(){
         return this.password;
     }
-    
+
     getNombre () {
         return this.nombre;
     }
-    
+
     getToken() {
         return this.token
-    }   
- 
+    }
+
     getInt () {
         return this.id;
     }
 
     setId (xid:number) {
         this.id = xid;
-      
+
     }
 
     setNombre (xnombre:string)  {
@@ -49,11 +49,11 @@ export class Usuario {
 
     setPassword (xpassword:string)  {
         this.password = xpassword;
-        
+
     }
 
     setToken (xtoken :string)  {
-        this.token = xtoken;       
+        this.token = xtoken;
     }
-    
+
   }

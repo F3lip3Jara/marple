@@ -73,7 +73,7 @@
 
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click) ="actionRoles(uprolDes.value , 'up' )" >Guardar</button>
+    <button type="button" class="btn btn-primary" (click) ="action(uprolDes.value , 'up' )" [disabled]="loading">Guardar</button>
     <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
   </div>
 </ng-template>
@@ -98,7 +98,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click) ="actionRoles(insrolDes.value , 'ins' )" >Guardar</button>
+    <button type="button" class="btn btn-primary" (click) ="action(insrolDes.value , 'ins' )" [disabled]="loading">Guardar</button>
     <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
   </div>
 </ng-template>

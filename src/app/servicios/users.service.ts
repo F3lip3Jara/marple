@@ -19,7 +19,13 @@ export class UsersService {
   setToken(token: string) {
     this.cookies.set("token", token);
   }
+
   getToken() : string{
     return this.cookies.get("token");
+  }
+
+  eliminarToken () {
+    this.cookies.delete("token");
+
   }
 }

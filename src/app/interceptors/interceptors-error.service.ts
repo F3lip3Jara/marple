@@ -19,16 +19,16 @@ export interface MensajesSystem{
 })
 export class InterceptorsErrorService implements HttpInterceptor  {
 
-  private servidor: string = 'http://marpleapp.agileticl.com/';
+  //private servidor: string = 'https://marpleapp.agileticl.com/';
 
- // private servidor: string = 'http://127.0.0.1:8000/';
+ private servidor: string = 'http://127.0.0.1:8000/';
 
-  mensajex : MensajesSystem []= [
+  /*mensajex : MensajesSystem []= [
      {url:  this.servidor  + 'updproducto',  mensaje : 'Producto actualizado', type : 'success'},
      {url:  this.servidor  + 'updroles' ,    mensaje : 'Rol actualizado',      type : 'success'},
      {url:  this.servidor  + 'insroles' ,    mensaje : 'Rol ingresado',        type : 'success'},
      {url:  this.servidor  + 'delRoles' ,    mensaje : 'Rol eliminado',        type : 'success'}
-    ];
+    ];*/
 
   constructor(private servicio : AlertasService) { }
 
@@ -42,23 +42,17 @@ export class InterceptorsErrorService implements HttpInterceptor  {
 
           switch(event.status){
             case  200 :{
-                  if(event.body != 'OK' ){
-                     let array : any =  event.body;
-                      array.forEach((celement: any) => {
-                        this.servicio.setAlert(celement.mensaje,celement.type);
-                      });
-                  }else{
-                    this.mensajex.forEach(element => {
-                      if(event.url == element.url){
-                         this.servicio.setAlert(element.mensaje,element.type);
-
-
-                      }else{
-                        console.log('no mapeado'+ event.url);
-                      }
-                    });
+              try {
+                let array : any =  event.body;
+                array.forEach((celement: any) => {
+                  if(celement.mensaje != ''){
+                    this.servicio.setAlert(celement.mensaje,celement.type)
                   }
-                  break;
+               });
+              }catch(e){
+
+              }
+             break;
             }
             case  203 :{
               this.servicio.setAlert('No posee privilegios','warning');

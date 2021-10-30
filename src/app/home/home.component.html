@@ -7,7 +7,7 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body class="hold-transition sidebar-mini pace-primary">
+<body class="hold-transition sidebar-mini pace-primary  text-sm">
 <!-- Site wrapper -->
 <div class="wrapper">
   <!-- Navbar -->
@@ -15,19 +15,54 @@
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        <a class="nav-link" data-widget="pushmenu" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="" class="nav-link">Home</a>
+        <a href="/#/home" class="nav-link">Home</a>
       </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <!-- Messages Dropdown Menu -->
+      <li class="nav-item dropdown ">
+        <a class="nav-link" data-toggle="dropdown"   (click)="isMenuCollapsed = !isMenuCollapsed" aria-expanded="true">
+          <span class="badge badge-danger navbar-badge">   <i class="fas fa-sign-out-alt"></i> Salir</span>
+        </a>
+        <div *ngIf="isMenuCollapsed" class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
+          <a  class="dropdown-item">
+            <!-- Message Start -->
+            <div  class="collapse navbar-collapse media">
+              <div *ngIf="imgName"  class="image">
+                <img src="{{imgName}}" class="img-size-50 mr-3 img-circle" alt="User Image">
+              </div>
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  {{name}}
+                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                </h3>
+
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+
+          <a (click)="salir()" class="dropdown-item dropdown-footer">Salir</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-widget="fullscreen" href="#/home" role="button">
+          <i class="fas fa-expand-arrows-alt"></i>
+        </a>
+      </li>
+
     </ul>
   </nav>
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <aside class="main-sidebar elevation-4 sidebar-light-danger">
     <!-- Brand Logo -->
-    <a href="#" class="brand-link">
+    <a  class="brand-link">
       <img src="../../assets/pixlr-bg-result.png"
            alt="Logo"
            class="brand-image img-circle elevation-3"
@@ -37,36 +72,32 @@
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-          <img src="../../assets/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-        </div>
-        <div class="info">
-          <a href="#" class="d-block">{{usuario}}</a>
-        </div>
-      </div>
+      <app-info-usuario (onItemAdded) = 'infoUsuario($event)'></app-info-usuario>
       <app-menu-lateral (onItemAdded) = 'links($event)'></app-menu-lateral>
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
   </aside>
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper" id="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
+        <app-alerts></app-alerts>
       </div><!-- /.container-fluid -->
     </section>
     <!-- Main content -->
     <section class="content">
-      <app-alerts></app-alerts>
       <!-- Default box -->
       <ng-template  appReceptor (onItemAdded) = 'links($event)'></ng-template>
     </section>
+
     <!-- /.content -->
   </div>
+
   <!-- /.content-wrapper -->
   <footer class="main-footer">
+
     <div class="float-right d-none d-sm-block">
       Fecha {{ time | async}}
       <b>Version</b> 3.0.5

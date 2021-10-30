@@ -1,4 +1,4 @@
-import { Component, OnInit,  AfterViewInit, ViewChild, EventEmitter , Output, Renderer2, ElementRef} from '@angular/core';
+import { Component, OnInit,  AfterViewInit, ViewChild,  ElementRef} from '@angular/core';
 import { NgbModal , NgbTypeahead  } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective} from 'angular-datatables';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';

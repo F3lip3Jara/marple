@@ -1,6 +1,34 @@
-<div class="col-12" *ngIf= "valida">
 
-    <ngb-alert #selfClosingAlert *ngIf="alert.getMessage()"  type="{{alert.getType()}}" (closed)="alert.setMessage('')">{{ alert.getMessage() }}
-    </ngb-alert>
+      <span [ngSwitch]="alerta.getType()">
+        <span *ngSwitchCase="'danger'">
+          <div class="alert alert-danger alert-dismissible">
 
-</div>
+          <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            {{alerta.getMessage()}}
+        </div>
+      </span>
+
+        <span *ngSwitchCase="'info'">
+          <div class="alert alert-info alert-dismissible">
+
+            <h5><i class="icon fas fa-info"></i> Alert!</h5>
+            {{alerta.getMessage()}}
+          </div>
+        </span>
+
+        <span *ngSwitchCase="'warning'">
+          <div class="alert alert-warning alert-dismissible">
+
+            <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
+            {{alerta.getMessage()}}
+          </div>
+        </span>
+
+        <span *ngSwitchCase="'success'">
+          <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            {{alerta.getMessage()}}
+          </div>
+        </span>
+       </span>

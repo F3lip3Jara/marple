@@ -1,3 +1,6 @@
 body{
   background-image: url('src\assets\Marple1-min.PNG') ;
+  background-position: center center;
+  background-size: 100%;
+  background-repeat: no-repeat;
 }

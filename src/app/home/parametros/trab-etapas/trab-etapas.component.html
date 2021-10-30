@@ -31,7 +31,7 @@
           <th>{{etapas.idEta}}</th>
           <th>{{etapas.etaDes}}</th>
           <th>
-            <a (click) = "modelUp(modalEtaUdp)" class="btn btn-warning btn-xs" placeholder="actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+            <a (click) = "modelUp(modalEtaUdp , etapas)" class="btn btn-warning btn-xs" placeholder="actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
             <a (click) = "delEtapas(etapas)" class="btn btn-warning btn-xs" placeholder="eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
           </th>
         </tr>
@@ -48,13 +48,15 @@
 </div>
 <ng-template #modalEtaUdp let-modal>
   <div class="modal-header">
-    <h5 class="modal-title">Modal actualiza Rol</h5>
+    <h5 class="modal-title">Modal actualiza Etapas</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>  <!-- /.card-header -->
+  <form >
+
   <div class="modal-body">
-    <form >
+
       <div class="card-body">
         <div class="form-group">
           <label for="">Código</label>
@@ -66,21 +68,22 @@
         </div>
       </div>
       <!-- /.card-body -->
-    </form>
 
     <!-- form start -->
 
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click) ="actionEtapa(etaDes.value , 'up' )" >Guardar</button>
+    <button type="button" class="btn btn-primary" (click) ="actionEtapa(etaDes.value , 'up' )" [disabled]="loading">Guardar</button>
     <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
   </div>
+</form>
+
 </ng-template>
 
 
 <ng-template #modalInsEta let-modal>
   <div class="modal-header">
-    <h5 class="modal-title">Modal ingreso Roles</h5>
+    <h5 class="modal-title">Modal ingreso Etapas</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -97,7 +100,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click) ="actionEtapa(etaDes.value , 'ins' )" >Guardar</button>
+    <button type="button" class="btn btn-primary" (click) ="actionEtapa(etaDes.value , 'ins' )" [disabled]="loading" >Guardar</button>
     <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
   </div>
 </ng-template>

@@ -1,0 +1,178 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Región</h3>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+        <i class="fas fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="card-body">
+
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ><i class="fas fa-file-csv"></i>Excel</button>
+      <a (click) = "modalIns(modalPaisIns)" class="btn  btn-outline-primary btn-sm" ><i class="fas fa-address-card" ></i>Nuevo</a>
+
+
+    <div class="loading" *ngIf= "loading" >
+      <img src = "../../../assets/Circles-menu-3.gif">
+     </div>
+
+ <div>
+  <br>
+  <div  class="table-responsive"  *ngIf="tblRegion?.length > 0" class="{{carga}}">
+    <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Cód. País</th>
+          <th>Descripción</th>
+          <th>Cód. Región</th>
+          <th>Descripción</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let region of tblRegion">
+          <th>{{region.idReg}}</th>
+          <th>{{region.paiCod}}</th>
+          <th>{{region.paiDes}}</th>
+          <th>{{region.regCod}}</th>
+          <th>{{region.regDes}}</th>
+          <th>
+            <a (click) = "modelUp(modalPaisUdp , region)" class="btn btn-warning btn-xs" placeholder="actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+            <a (click) = "delRegion(region)" class="btn btn-warning btn-xs" placeholder="eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
+          </th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+</div>
+  <!-- /.card-body -->
+  <div class="card-footer">
+    Marple
+  </div>
+  <!-- /.card-footer-->
+</div>
+<ng-template #modalPaisUdp let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal actualiza Región</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>  <!-- /.card-header -->
+  <form [formGroup] = "upRegion"
+  (ngSubmit)  = "action( upidPai.value ,
+                        upRegion.controls['upregDes'].value ,
+                        upregCod.value,
+                         'up' )" >
+  <div class="modal-body">
+
+      <div class="card-body">
+        <div class="form-group">
+          <label for="">Código</label>
+          <input type="text" class="form-control" id="" placeholder="" value="{{region.idReg}}"   disabled  #upidReg>
+        </div>
+        <div class="form-group">
+          <label for="">Cód. País</label>
+          <input type="text" class="form-control" name = "paiCod" id="paiCod" placeholder="" value="{{region.paiCod}}" disabled >
+          <input type="hidden" class="form-control" name = "idPai" id="idPai" placeholder="" value="{{region.idPai}}" disabled  #upidPai>
+        </div>
+        <div class="form-group">
+          <label for="">País</label>
+          <input type="text" class="form-control" id="" placeholder="" value="{{region.paiDes}}"  disabled>
+        </div>
+        <div class="form-group">
+          <label for="">Cód. Reg</label>
+          <input type="text" class="form-control" name = "regCod" id="regCod" placeholder="" value="{{region.regCod}}" disabled #upregCod>
+        </div>
+
+        <div class="form-group">
+          <label for="">Descripción</label>
+          <input type="text" class="form-control" name = "regDes" id="paiDes" placeholder="" value="{{region.regDes}}" formControlName = 'upregDes'>
+        </div>
+      </div>
+      <!-- /.card-body -->
+
+
+    <!-- form start -->
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="upRegion.valid" [disabled]="val">
+      <div *ngIf= "val">
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!val">
+        Guardar
+      </div>
+    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+</ng-template>
+
+
+<ng-template #modalPaisIns let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal ingreso Región</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form  [formGroup] = "insRegion"
+         (ngSubmit)  = "action(insRegion.controls['idPai'].value ,
+                               insRegion.controls['regDes'].value ,
+                               insRegion.controls['regCod'].value ,
+                               'ins' )"
+                         >
+  <div class="modal-body">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="nombre">Pais</label>
+          <div class=" input-group-sm">
+            <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'idPai'>
+              <option  *ngFor = "let pais of paises"  value="{{pais.idPai}}">{{pais.paiDes}}</option>
+            </select>
+          </div>
+          <div *ngIf = "insRegion.controls['idPai'].hasError('required')">
+            <span class="text-danger">Campo obligatorio!</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="regCod">Cód. Región</label>
+          <div class="input-group input-group-sm">
+          <input type="text" class="form-control" id="regCod" placeholder="Ingresar cód. ISO..." formControlName = 'regCod'  >
+        </div>
+      </div>
+      <div *ngIf = "validCod">  <span class="text-danger">Código invalido!</span></div>
+
+        <div *ngIf = "insRegion.controls['regCod'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+        <div class="form-group">
+          <label for="regDes">Descripción</label>
+          <div class="input-group input-group-sm">
+          <input type="text" class="form-control" id="regDes" placeholder="Ingresar descripción..." formControlName = 'regDes'  >
+        </div>
+      </div>
+        <div *ngIf = "insRegion.controls['regDes'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+      <!-- /.card-body -->
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="insRegion.valid && validCod == false" [disabled]="val">
+      <div *ngIf= "val">
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!val">
+        Guardar
+      </div>
+
+    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+</ng-template>

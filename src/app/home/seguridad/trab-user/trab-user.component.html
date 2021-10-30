@@ -1,133 +1,193 @@
 <div class="card">
-    <div class="card-header">
-      <h3 class="card-title">Usuarios</h3>
-
-      <div class="card-tools">
-        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-          <i class="fas fa-minus"></i></button>
-      </div>
+  <div class="card-header">
+    <h3 class="card-title">Usuarios</h3>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+        <i class="fas fa-minus"></i></button>
     </div>
-    <div class="card-body">
-        <h3 class="card-title">Filtros</h3>
-        <form
-     >
-        <table class="table table-bordered">
-          <tbody>
-            <tr>
-              <td>Usuario</td>
-              <td>
-              <td>Fecha de Creación</td>
-              <td>
-                <div class="input-group">
-                  <input class="form-control" placeholder="yyyy-mm-dd"
-                         name="dp"  ngbDatepicker #d="ngbDatepicker">
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
-                  </div>
-                </div>
-              </td>
+  </div>
+  <div class="card-body">
 
-            </tr>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ><i class="fas fa-file-csv"></i>Excel</button>
+      <a (click) = "userNuevo()" class="btn  btn-outline-primary btn-sm" ><i class="fas fa-address-card" ></i>Nuevo</a>
 
-          </tbody>
-        </table>
-        <button type = 'button' class="btn  btn-outline-primary btn-sm"><i class="fas fa-search"></i>Buscar</button>
-        <button type = 'button' class="btn  btn-outline-primary btn-sm" ><i class="fas fa-sync-alt"></i>Refrescar</button>
-        <button type = 'button' class="btn  btn-outline-primary btn-sm" ><i class="fas fa-file-csv"></i>Excel</button>
-        <a  (click) = "userNuevo(modalIns)" class="btn  btn-outline-primary btn-sm" ><i class="fas fa-address-card" ></i>Nuevo</a>
-      </form>
 
-      <div class="loading" *ngIf= "loading" >
-        <img src = "../../../assets/Circles-menu-3.gif">
-       </div>
+    <div class="loading" *ngIf= "loading" >
+      <img src = "../../../assets/Circles-menu-3.gif">
+     </div>
 
-   <div>
-    <br>
-    <div  *ngIf="tblUsuarios?.length > 0" >
-      <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+ <div>
+  <br>
+  <div class="table-responsive">
+  <div *ngIf="tblUsuarios?.length > 0" class="{{carga}}">
+
+      <table #datatableElement datatable  id="tblUsuarios" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
         <thead>
           <tr>
             <th>ID</th>
-            <th>Descripción</th>
-            <th>Email</th>
+            <th>Usuario</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Rol</th>
+            <th>Gerencia</th>
             <th>Activado</th>
-            <th>Acciones</th>
+            <th>Reinicio</th>
+            <th>Fec.Creación</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor = "let usuarios of tblUsuarios">
-            <th>{{usuarios.id}}</th>
-            <th>{{usuarios.name}}</th>
-            <th>{{usuarios.email}}</th>
-            <th>{{usuarios.activado}}</th>
-            <th><a class="btn btn-warning btn-xs" placeholder="actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a></th>
+          <tr *ngFor = "let usuario of tblUsuarios">
+            <th>{{usuario.id}}</th>
+            <th>{{usuario.name}}</th>
+            <th>{{usuario.emploNom}}</th>
+            <th>{{usuario.emploApe}}</th>
+            <th>{{usuario.rolDes}}</th>
+            <th>{{usuario.gerDes}}</th>
+            <th>{{usuario.activado}}</th>
+            <th>{{usuario.reinicio}}</th>
+            <th>{{usuario.created_at.substr(0 , 10)}}</th>
+            <th>
+              <a (click)="modelUp(modalRolesUdp, usuario)" class="btn btn-warning btn-xs" placeholder="actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+
+            </th>
           </tr>
         </tbody>
       </table>
     </div>
-    </div>
   </div>
-    <!-- /.card-body -->
-    <div class="card-footer">
-      Marple
-    </div>
-    <!-- /.card-footer-->
   </div>
-  <ng-template #modalIns let-modal>
-    <div class="modal-header">
-      <h5 class="modal-title">Modal Ingreso de Usuario</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <form
-    [formGroup] = "insUser"
-    (ngSubmit)  = "guardar(insUser.controls['nombre'].value , insUser.controls['url'].value)">
-    <div class="modal-body">
+</div>
+  <!-- /.card-body -->
+  <div class="card-footer">
+    Marple
+  </div>
+  <!-- /.card-footer-->
+</div>
 
-          <div class="form-group">
-              <label for="nombre">Nombre</label>
-              <input type="text" class="form-control" id="nombre" placeholder="Ingresar nombre..." formControlName = 'nombre'  >
-            </div>
-            <div *ngIf = "insUser.controls['nombre'].hasError('required')">
+<ng-template #modalRolesUdp let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal actualiza Usuario</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>  <!-- /.card-header -->
+<form
+[formGroup] = "udpUser"
+  (ngSubmit)  = "upUser(
+                        udpUser.controls['empNombre'].value,
+                        udpUser.controls['empApe'].value ,
+                        udpUser.controls['rol'].value,
+                        udpUser.controls['gerencias'].value,
+                        emploFecNac.value,
+                        activado.value,
+                        reinicio.value)">
+  <div class="modal-body">
+
+            <div class="form-group">
+                <label for="empName">Nombre Usuario</label>
+                <div class="input-group input-group-sm">
+                <span >{{usuario.name}}</span>
+              </div>
             </div>
 
             <div class="form-group">
-              <label for="nombre">Email</label>
-              <input type="text" class="form-control" id="email" placeholder="Ingresar emial..." formControlName = 'email'  >
-              <div *ngIf = "insUser.controls['email'].hasError('email')">
-                <div class="alert alert-danger" role="alert">
-                  Ingrese un mail correcto!
-              </div>
+              <label for="empNombre">Nombre</label>
+              <div class="input-group input-group-sm">
+              <input  type="text" class="form-control" id="empNombre" placeholder="Ingresar nombre..."  formControlName='empNombre'  >
+            </div>
+          </div>
+            <div *ngIf = "udpUser.controls['empNombre'].hasError('required')">
+              <span class="text-danger">Campo obligatorio!</span>
+            </div>
+
+            <div class="form-group">
+              <label for="empApe">Apellido</label>
+              <div class="input-group input-group-sm">
+              <input type="text" class="form-control" id="empApe" placeholder="Ingresar apellido..."  formControlName = 'empApe'  >
             </div>
             </div>
+            <div *ngIf = "udpUser.controls['empApe'].hasError('required')">
+              <span class="text-danger">Campo obligatorio!</span>
+            </div>
+
 
             <div class="form-group">
               <label for="nombre">Rol</label>
-              <input type="text" class="form-control" id="nombre" placeholder="Ingresar nombre..." formControlName = 'nombre'  >
-            </div>
-
-            <div class="form-group">
-              <label for="nombre">Avatar</label>
-              <div *ngIf="previsualizador" >
-                  <img [src] = "previsualizador" class="previsualizar-img">
+              <div class=" input-group-sm">
+                <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'rol'>
+                  <option    value="0">Seleccione</option>
+                  <option  *ngFor = "let roles of rol"   value="{{roles.idRol}}">{{roles.rolDes}}</option>
+                </select>
               </div>
+              <div *ngIf = "udpUser.controls['rol'].hasError('required')">
+                <span class="text-danger">Campo obligatorio!</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="nombre">Gerencia</label>
+              <div class="input-group-sm">
+                <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'gerencias'>
+                  <option  value="0">Seleccione</option>
+                  <option  *ngFor = "let item of gerencia" selected="selected" value="{{item.gerId}}">{{item.gerDes}}</option>
+                </select>
+              </div>
+                <div *ngIf = "udpUser.controls['gerencias'].hasError('required')">
+                  <span class="text-danger">Campo obligatorio!</span>
+                </div>
+            </div>
+            <div class="form-group ">
+              <label for="nombre">Fecha Nacimiento</label>
+            <div class="input-group input-group-sm">
+              <input class="form-control" placeholder="yyyy-mm-dd"
+                 value="{{usuario.emploFecNac}}"    name="dp"  ngbDatepicker #d="ngbDatepicker" #emploFecNac >
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
+              </div>
+            </div>
+          </div>
 
-              <div class="input-group mb-3">
-                <div class="custom-file">
-                  <input (change) = "capturarFile($event)" type="file" class="custom-file-input" >
-                  <label class="custom-file-label"><i class="fas fa-search"></i> Seleccione archivo</label>
+
+              <div class="form-group">
+                <label for="nombre">Activado</label>
+                <div class=" input-group-sm">
+                  <select #activado class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                    <option *ngIf="usuario.activado == 'ACTIVADO', else noact"  selected value ='A'>{{usuario?.activado}}</option>
+                    <ng-template #noact> <option value ='D' selected>{{usuario?.activado}}</option></ng-template>
+
+                    <option *ngIf="usuario.activado == 'ACTIVADO', else noactx" value ='D'>DESACTIVADO</option>
+                    <ng-template #noactx> <option value ='A' >ACTIVADO</option></ng-template>
+                  </select>
                 </div>
               </div>
-            </div>
+              <div class="form-group">
+                <label for="nombre">Reinicio</label>
+                <div class=" input-group-sm">
+                  <select #reinicio class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                    <option *ngIf="usuario.reinicio == 'NO', else norei"  selected value ='N'>{{usuario?.reinicio}}</option>
+                    <ng-template #norei> <option value ='S' selected>{{usuario?.reinicio}}</option></ng-template>
+                    <option *ngIf="usuario.reinicio == 'NO', else noreix"  value ='S'>SI</option>
+                    <ng-template #noreix> <option value ='N' >NO</option></ng-template>
 
+                  </select>
+                </div>
+              </div>
 
+  </div>
+   <!-- /.card-body -->
+    <!-- form start -->
+  <div class="modal-footer">
+    <button *ngIf="udpUser.valid" type="submit" class="btn btn-primary"  [disabled]= "valGuar" >
+      <div *ngIf= "valGuar">
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!valGuar">
+        Guardar
+      </div>
+    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+</ng-template>
 
-    </div>
-    <div class="modal-footer">
-      <button type="submit" class="btn btn-primary"  *ngIf ="insUser.valid">Guardar</button>
-      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
-    </div>
-
-  </form>
-  </ng-template>

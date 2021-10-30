@@ -3,7 +3,7 @@
 
     <li   class="nav-item has-treeview">
     <a  class="nav-link"  (click)="isMenuCollapsed = !isMenuCollapsed">
-      <i class="nav-icon fas fa-tachometer-alt"></i>
+      <i class="nav-icon fas fa-shield-alt"></i>
       <p>
         Seguridad
         <i class="right fas fa-angle-left"></i>
@@ -13,13 +13,13 @@
     <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
       <ul class="nav nav-treeview" >
         <li  class="nav-item">
-          <a  (click) = "elinks('users')" class="nav-link" >
+          <a  (click)="elinks('users')" class="nav-link" >
             <i class="far fa-circle nav-icon"></i>
             <p>Usuario</p>
           </a>
         </li>
         <li class="nav-item">
-          <a  (click) = "elinks('roles')" class="nav-link">
+          <a  (click)="elinks('roles')" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>Roles</p>
           </a>
@@ -47,35 +47,54 @@
     <div [ngbCollapse]="isMenuCollapsed2" class="collapse navbar-collapse">
       <ul class="nav nav-treeview">
         <li class="nav-item">
-          <a  (click) = "elinks('almacen')" class="nav-link">
+          <a  (click)="elinks('empresa')" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
-            <p>Almacen</p>
+            <p>Empresa</p>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link">
+          <a  (click)="elinks('gerencia')" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
-            <p>Centro</p>
+            <p>Gerencia</p>
           </a>
         </li>
         <li class="nav-item">
-          <a  (click) = "elinks('pallet')" class="nav-link">
+          <a  (click)="elinks('pais')" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
-            <p>Pallet</p>
+            <p>País</p>
           </a>
         </li>
         <li class="nav-item">
-          <a  (click) = "elinks('bultos')"  class="nav-link">
+          <a  (click)="elinks('regiones')" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
-            <p>Bultos</p>
+            <p>Región</p>
           </a>
         </li>
         <li class="nav-item">
-          <a (click) = "elinks('productos')" class="nav-link">
+          <a  (click)="elinks('comuna')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Comuna</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a  (click)="elinks('ciudad')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Ciudad</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a  (click)="elinks('proveedor')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Proveedor</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a  (click)="elinks('producto')" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>Productos</p>
           </a>
         </li>
+
       </ul>
     </div>
   </li>

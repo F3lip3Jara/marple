@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
               private UsersService : UsersService,
               private router : Router ,
               private servicioAler : AlertasService) {
+
     this.login = fb.group({
       email : ['' , Validators.compose([
        Validators.required
@@ -28,7 +29,7 @@ export class LoginComponent implements OnInit {
         Validators.required
        ])],
     });
-
+    this.UsersService.setToken("");
   }
 
   ngOnInit(): void {
@@ -37,42 +38,52 @@ export class LoginComponent implements OnInit {
 
   guardar(email : string , password:string  ) : boolean {
     this.log = true;
-     const userx = new Usuario(1,'' , password , '', email);
+    let datx : any [] = [];
+
+    const userx = new Usuario(1,'' , password , '', email);
 
      this.UsersService.login(userx).subscribe( data => {
 
       data.forEach((element:any) => {
          if(element.error == "1"){
-            setTimeout(()=>{
-              this.servicioAler.setAlert("","");
-            }, 5000);
-            this.log = false;
+              this.servicioAler.disparador.emit(this.servicioAler.getAlert());
+              setTimeout(()=>{
+                this.servicioAler.setAlert('','');
+              },2000);
+              this.log = false;
          }else{
-              let datx : any []  = data;
-              let token          = '';
+
+              datx = data;
+              let reinicio : string  = '';
+              let token    : string  = '';
+
               if(datx){
+
                 Object.values(datx).forEach(element=>{
-                    token = element.token;
+                    token    = element.token;
+                    reinicio = element.reinicio;
                 });
 
                 this.UsersService.setToken(token);
-
               }
 
-            setTimeout(()=>{
-                this.router.navigate(['/home']);
-                this.log = false;
-              },2000);
-         }
-
+              if (reinicio == 'S'){
+                this.router.navigate(['/changePassword']);
+              }else{
+                setTimeout(()=>{
+                  this.router.navigate(['/home']);
+                  this.log = false;
+                },2000);
+              }
+        }
       });
     });
+
      return false;
- }
-
-
-
-
-
-
+  }
 }
+
+
+
+
+

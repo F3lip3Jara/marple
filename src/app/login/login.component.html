@@ -7,15 +7,13 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body class="hold-transition login-page">
-<div class="login-box">
-  <div class="login-logo">
-    <a href="../../index2.html"><b>Marple</b>ERP</a>
-  </div>
-  <!-- /.login-logo -->
-  <div class="card">
-    <div class="card-body login-card-body">
-      <p class="login-box-msg">Regístrese para iniciar su sesión</p>
+<body class="register-page">
+<div class="register-box">
+  <div class="card card-outline card-primary">
+    <div class="card-header text-center">
+      <a  class="h1"><b>Marple</b>ERP</a>
+    </div>
+    <div class="card-body">
       <form
       [formGroup] = "login"
       (ngSubmit)  = "guardar(login.controls['email'].value , login.controls['password'].value)">
@@ -44,9 +42,7 @@
           </div>
         </div>
         <div *ngIf = "login.controls['password'].hasError('required')">
-
       </div>
-
         <div class="row">
           <!-- /.col -->
           <div class="col-9">
@@ -68,12 +64,13 @@
 
       </p>
     </div>
-   <div class="col-12">
-    <app-alerts></app-alerts>
-   </div>
-    <!-- /.login-card-body -->
-  </div>
+    <div class="col-12">
+      <app-alerts></app-alerts>
+     </div>
+    <!-- /.form-box -->
+  </div><!-- /.card -->
 </div>
+
 
 
 </body>

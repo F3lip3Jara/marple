@@ -37,9 +37,10 @@
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js",
-              "node_modules/bootstrap/js/bootstrap.bundle.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "node_modules/datatables.net/js/jquery.dataTables.min.js",
               "node_modules/admin-lte/dist/js/adminlte.min.js"
+
             ]
           },
           "configurations": {

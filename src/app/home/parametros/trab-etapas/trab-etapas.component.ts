@@ -2,7 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
+import { Alert } from 'src/app/model/alert.model';
 import { Etapas } from 'src/app/model/etapas.model';
+import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -18,7 +20,6 @@ export class TrabEtapasComponent implements OnInit {
 
   loading      : boolean              = true;
   dtOptions    : DataTables.Settings  = {} ;
-  //filtroRol    : FormGroup;
   tblEtapas    : any                  = {};
   token        : string               = '';
   parametros   : any []               = [];
@@ -29,7 +30,8 @@ export class TrabEtapasComponent implements OnInit {
     private servicio : UsersService,
     private rest : RestService,
     private modal : NgbModal,
-    private excel: ExcelService) {
+    private excel: ExcelService,
+    private servicioaler : AlertasService) {
 
       this.token = servicio.getToken();
       this.etapas= new Etapas(0, '');
@@ -67,15 +69,16 @@ export class TrabEtapasComponent implements OnInit {
     setTimeout(()=> {
         this.carga = 'visible';
         this.loading = false;
-     },3000 );
+     },1500 );
    }
 
   public modalIns(content : any ){
       this.modal.open(content);
   }
 
-  public modelUp(content :any){
-
+  public modelUp(content :any , etapasx: Etapas){
+    this.etapas.setIdEta(etapasx.idEta);
+    this.etapas.setEtaDes(etapasx.etaDes);
     this.modal.open(content);
   }
 
@@ -85,51 +88,82 @@ export class TrabEtapasComponent implements OnInit {
   }
 
   public delEtapas(etapas : any){
-    let url = 'delEtapas';
-    this.rest.post(url ,this.token, etapas).subscribe(resp => {
-      if(resp == 'OK'){
-        this.modal.dismissAll();
-        this.loading      = true;
-        this.tblEtapas     = {};
-        this.rest.get('tblEtapas' , this.token, this.parametros).subscribe(respuesta => {
-          this.tblEtapas = respuesta;
-          this.carga    = 'visible';
-          this.loading  = false;
-        });
+    let url      = 'delEtapas';
+    this.carga   = 'invisible';
+    this.loading = true;
 
-      this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-        dtInstance.destroy().draw();
-      });
-    }
-    });
+     this.rest.post(url ,this.token, etapas).subscribe(resp => {
+         resp.forEach((elementx : any)  => {
+           if(elementx.error == '0'){
+             this.modal.dismissAll();
+             this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+             setTimeout(()=>{
+               this.servicioaler.setAlert('','');
+               this.tblEtapas = {};
+               this.rest.get('trabEtapas' , this.token, this.parametros).subscribe(data => {
+                   this.tblEtapas = data;
+               });
+
+               this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
+                 dtInstance.destroy().draw();
+               });
+               this.carga    = 'visible';
+               this.loading  = false;
+             },1500);
+
+           }else{
+             this.carga    = 'visible';
+             this.loading  = false;
+             this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+             setTimeout(()=>{
+               this.servicioaler.setAlert('','');
+             },1500);
+           }
+         });
+     });
+     return false;
   }
 
   public actionEtapa(etapas : any , tipo :string ){
-    let url = '';
-    let rolesx = new Etapas(this.etapas.idEta , etapas);
+    let url      = '';
+    let etapasx  = new Etapas(this.etapas.idEta , etapas);
+    this.carga   = 'invisible';
+    this.loading = true;
 
     if(tipo =='up'){
        url = 'updEtapas';
     }else{
       url = 'insEtapas';
     }
-    this.rest.post(url, this.token, rolesx).subscribe(resp => {
-        if(resp == 'OK'){
+
+    this.rest.post(url, this.token, etapasx).subscribe((resp:any) => {
+      resp.forEach((elementx : any)  => {
+        if(elementx.error == '0'){
           this.modal.dismissAll();
-          this.loading      = true;
-          this.tblEtapas     = {};
-          this.rest.get('trabEtapas' , this.token, this.parametros).subscribe(respuesta => {
-            this.tblEtapas = respuesta;
-              this.carga = 'visible';
-              this.loading = false;
 
-          });
+          setTimeout(()=>{
+            this.servicioaler.setAlert('','');
+            this.tblEtapas = {};
 
-        this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-          dtInstance.destroy().draw();
-        });
+            this.rest.get('trabEtapas' , this.token, this.parametros).subscribe(data => {
+                this.tblEtapas = data;
+            });
+
+            this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
+              dtInstance.destroy().draw();
+            });
+            this.carga    = 'visible';
+            this.loading  = false;
+          },1500);
+      }else {
+        this.carga    = 'visible';
+        this.loading  = false;
       }
+        });
     });
+    let alerta : Alert = this.servicioaler.getAlert();
+    this.servicioaler.disparador.emit(alerta);
+    return false;
   }
 
 }

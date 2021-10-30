@@ -1,0 +1,281 @@
+<div class="col-md-12">
+  <div class="card card-outline card-primary">
+    <div class="card-header">
+      <h3 class="card-title">Actualizar Proveedor / Cliente</h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+          <i class="fas fa-minus"></i>
+        </button>
+      </div>
+      <!-- /.card-tools -->
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+      <div class="modal-body">
+          <div class="row">
+
+<div class="col-md-12">
+  <div class="card">
+      <div class="card-body">
+      <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav nav-pills ">
+        <li [ngbNavItem]="1" class="nav-item" ><a ngbNavLink>Información básica </a>
+        <ng-template ngbNavContent>
+         <div class="post">
+          <form [formGroup] = "insProv"
+          (ngSubmit)  = "guardar(
+                      insProv.controls['prvNom'].value,
+                        insProv.controls['prvNom2'].value,
+                        insProv.controls['prvGiro'].value,
+                        insProv.controls['prvDir'].value,
+                        insProv.controls['prvDirNum'].value,
+                        insProv.controls['idPai'].value,
+                        insProv.controls['idReg'].value,
+                        insProv.controls['idCom'].value,
+                        insProv.controls['idCiu'].value,
+                        insProv.controls['prvMail'].value,
+                        insProv.controls['prvTel'].value,
+                        insProv.controls['prvCli'].value,
+                        insProv.controls['prvPrv'].value,
+                        insProv.controls['prvAct'].value)">
+  <div class="col-md-12">
+    <div class="col-md-12">
+        <div class="card-header">
+          <h3 class="card-title">Actualizar información básica de Proveedor / Cliente</h3>
+          <!-- /.card-tools -->
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+          <div class="modal-body">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="prvRut">Rut</label>
+                    <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" id="prvRut" placeholder=""  value="{{proveedor.rut}}" #prvRut disabled>
+                  </div>
+                </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="form-group">
+                    <div class="custom-control custom-switch">
+                      <input type="checkbox" class="custom-control-input" id="prvAct" formControlName='prvAct'>
+                      <label class="custom-control-label" for="prvAct">Activado</label>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="custom-control custom-switch">
+                      <input type="checkbox" class="custom-control-input" id="prvCli" formControlName='prvCli'>
+                      <label class="custom-control-label" for="prvCli">Es cliente</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="custom-control custom-switch">
+                      <input type="checkbox" class="custom-control-input" id="prvPrv" formControlName='prvPrv'>
+                      <label class="custom-control-label" for="prvPrv">Es Proveedor</label>
+                    </div>
+                  </div>
+                </div>
+                <div class=" col-md-12">
+                <div class="form-group">
+                  <label for="prvNom">Nombre</label>
+                  <div class="input-group input-group-sm">
+                  <input type="text" class="form-control" id="prvNom" placeholder="Ingresar nombre..." formControlName = 'prvNom'>
+                </div>
+                </div>
+                <div *ngIf = "insProv.controls['prvNom'].hasError('required')">
+                  <span class="text-danger">Campo obligatorio!</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="prvNom2">Nombre Fantasía</label>
+                  <div class="input-group input-group-sm">
+                  <input type="text" class="form-control" id="empApe" placeholder="Ingresar nombre..." formControlName = 'prvNom2'  >
+                </div>
+                </div>
+                <div *ngIf = "insProv.controls['prvNom2'].hasError('required')">
+                  <span class="text-danger">Campo obligatorio!</span>
+                </div>
+                <div class="form-group">
+                  <label for="prvGiro">Giro Comercial</label>
+                  <div class="input-group input-group-sm">
+                  <input type="text" class="form-control" id="prvGiro" placeholder="Ingresar giro..." formControlName = 'prvGiro'  >
+                </div>
+                </div>
+                <div *ngIf = "insProv.controls['prvGiro'].hasError('required')">
+                  <span class="text-danger">Campo obligatorio!</span>
+                </div>
+                </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="prvDir">Dirección</label>
+                      <div class="input-group input-group-sm">
+                      <input type="text" class="form-control" id="prvDir" placeholder="Ingresar dirección..." formControlName = 'prvDir'  >
+                      </div>
+                    </div>
+                    <div *ngIf = "insProv.controls['prvDir'].hasError('required')">
+                      <span class="text-danger">Campo obligatorio!</span>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="prvDir">Número</label>
+                      <div class="input-group input-group-sm">
+                      <input type="text" class="form-control" id="prvDirNum" placeholder="Ingresar número..." formControlName = 'prvDirNum'  >
+                    </div>
+                    </div>
+                    <div *ngIf = "insProv.controls['prvDirNum'].hasError('required')">
+                      <span class="text-danger">Campo obligatorio!</span>
+                    </div>
+                  </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="nombre">País</label>
+                  <div class=" input-group-sm" *ngIf="paises.length > 0">
+                    <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'idPai'>
+                      <option   value="">Seleccione</option>
+                      <option  *ngFor = "let pais of paises"  value="{{pais.idPai}}">{{pais.paiDes}}</option>
+                    </select>
+                  </div>
+                  <div *ngIf = "insProv.controls['idPai'].hasError('required')">
+                    <span class="text-danger">Campo obligatorio!</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="nombre">Región</label>
+                  <div  *ngIf=" !regiones.length ">
+                    <div class="spinner-border spinner-border-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
+                  <div class=" input-group-sm" *ngIf="regiones.length  > 0 && paises.length > 0 && insProv.controls['idPai'].value != '' ">
+                    <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'idReg'>
+                      <option   value="">Seleccione</option>
+                      <option  *ngFor = "let region of regiones"  value="{{region.idReg}}">{{region.regDes}}</option>
+                    </select>
+                  </div>
+                  <div *ngIf = "insProv.controls['idReg'].hasError('required')">
+                    <span class="text-danger">Campo obligatorio!</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="nombre">Comuna</label>
+                  <div  *ngIf=" !comunas.length ">
+                    <div class="spinner-border spinner-border-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
+                  <div class=" input-group-sm" *ngIf="regiones.length > 0 && comunas.length > 0  && insProv.controls['idReg'].value != '' ">
+                    <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'idCom'>
+                      <option   value="">Seleccione</option>
+                      <option  *ngFor = "let comuna of comunas"  value="{{comuna.idCom}}">{{comuna.comDes}}</option>
+                    </select>
+                  </div>
+                  <div *ngIf = "insProv.controls['idCom'].hasError('required')">
+                    <span class="text-danger">Campo obligatorio!</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="nombre">Ciudad</label>
+                  <div  *ngIf=" !ciudades.length">
+                    <div class="spinner-border spinner-border-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
+                  <div class=" input-group-sm" *ngIf="comunas.length > 0 && ciudades.length > 0 && insProv.controls['idCom'].value != '' ">
+                    <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'idCiu'>
+                      <option   value="">Seleccione</option>
+                      <option  *ngFor = "let ciudad of ciudades"  value="{{ciudad.idCiu}}">{{ciudad.ciuDes}}</option>
+                    </select>
+                  </div>
+                  <div *ngIf = "insProv.controls['idCiu'].hasError('required')">
+                    <span class="text-danger">Campo obligatorio!</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="prvMail">Correo</label>
+                <div class="input-group input-group-sm">
+                <input type="text" class="form-control" id="prvMail" placeholder="Ingresar correo..." formControlName = 'prvMail'  >
+              </div>
+              </div>
+              <div *ngIf = "insProv.controls['prvMail'].hasError('email')">
+                <span class="text-danger">Ingrese correo valido!</span>
+              </div>
+              <div class="form-group">
+                <label for="prvTel">Teléfono</label>
+                <div class="input-group input-group-sm">
+                <input type="text" class="form-control" id="prvTel" placeholder="Ingresar correo..." formControlName = 'prvTel'  >
+              </div>
+              </div>
+              <div *ngIf = "insProv.controls['prvTel'].hasError('required')">
+                <span class="text-danger">Campo obligatorio!</span>
+              </div>
+
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary btn-block"  *ngIf ="insProv.valid" [disabled]="val" >
+                  <div *ngIf= "val">
+                    Guardando..
+                    <span class="spinner-border spinner-border-sm mr-2"></span>
+                  </div>
+                  <div *ngIf= "!val">
+                    Guardar
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</form>
+</div>
+
+   </ng-template>
+      </li>
+        <li class="nav-item" [ngbNavItem]="2">
+          <a ngbNavLink>Despacho</a>
+          <ng-template ngbNavContent>
+            <div class="post">
+
+
+            </div>
+          </ng-template>
+        </li>
+
+      </ul>
+      <hr>
+      <div [ngbNavOutlet]="nav" class="post"></div>
+      <app-alerts></app-alerts>
+      </div>
+    </div>
+</div>
+</div>
+</div>
+
+<a href= ""  (click)="volver()">Volver</a>
+
+</div>
+</div>
+
+
+
+
+
+
+

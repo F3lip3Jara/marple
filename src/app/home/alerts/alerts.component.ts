@@ -1,7 +1,7 @@
-import { Component, OnInit, Output, Input, ViewChild , ElementRef , AfterViewInit} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, ViewChild ,  AfterViewInit} from '@angular/core';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { Alert } from 'src/app/model/alert.model';
-
 import { AlertasService } from 'src/app/servicios/alertas.service';
 
 
@@ -12,19 +12,24 @@ import { AlertasService } from 'src/app/servicios/alertas.service';
 })
 export class AlertsComponent implements OnInit , AfterViewInit {
 
-    @ViewChild('selfClosingAlert', {static: false}) selfClosingAlert?: NgbAlert;
 
-    alert    : Alert;
-    type     : string = '';
-    valida   : boolean = true;
+    type     : string  = '';
+    valida   : boolean = false;
+    alerta   : Alert   = new Alert('', '');
 
     constructor( private  servicio : AlertasService) {
-      this.alert = this.servicio.alert();
-      this.valida = true;
+
+
      }
 
     ngOnInit() {
-      this.servicio.disparador.emit(this.alert);
+      this.servicio.disparador.subscribe(data=>{
+
+        this.valida= true;
+        this.alerta = data;
+
+
+      });
     }
 
     ngAfterViewInit(){

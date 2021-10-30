@@ -1,7 +1,7 @@
 export class Alert {
 
-    private type: string;
-    private message: string;
+    public type: string;
+    public message: string;
 
 
    constructor(  typex : string ,  messagex : string ){

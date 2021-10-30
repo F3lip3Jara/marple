@@ -1,3 +1,5 @@
+import { Alert } from 'src/app/model/alert.model';
+import { AlertasService } from './../../../servicios/alertas.service';
 import { UsersService } from 'src/app/servicios/users.service';
 import { Component,  OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -20,7 +22,6 @@ export class TrabRolesComponent implements OnInit {
 
   loading      : boolean              = true;
   dtOptions    : DataTables.Settings  = {} ;
-  filtroRol    : FormGroup;
   tblRoles     : any                  = {};
   token        : string               = '';
   parametros   : any []               = [];
@@ -32,13 +33,9 @@ export class TrabRolesComponent implements OnInit {
     private servicio : UsersService,
     private rest : RestService,
     private modal : NgbModal,
-    private excel: ExcelService
+    private excel: ExcelService,
+    private servicioaler : AlertasService
     ) {
-
-      this.filtroRol = fb.group({
-        prdDes : [''],
-        created_at : [''],
-      });
 
 
       this.token = this.servicio.getToken();
@@ -78,7 +75,7 @@ export class TrabRolesComponent implements OnInit {
     setTimeout(()=> {
         this.carga = 'visible';
         this.loading = false;
-     },3000 );
+     },1500 );
    }
 
    public modalIns(content : any ){
@@ -88,64 +85,96 @@ export class TrabRolesComponent implements OnInit {
    public modelUp(content :any , xroles: Roles){
      this.roles.setId(xroles.idRol);
      this.roles.setRolDes(xroles.rolDes);
-
-    console.log(this.roles);
      this.modal.open(content);
    }
 
-   public actionRoles(rolDesx : any , tipo :string ){
-    let url = '';
-    let rolesx = new Roles(this.roles.idRol , rolDesx  );
+   public action(rolDesx : any , tipo :string ) : boolean{
+    let url      = '';
+    this.carga   = 'invisible';
+    this.loading = true;
+    let rolesx   = new Roles(this.roles.idRol , rolDesx  );
 
     if(tipo =='up'){
        url = 'updRoles';
     }else{
       url = 'insRoles';
     }
-    this.rest.post(url, this.token, rolesx).subscribe(resp => {
-        if(resp == 'OK'){
-          this.modal.dismissAll();
-          this.loading      = true;
-          this.tblRoles     = {};
-          this.rest.get('trabRoles' , this.token, this.parametros).subscribe(respuesta => {
-            this.tblRoles = respuesta;
-              this.carga = 'visible';
-              this.loading = false;
+   this.rest.post(url, this.token, rolesx).subscribe(resp => {
+        resp.forEach((elementx : any)  => {
+        if(elementx.error == '0'){
+            this.modal.dismissAll();
 
-          });
+            setTimeout(()=>{
+              this.servicioaler.setAlert('','');
+              this.tblRoles = {};
 
-        this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-          dtInstance.destroy().draw();
-        });
-      }
+              this.rest.get('trabRoles' , this.token, this.parametros).subscribe(data => {
+                  this.tblRoles = data;
+              });
+
+              this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
+                dtInstance.destroy().draw();
+              });
+
+              this.carga    = 'visible';
+              this.loading  = false;
+
+            },1500);
+        }else {
+          this.carga    = 'visible';
+          this.loading  = false;
+        }
+      });
     });
+
+    let alerta : Alert = this.servicioaler.getAlert();
+    this.servicioaler.disparador.emit(alerta);
+    return false;
   }
 
-  public delRoles( rol : any){
-     let url = 'delRoles';
+  public delRoles( rol : any) : boolean{
+     let url      = 'delRoles';
+     this.carga   = 'invisible';
+     this.loading = true;
+
       this.rest.post(url ,this.token, rol).subscribe(resp => {
-        if(resp == 'OK'){
-          this.modal.dismissAll();
-          this.loading      = true;
-          this.tblRoles     = {};
-          this.rest.get('trabRoles' , this.token, this.parametros).subscribe(respuesta => {
-            this.tblRoles = respuesta;
-            this.carga    = 'visible';
-            this.loading  = false;
+          resp.forEach((elementx : any)  => {
+            if(elementx.error == '0'){
+              this.modal.dismissAll();
+              this.servicioaler.disparador.emit(this.servicioaler.getAlert());
 
+              setTimeout(()=>{
+                this.servicioaler.setAlert('','');
+                this.tblRoles = {};
+                this.rest.get('trabRoles' , this.token, this.parametros).subscribe(data => {
+                    this.tblRoles = data;
+                });
+
+                this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
+                  dtInstance.destroy().draw();
+                });
+
+                this.carga    = 'visible';
+                this.loading  = false;
+              },1500);
+
+            }else{
+              this.carga    = 'visible';
+              this.loading  = false;
+              this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+
+              setTimeout(()=>{
+                this.servicioaler.setAlert('','');
+              },1500);
+            }
           });
-
-        this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-          dtInstance.destroy().draw();
-        });
-      }
       });
-
+      return false;
   }
 
   public Excel(){
     this.excel.exportAsExcelFile(this.tblRoles, 'roles');
-  return false;
+     return false;
   }
 
 }

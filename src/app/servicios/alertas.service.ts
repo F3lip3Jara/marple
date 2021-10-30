@@ -11,7 +11,7 @@ export class AlertasService {
 
   alerta : Alert = new Alert('', '');
 
-  alert(): Alert {
+  getAlert(): Alert {
      return this.alerta;
   }
 
