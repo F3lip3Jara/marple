@@ -33,6 +33,7 @@ import { InsProveedoresComponent } from './home/parametros/trab-proveedores/ins-
 import { NgxMaskModule, IConfig } from 'ngx-mask';
 import { UpProveedorComponent } from './home/parametros/trab-proveedores/up-proveedor/up-proveedor.component';
 import { VerProveedorComponent } from './home/parametros/trab-proveedores/ver-proveedor/ver-proveedor.component';
+import { UpDesProveeedorComponent } from './home/parametros/trab-proveedores/up-proveedor/up-des-proveeedor/up-des-proveeedor.component';
 
 
 const routes: Routes = [
@@ -71,6 +72,7 @@ const routes: Routes = [
     InsProveedoresComponent,
     UpProveedorComponent,
     VerProveedorComponent,
+    UpDesProveeedorComponent,
 
   ],
   imports: [

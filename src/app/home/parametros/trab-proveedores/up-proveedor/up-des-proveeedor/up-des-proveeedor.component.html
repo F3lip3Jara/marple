@@ -1,0 +1,41 @@
+
+     <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ><i class="fas fa-file-csv"></i>Excel</button>
+    <br>
+   <div class="loading" *ngIf= "loading" >
+      <img src = "../../../assets/Circles-menu-3.gif">
+     </div>
+
+<div class="table-responsive" *ngIf="tblProveedor?.length > 0" class="{{carga}}">
+  <table #datatableElement datatable  id="tblProveedor" class="table table-hover text-nowrap" [dtOptions]="dtOptions" >
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>RUT</th>
+        <th>País</th>
+        <th>Región</th>
+        <th>Comuna</th>
+        <th>Ciudad</th>
+        <th>Dirección</th>
+        <th>Número</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let xproveedor of tblProveedor">
+        <th>{{xproveedor.id}}</th>
+        <th>{{xproveedor.rut}}</th>
+        <th>{{xproveedor.pais}}</th>
+        <th>{{xproveedor.region}}</th>
+        <th>{{xproveedor.comuna}}</th>
+        <th>{{xproveedor.ciudad}}</th>
+        <th>{{xproveedor.direccion}}</th>
+        <th>{{xproveedor.numero}}</th>
+        <th>
+         <a  class="btn btn-warning btn-xs" placeholder="actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+        </th>
+      </tr>
+    </tbody>
+  </table>
+<div>
+  </div>
+</div>
