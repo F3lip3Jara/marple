@@ -7,8 +7,8 @@
     </div>
   </div>
   <div class="card-body">
-      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ><i class="fas fa-file-csv"></i>Excel</button>
-      <a (click) = "modalIns(modalPaisIns)" class="btn  btn-outline-primary btn-sm" ><i class="fas fa-address-card" ></i>Nuevo</a>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel" ><i class="fas fa-file-csv"></i>Excel</button>
+      <a (click) = "modalIns(modalPaisIns)" class="btn  btn-outline-primary btn-sm" ngbTooltip="Nuevo"><i class="fas fa-address-card" ></i>Nuevo</a>
 
 
     <div class="loading" *ngIf= "loading" >
@@ -34,8 +34,8 @@
           <th>{{pais.paiCod}}</th>
           <th>{{pais.paiDes}}</th>
           <th>
-            <a (click) = "modelUp(modalPaisUdp , pais)" class="btn btn-warning btn-xs" placeholder="actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
-            <a (click) = "delPais(pais)" class="btn btn-warning btn-xs" placeholder="eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
+            <a (click) = "modelUp(modalPaisUdp , pais)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+            <a (click) = "delPais(pais)" class="btn btn-warning btn-xs" ngbTooltip="Eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
 
           </th>
         </tr>
@@ -73,7 +73,7 @@
         </div>
         <div class="form-group">
           <label for="">Descripción</label>
-          <input type="text" class="form-control" name = "paiDes" id="paiDes" placeholder="" value="{{pais.paiDes}}" formControlName = 'paiDes'>
+          <input type="text" class="form-control" name = "paiDes" id="paiDes" placeholder="" value="{{pais.paiDes}}" formControlName = 'paiDes' oninput="this.value = this.value.toUpperCase()">
         </div>
         <div *ngIf = "upPais.controls['paiDes'].hasError('required')">
          <span class="text-danger">Campo obligatorio!</span>
@@ -115,7 +115,7 @@
       <div class="card-body">
         <div class="form-group">
           <label for="">Cód. País</label>
-          <input type="text" class="form-control" name = "paiCod" id="paiCod" placeholder="" value="" formControlName = 'paiCod' >
+          <input type="text" class="form-control" name = "paiCod" id="paiCod" placeholder="" value="" formControlName = 'paiCod' oninput="this.value = this.value.toUpperCase()">
         </div>
          <div *ngIf = "validCod">  <span class="text-danger">Código invalido!</span></div>
          <div *ngIf = "insPais.controls['paiCod'].hasError('required')">
@@ -123,7 +123,7 @@
         </div>
         <div class="form-group">
           <label for="">Descripción</label>
-          <input type="text" class="form-control" name = "paiCod" id="paiDes" placeholder="" value="" formControlName = 'paiDes' >
+          <input type="text" class="form-control" name = "paiCod" id="paiDes" placeholder="" value="" formControlName = 'paiDes' oninput="this.value = this.value.toUpperCase()">
         </div>
         <div *ngIf = "insPais.controls['paiDes'].hasError('required')">
           <span class="text-danger">Campo obligatorio!</span>

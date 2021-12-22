@@ -1,0 +1,64 @@
+.ngalert{
+  font-size: 12px !important;
+}
+
+
+.alert-service {
+  position: fixed;
+  max-width: 310px;
+  max-height: 120px;
+  opacity: 1;
+  margin-bottom: 20px;
+  margin-left: 60% ;
+  z-index: 9999 !important;
+  /* Animation on creation */
+  -webkit-animation:slideIn 500ms forwards;
+  animation: slideIn 500ms forwards;
+  -webkit-animation-delay: 1s; /* Safari */
+  animation-delay: 1s;
+
+  /* Transition so all movements are smooth */
+  -webkit-transition: all 500ms;
+  -moz-transition: all 500ms;
+  -o-transition: all 500ms;
+  -ms-transition: all 500ms;
+  transition: all 500ms;
+  -webkit-transition-delay: 500ms; /* Safari */
+  transition-delay: 500ms;
+}
+
+
+@media only screen
+  and (min-device-width : 320px)
+  and (max-device-width : 568px) {
+
+.alert-service {
+  margin-left:0% !important;
+}
+
+    }
+
+
+.toast-warnig{
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+}
+
+.toast-warnig >.toast-header{
+  color: #856404;
+  background-color: #fff3cd !important;
+  border-color: #ffeeba !important;
+}
+
+
+.toast-info{
+  color: #004085;
+  background-color: #cce5ff;
+  border-color: #b8daff;
+}
+
+.delay-hide{
+  opacity: 0;
+  transition:  opacity 5s;
+}

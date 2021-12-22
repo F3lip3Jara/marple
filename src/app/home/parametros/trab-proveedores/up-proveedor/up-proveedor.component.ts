@@ -138,14 +138,14 @@ export class UpProveedorComponent implements OnInit {
           this.regiones = data;
       });
 
-      this.parametros = [{key :'idReg' ,value: this.idReg}];
-      this.rest.get('comReg' , this.token, this.parametros).subscribe(data => {
-        this.comunas = data;
-      });
-
-      this.parametros = [{key :'idCom' ,value: this.idCom}];
+      this.parametros = [{key :'idReg' ,value: this.idReg} , {key: 'idPai' , value:this.idPai}];
       this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
         this.ciudades = data;
+      });
+
+      this.parametros = [{key :'idCiu' ,value: this.idCiu} ,{key :'idReg' , value : this.idReg } , {key : 'idPai' , value:  this.idPai} ];
+      this.rest.get('ciuCom' , this.token, this.parametros).subscribe(data => {
+        this.comunas = data;
       });
 
 
@@ -169,20 +169,20 @@ export class UpProveedorComponent implements OnInit {
           this.ciudades= {};
           this.insProv.controls['idCom'].setValue('');
           this.insProv.controls['idCiu'].setValue('');
-          this.parametros = [{key :'idReg' ,value: field}];
-          this.rest.get('comReg' , this.token, this.parametros).subscribe(data => {
-            this.comunas = data;
+          this.parametros = [{key :'idReg' ,value: field} , {key : 'idPai' , value:  this.insProv.controls['idPai'].value}];
+          this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
+            this.ciudades = data;
             });
         }
       });
 
-      this.insProv.controls['idCom'].valueChanges.subscribe(field => {
+      this.insProv.controls['idCiu'].valueChanges.subscribe(field => {
         if(field > 0){
-          this.ciudades = {};
-          this.insProv.controls['idCiu'].setValue('');
-          this.parametros = [{key :'idCom' ,value: field}];
-          this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
-            this.ciudades = data;
+          this.comunas = {};
+          this.insProv.controls['idCom'].setValue('');
+          this.parametros = [{key :'idCiu' ,value: field} , {key :'idReg' , value : this.insProv.controls['idReg'].value } , {key : 'idPai' , value:  this.insProv.controls['idPai'].value} ];
+          this.rest.get('ciuCom' , this.token, this.parametros).subscribe(data => {
+            this.comunas = data;
             });
         }
 

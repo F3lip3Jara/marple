@@ -138,20 +138,20 @@ export class TrabProveedoresComponent implements OnInit {
             this.ciudades= {};
             this.insProv.controls['idCom'].setValue('');
             this.insProv.controls['idCiu'].setValue('');
-            this.parametros = [{key :'idReg' ,value: field}];
-            this.rest.get('comReg' , this.token, this.parametros).subscribe(data => {
-              this.comunas = data;
+            this.parametros = [{key :'idReg' ,value: field} , {key : 'idPai' , value:  this.insProv.controls['idPai'].value}];
+            this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
+              this.ciudades = data;
               });
           }
         });
 
-        this.insProv.controls['idCom'].valueChanges.subscribe(field => {
+        this.insProv.controls['idCiu'].valueChanges.subscribe(field => {
           if(field > 0){
-            this.ciudades = {};
-            this.insProv.controls['idCiu'].setValue('');
-            this.parametros = [{key :'idCom' ,value: field}];
-            this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
-              this.ciudades = data;
+            this.comunas = {};
+            this.insProv.controls['idCom'].setValue('');
+            this.parametros = [{key :'idCiu' ,value: field} , {key :'idReg' , value : this.insProv.controls['idReg'].value } , {key : 'idPai' , value:  this.insProv.controls['idPai'].value} ];
+            this.rest.get('ciuCom' , this.token, this.parametros).subscribe(data => {
+              this.comunas = data;
               });
           }
 
@@ -200,7 +200,6 @@ export class TrabProveedoresComponent implements OnInit {
       if(elementx.error == '0'){
           this.modal.dismissAll();
           setTimeout(()=>{
-            this.alertas.setAlert('','');
             this.insProv.controls['prvDir'].setValue('');
             this.insProv.controls['prvNum'].setValue('');
             this.val      = false;
@@ -215,17 +214,12 @@ export class TrabProveedoresComponent implements OnInit {
 
  modelUp(proveedorx : any){
       const proveedor = proveedorx;
-
       this.serProveedor.setProveedor(proveedor);
-
-
       this.parametros = [{key :'idPrv' ,value: proveedorx.id}];
       this.rest.get('datPrv' , this.token, this.parametros).subscribe(data => {
         this.serProveedor.setDatPrv(data);
-
         setTimeout(()=>{
           this.servicioLink.disparador.emit('upProveedor');
-
         },200);
       });
 

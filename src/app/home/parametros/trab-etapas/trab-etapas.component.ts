@@ -96,7 +96,6 @@ export class TrabEtapasComponent implements OnInit {
          resp.forEach((elementx : any)  => {
            if(elementx.error == '0'){
              this.modal.dismissAll();
-             this.servicioaler.disparador.emit(this.servicioaler.getAlert());
              setTimeout(()=>{
                this.servicioaler.setAlert('','');
                this.tblEtapas = {};
@@ -114,13 +113,10 @@ export class TrabEtapasComponent implements OnInit {
            }else{
              this.carga    = 'visible';
              this.loading  = false;
-             this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-             setTimeout(()=>{
-               this.servicioaler.setAlert('','');
-             },1500);
            }
          });
      });
+     this.servicioaler.disparador.emit(this.servicioaler.getAlert());
      return false;
   }
 
@@ -142,13 +138,10 @@ export class TrabEtapasComponent implements OnInit {
           this.modal.dismissAll();
 
           setTimeout(()=>{
-            this.servicioaler.setAlert('','');
             this.tblEtapas = {};
-
             this.rest.get('trabEtapas' , this.token, this.parametros).subscribe(data => {
                 this.tblEtapas = data;
             });
-
             this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
               dtInstance.destroy().draw();
             });
@@ -161,8 +154,7 @@ export class TrabEtapasComponent implements OnInit {
       }
         });
     });
-    let alerta : Alert = this.servicioaler.getAlert();
-    this.servicioaler.disparador.emit(alerta);
+    this.servicioaler.disparador.emit(this.servicioaler.getAlert());
     return false;
   }
 

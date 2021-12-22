@@ -1,77 +1,88 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Marple | Login</title>
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body class="register-page">
-<div class="register-box">
-  <div class="card card-outline card-primary">
-    <div class="card-header text-center">
-      <a  class="h1"><b>Marple</b>ERP</a>
-    </div>
-    <div class="card-body">
-      <form
-      [formGroup] = "login"
-      (ngSubmit)  = "guardar(login.controls['email'].value , login.controls['password'].value)">
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" id="email" placeholder="Ingresar email..." formControlName = 'email' >
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
-          </div>
+<div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
+  <div class="card card0 border-0">
+      <div class="row d-flex">
+        <div class="col-md-12">
+          <app-alerts></app-alerts>
         </div>
-          <div *ngIf = "login.controls['email'].hasError('required')">
+          <div class="col-lg-6">
+              <div class="card1 pb-5">
+                  <div class="row"> <img src="../../assets/pixlr-bg-result.png" class="logo"> </div>
+                  <div class="row px-3 justify-content-center mt-4 mb-5 border-line"> <img src="https://i.imgur.com/uNGdWHi.png" class="image"> </div>
+              </div>
+          </div>
 
-        </div>
-          <div *ngIf = "login.controls['email'].hasError('email')">
-            <div class="alert alert-danger" role="alert">
-              Ingrese un mail correcto!
+          <div class="col-lg-6">
+
+              <div class="card2 card border-0 px-4 py-5">
+                  <div class="row mb-4 px-3">
+                      <h6 class="mb-0 mr-4 mt-2">Acceso a Usuarios <strong>Marple ERP</strong></h6>
+
+                  </div>
+                  <div class="row px-3 mb-4">
+                      <div class="line"></div> <small class="or text-center">O</small>
+                      <div class="line"></div>
+                  </div>
+
+                    <form
+                    [formGroup] = "login"
+                    (ngSubmit)  = "guardar(login.controls['email'].value , login.controls['password'].value)">
+                    <h6 class="mb-0 text-sm">Usuario</h6>
+                      <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="email" placeholder="Ingresar usuario..." formControlName = 'email' oninput="this.value = this.value.toUpperCase()" >
+                        <div class="input-group-append">
+                          <div class="input-group-text">
+                            <span class="fas fa-user"></span>
+                          </div>
+                        </div>
+                      </div>
+                        <div *ngIf = "login.controls['email'].hasError('required')">
+
+                      </div>
+                        <div *ngIf = "login.controls['email'].hasError('email')">
+                          <div class="alert alert-danger" role="alert">
+                            Ingrese un mail correcto!
+                        </div>
+                      </div>
+                      <h6 class="mb-0 text-sm">Password</h6>
+                      <div class="input-group mb-3">
+                        <input type="password" class="form-control" placeholder="Password" id="password" formControlName ='password'>
+                        <div class="input-group-append">
+                          <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngIf = "login.controls['password'].hasError('required')">
+                    </div>
+                      <div class="row">
+                        <!-- /.col -->
+                        <div class="col-9">
+                          <button type="submit" class="btn btn-primary btn-block"  *ngIf ="login.valid">
+                            <div *ngIf= "log">
+                              Ingresando..
+                              <span class="spinner-border spinner-border-sm mr-2"></span>
+                            </div>
+                            <div *ngIf= "!log">
+                              Ingresar
+                            </div>
+
+                          </button>
+                        </div>
+                        <!-- /.col -->
+
+                      </div>
+
+
+                  </form>
+
+              </div>
           </div>
-        </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password" id="password" formControlName ='password'>
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
-        </div>
-        <div *ngIf = "login.controls['password'].hasError('required')">
       </div>
-        <div class="row">
-          <!-- /.col -->
-          <div class="col-9">
-            <button type="submit" class="btn btn-primary btn-block"  *ngIf ="login.valid">
-              <div *ngIf= "log">
-                Ingresando..
-                <span class="spinner-border spinner-border-sm mr-2"></span>
-              </div>
-              <div *ngIf= "!log">
-                Ingresar
-              </div>
 
-            </button>
+      <div class="bg-red py-4">
+          <div class="row px-3"> <small class="ml-4 ml-sm-5 mb-2">AgileTiCL &copy; 2021. Todos los derecho reservados.</small>
           </div>
-          <!-- /.col -->
-        </div>
-      </form>
-      <p class="mb-0">
 
-      </p>
-    </div>
-    <div class="col-12">
-      <app-alerts></app-alerts>
-     </div>
-    <!-- /.form-box -->
-  </div><!-- /.card -->
+      </div>
+  </div>
 </div>
-
-
-
-</body>
-</html>

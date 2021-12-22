@@ -9,6 +9,10 @@ import { Links } from 'src/app/model/link.model';
 export class MenuLateralComponent implements OnInit {
   public isMenuCollapsed = true;
   public isMenuCollapsed2 = true;
+  public isMenuCollapsed3 = true;
+  public isMenuCollapsed4 = true;
+  public isMenuCollapsed5 = true;
+
 
   @Output() onItemAdded: EventEmitter<any>;
   public links : Links |undefined;
@@ -26,7 +30,5 @@ export class MenuLateralComponent implements OnInit {
     this.onItemAdded.emit(d);
     return false;
   }
-
-
 
 }

@@ -7,7 +7,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
-import { Alert } from 'src/app/model/alert.model';
+import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-trab-pais',
@@ -89,7 +89,10 @@ export class TrabPaisComponent implements OnInit {
       this.tblData();
 
 
-      this.insPais.controls['paiCod'].valueChanges.subscribe(field => {
+      this.insPais.controls['paiCod'].valueChanges.pipe(
+        filter(text => text.length > 1),
+        debounceTime(200),
+        distinctUntilChanged()).subscribe(field => {
         this.validaPais(field);
       });
 
@@ -129,15 +132,11 @@ public delPais( gerencia : any) : boolean{
        resp.forEach((elementx : any)  => {
          if(elementx.error == '0'){
            this.modal.dismissAll();
-           this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-
            setTimeout(()=>{
-             this.servicioaler.setAlert('','');
              this.tblPais = {};
              this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
                  this.tblPais = data;
              });
-
              this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
                dtInstance.destroy().draw();
              });
@@ -149,14 +148,10 @@ public delPais( gerencia : any) : boolean{
          }else{
            this.carga    = 'visible';
            this.loading  = false;
-           this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-
-           setTimeout(()=>{
-             this.servicioaler.setAlert('','');
-           },1500);
          }
        });
    });
+   this.servicioaler.disparador.emit(this.servicioaler.getAlert());
    return false;
 }
 
@@ -177,7 +172,6 @@ public action(xpaiDes : any , xpaicod : any , tipo :string ) : boolean{
       if(elementx.error == '0'){
           this.modal.dismissAll();
           setTimeout(()=>{
-            this.servicioaler.setAlert('','');
             this.tblPais = {};
             this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
                 this.tblPais = data;
@@ -191,11 +185,6 @@ public action(xpaiDes : any , xpaicod : any , tipo :string ) : boolean{
             this.val      = false;
             this.limpiar();
           },1500);
-
-
-
-
-
       }else {
         this.carga    = 'visible';
         this.loading  = false;
@@ -204,8 +193,7 @@ public action(xpaiDes : any , xpaicod : any , tipo :string ) : boolean{
     });
   });
 
-  let alerta : Alert = this.servicioaler.getAlert();
-  this.servicioaler.disparador.emit(alerta);
+  this.servicioaler.disparador.emit(this.servicioaler.getAlert());
   return false;
 }
 
@@ -229,11 +217,8 @@ public validaPais(paiCod : string){
 
 
  public limpiar(){
-
   this.insPais.controls['paiDes'].setValue('');
   this.insPais.controls['paiCod'].setValue('');
-
-
  }
 
 

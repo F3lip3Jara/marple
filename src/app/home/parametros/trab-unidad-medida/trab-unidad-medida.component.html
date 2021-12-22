@@ -1,0 +1,147 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Unidad de Medida</h3>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+        <i class="fas fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="card-body">
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel"><i class="fas fa-file-csv"></i>Excel</button>
+      <a (click) = "modalIns(modalInsUn)" class="btn  btn-outline-primary btn-sm" ngbTooltip="Nuevo"><i class="fas fa-address-card" ></i>Nuevo</a>
+
+
+    <div class="loading" *ngIf= "loading" >
+      <img src = "../../../assets/Circles-menu-3.gif">
+     </div>
+
+ <div>
+  <br>
+
+  <div class="table-responsive"   *ngIf="tblUnidad?.length > 0" class="{{carga}}">
+    <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Cód. Unidad de Medida</th>
+          <th>Descripción</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let unidad of tblUnidad">
+          <th>{{unidad.idUn}}</th>
+          <th>{{unidad.unCod}}</th>
+          <th>{{unidad.unDes}}</th>
+          <th>
+            <a (click) = "modelUp(modalUpUn , unidad)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+            <a (click) = "del(unidad)"  class="btn btn-warning btn-xs" ngbTooltip="Eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
+
+          </th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+</div>
+  <!-- /.card-body -->
+  <div class="card-footer">
+    Marple
+  </div>
+  <!-- /.card-footer-->
+</div>
+<ng-template #modalUpUn let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal actualiza Unidad de Medida</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>  <!-- /.card-header -->
+  <form  [formGroup] = "upUn"
+  (ngSubmit)  = "action( upUn.controls['unDes'].value ,
+                         upUnCod.value ,
+                         'up' )">
+  <div class="modal-body">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="">Código</label>
+          <input type="text" class="form-control" id="" placeholder="" value="{{unMed.idUn}}" disabled>
+        </div>
+        <div class="form-group">
+          <label for="">Cód. Un. Medida</label>
+          <input type="text" class="form-control" name = "monDes" id="monCod" placeholder="" value="{{unMed.unCod}}"  #upUnCod disabled>
+        </div>
+        <div class="form-group">
+          <label for="">Descripción</label>
+          <input type="text" class="form-control" name = "monDes" id="monDes" placeholder="" value="{{ unMed.unDes}}" formControlName = 'unDes'  oninput="this.value = this.value.toUpperCase()">
+        </div>
+        <div *ngIf = "upUn.controls['unDes'].hasError('required')">
+         <span class="text-danger">Campo obligatorio!</span>
+       </div>
+      </div>
+      <!-- /.card-body -->
+    <!-- form start -->
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="upUn.valid" [disabled]="val">
+      <div *ngIf= "val">
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!val">
+        Guardar
+      </div>
+    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+
+</ng-template>
+
+
+<ng-template #modalInsUn let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal ingreso Unidad de Medida</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form  [formGroup] = "insUn"
+  (ngSubmit)  = "action( insUn.controls['unDes'].value ,
+                         insUn.controls['unCod'].value ,
+                        'ins' )">
+  <div class="modal-body">
+
+      <div class="card-body">
+        <div class="form-group">
+          <label for="">Cód. Un. Medida</label>
+          <input type="text" class="form-control" name = "unCod" id="unCod" placeholder="" value="" formControlName = 'unCod'  oninput="this.value = this.value.toUpperCase()">
+        </div>
+         <div *ngIf = "validCod">  <span class="text-danger">Código invalido!</span></div>
+         <div *ngIf = "insUn.controls['unCod'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+        <div class="form-group">
+          <label for="">Descripción</label>
+          <input type="text" class="form-control" name = "unDes" id="unDes" placeholder="" value="" formControlName = 'unDes'  oninput="this.value = this.value.toUpperCase()">
+        </div>
+        <div *ngIf = "insUn.controls['unDes'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+      </div>
+      <!-- /.card-body -->
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="insUn.valid && validCod == false" [disabled]="val">
+      <div *ngIf= "val">
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!val">
+        Guardar
+      </div>
+    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+</ng-template>

@@ -1,0 +1,147 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Grupo</h3>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+        <i class="fas fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="card-body">
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel" ><i class="fas fa-file-csv"></i>Excel</button>
+      <a (click) = "modalIns(modalInsGrp)" class="btn  btn-outline-primary btn-sm" ngbTooltip="Nuevo"><i class="fas fa-address-card" ></i>Nuevo</a>
+
+
+    <div class="loading" *ngIf= "loading" >
+      <img src = "../../../assets/Circles-menu-3.gif">
+     </div>
+
+ <div>
+  <br>
+
+  <div class="table-responsive"   *ngIf="tblGrupo?.length > 0" class="{{carga}}">
+    <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Cód. Grupo</th>
+          <th>Descripción</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let grupo of tblGrupo">
+          <th>{{grupo.idGrp}}</th>
+          <th>{{grupo.grpCod}}</th>
+          <th>{{grupo.grpDes}}</th>
+          <th>
+            <a (click) = "modelUp(modalUpGrp , grupo)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+            <a (click) = "del(grupo)"  class="btn btn-warning btn-xs" ngbTooltip="Eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
+
+          </th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+</div>
+  <!-- /.card-body -->
+  <div class="card-footer">
+    Marple
+  </div>
+  <!-- /.card-footer-->
+</div>
+<ng-template #modalUpGrp let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal actualiza Grupo</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>  <!-- /.card-header -->
+  <form  [formGroup] = "upGrp"
+  (ngSubmit)  = "action( upGrp.controls['grpDes'].value ,
+                         upGrpCod.value ,
+                         'up' )">
+  <div class="modal-body">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="">Código</label>
+          <input type="text" class="form-control" id="" placeholder="" value="{{grupo.idGrp}}" disabled>
+        </div>
+        <div class="form-group">
+          <label for="">Cód. Grupo</label>
+          <input type="text" class="form-control" name = "grpCod" id="grpCod" placeholder="" value="{{grupo.grpCod}}"  #upGrpCod disabled oninput="this.value = this.value.toUpperCase()">
+        </div>
+        <div class="form-group">
+          <label for="">Descripción</label>
+          <input type="text" class="form-control" name = "grpDes" id="grpDes" placeholder="" value="{{ grupo.grpDes}}" formControlName = 'grpDes' oninput="this.value = this.value.toUpperCase()">
+        </div>
+        <div *ngIf = "upGrp.controls['grpDes'].hasError('required')">
+         <span class="text-danger">Campo obligatorio!</span>
+       </div>
+      </div>
+      <!-- /.card-body -->
+    <!-- form start -->
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="upGrp.valid" [disabled]="val">
+      <div *ngIf= "val">
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!val">
+        Guardar
+      </div>
+    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+
+</ng-template>
+
+
+<ng-template #modalInsGrp let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal ingreso Grupo</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form  [formGroup] = "insGrp"
+  (ngSubmit)  = "action( insGrp.controls['grpDes'].value ,
+                         insGrp.controls['grpCod'].value ,
+                        'ins' )">
+  <div class="modal-body">
+
+      <div class="card-body">
+        <div class="form-group">
+          <label for="">Cód. Grupo</label>
+          <input type="text" class="form-control" name = "grpCod" id="grpCod" placeholder="" value="" formControlName = 'grpCod'  oninput="this.value = this.value.toUpperCase()">
+        </div>
+         <div *ngIf = "validCod">  <span class="text-danger">Código invalido!</span></div>
+         <div *ngIf = "insGrp.controls['grpCod'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+        <div class="form-group">
+          <label for="">Descripción</label>
+          <input type="text" class="form-control" name = "grpDes" id="grpDes" placeholder="" value="" formControlName = 'grpDes' oninput="this.value = this.value.toUpperCase()">
+        </div>
+        <div *ngIf = "insGrp.controls['grpDes'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+      </div>
+      <!-- /.card-body -->
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="insGrp.valid && validCod == false" [disabled]="val">
+      <div *ngIf= "val">
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!val">
+        Guardar
+      </div>
+    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+</ng-template>

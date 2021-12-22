@@ -7,5 +7,5 @@ export class ReceptorDirective {
 
   constructor(public viewContainerRef: ViewContainerRef) { }
 
-  
+
 }

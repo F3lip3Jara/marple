@@ -31,7 +31,7 @@
         <th>{{xproveedor.direccion}}</th>
         <th>{{xproveedor.numero}}</th>
         <th>
-         <a  class="btn btn-warning btn-xs" placeholder="actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+          <a (click) = "delPrvDir(xproveedor)" class="btn btn-warning btn-xs" placeholder="eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
         </th>
       </tr>
     </tbody>

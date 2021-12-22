@@ -8,8 +8,8 @@
   </div>
   <div class="card-body">
 
-      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ><i class="fas fa-file-csv"></i>Excel</button>
-      <a (click) = "modalIns(modalComIns)" class="btn  btn-outline-primary btn-sm" ><i class="fas fa-address-card" ></i>Nuevo</a>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel"><i class="fas fa-file-csv"></i>Excel</button>
+      <a (click) = "modalIns(modalComIns)" class="btn  btn-outline-primary btn-sm" ngbTooltip="Nuevo" ><i class="fas fa-address-card" ></i>Nuevo</a>
 
 
     <div class="loading" *ngIf= "loading" >
@@ -23,10 +23,9 @@
       <thead>
         <tr>
           <th>ID</th>
-          <th>Cód. País</th>
-          <th>Descripción</th>
-          <th>Cód. Región</th>
-          <th>Descripción</th>
+          <th>País</th>
+          <th>Región</th>
+          <th>Ciudad</th>
           <th>Cód. Comuna</th>
           <th>Descripción</th>
           <th>Acciones</th>
@@ -35,15 +34,14 @@
       <tbody>
         <tr *ngFor = "let comuna of tblComuna">
           <th>{{comuna.idCom}}</th>
-          <th>{{comuna.paiCod}}</th>
           <th>{{comuna.paiDes}}</th>
-          <th>{{comuna.regCod}}</th>
           <th>{{comuna.regDes}}</th>
+          <th>{{comuna.ciuDes}}</th>
           <th>{{comuna.comCod}}</th>
           <th>{{comuna.comDes}}</th>
           <th>
-            <a (click) = "modelUp(modalComUpd , comuna)" class="btn btn-warning btn-xs" placeholder="actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
-            <a (click) = "delComuna(comuna)" class="btn btn-warning btn-xs" placeholder="eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
+            <a (click) = "modelUp(modalComUpd , comuna)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+            <a (click) = "delComuna(comuna)" class="btn btn-warning btn-xs" ngbTooltip="Eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
           </th>
         </tr>
       </tbody>
@@ -69,6 +67,7 @@
   <form  [formGroup] = "insComuna"
          (ngSubmit)  = "action(insComuna.controls['idPai'].value ,
                               insComuna.controls['idReg'].value ,
+                              insComuna.controls['idCiu'].value ,
                               insComuna.controls['comCod'].value,
                               insComuna.controls['comDes'].value,
                                'ins' )"
@@ -107,11 +106,37 @@
           <div *ngIf = "insComuna.controls['idReg'].hasError('required')">
             <span class="text-danger">Campo obligatorio!</span>
           </div>
+
+
+        </div>
+
+        <div class="form-group">
+          <label for="nombre">Ciudad</label>
+
+          <div  *ngIf=" !ciudades.length ">
+            <div class="spinner-border spinner-border-sm" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow spinner-grow-sm" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+
+          <div class=" input-group-sm" *ngIf="regiones.length  > 0 && ciudades.length > 0">
+            <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'idCiu'>
+              <option  *ngFor = "let ciudad of ciudades"  value="{{ciudad.idCiu}}">{{ciudad.ciuDes}}</option>
+            </select>
+          </div>
+          <div *ngIf = "insComuna.controls['idReg'].hasError('required')">
+            <span class="text-danger">Campo obligatorio!</span>
+          </div>
+
+
         </div>
         <div class="form-group">
           <label for="regDes">Código</label>
           <div class="input-group input-group-sm">
-          <input type="text" class="form-control" id="comCod" placeholder="Ingresar descripción..." formControlName = 'comCod'  >
+          <input type="text" class="form-control" id="comCod" placeholder="Ingresar descripción..." formControlName = 'comCod'  oninput="this.value = this.value.toUpperCase()">
         </div>
       </div>
         <div *ngIf = "insComuna.controls['comCod'].hasError('required')">
@@ -121,7 +146,7 @@
         <div class="form-group">
           <label for="regDes">Descripción</label>
           <div class="input-group input-group-sm">
-          <input type="text" class="form-control" id="comDes" placeholder="Ingresar descripción..." formControlName = 'comDes'  >
+          <input type="text" class="form-control" id="comDes" placeholder="Ingresar descripción..." formControlName = 'comDes'  oninput="this.value = this.value.toUpperCase()">
         </div>
       </div>
         <div *ngIf = "insComuna.controls['comDes'].hasError('required')">
@@ -157,6 +182,7 @@
   <form  [formGroup] = "updComuna"
          (ngSubmit)  = "action(upidPai.value,
                                upidReg.value,
+                               upidCiu.value,
                                upcomCod.value,
                                updComuna.controls['upcomDes'].value ,
                                'up' )"
@@ -176,13 +202,19 @@
           <input type="hidden" class="form-control" name = "idPai" id="idPai" placeholder="" value="{{comuna.idReg}}" disabled  #upidReg>
         </div>
         <div class="form-group">
+          <label for="nombre">Ciudad</label>
+          <input type="text" class="form-control" id="" placeholder="" value="{{comuna.ciuDes}}" disabled>
+          <input type="hidden" class="form-control" name = "idPai" id="idPai" placeholder="" value="{{comuna.idCiu}}" disabled  #upidCiu>
+        </div>
+
+        <div class="form-group">
           <label for="nombre">Cód Comuna</label>
           <input type="text" class="form-control" id="" placeholder="" value="{{comuna.comCod}}" disabled #upcomCod>
         </div>
         <div class="form-group">
           <label for="regDes">Descripción</label>
           <div class="input-group input-group-sm">
-          <input type="text" class="form-control" id="comDes" placeholder="Ingresar descripción..." formControlName = 'upcomDes'>
+          <input type="text" class="form-control" id="comDes" placeholder="Ingresar descripción..." formControlName = 'upcomDes' oninput="this.value = this.value.toUpperCase()">
         </div>
       </div>
         <div *ngIf = "updComuna.controls['upcomDes'].hasError('required')">

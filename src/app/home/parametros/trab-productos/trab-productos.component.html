@@ -1,0 +1,100 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Productos</h3>
+
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+        <i class="fas fa-minus"></i></button>
+    </div>
+
+  </div>
+  <div class="card-body">
+      <h3 class="card-title">Filtros</h3>
+      <form
+      [formGroup] = "filtroPrd">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <td>Descripción</td>
+            <td><input type="text"   [(ngModel)]="model"
+              [ngbTypeahead]="search"
+              (focus)="focus$.next($any($event).target.value)"
+              (click)="click$.next($any($event).target.value)"
+              #instance="ngbTypeahead"  value="" class="form-control" placeholder="Ingrese descripción de producto"  formControlName ='prdDes' /> </td>
+            <!--<td>Fecha de Creación</td>
+            <td>
+              <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd"
+                       name="dp"  ngbDatepicker #d="ngbDatepicker">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
+                </div>
+              </div>
+            </td>-->
+
+          </tr>
+
+        </tbody>
+      </table>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "buscar(filtroPrd.controls['prdDes'].value , filtroPrd.controls['created_at'].value)" ngbTooltip="Buscar"><i class="fas fa-search"></i>Buscar</button>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "refrescar()"><i class="fas fa-sync-alt" ngbTooltip="Refrescar"></i>Refrescar</button>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "Excel()"><i class="fas fa-file-csv" ngbTooltip="Excel"></i>Excel</button>
+      <a (click)="prvNuevo()" class="btn  btn-outline-primary btn-sm" ><i class="fas fa-address-card" ngbTooltip="Nuevo" ></i>Nuevo</a>
+    </form>
+
+    <div class="loading" *ngIf= "loading" >
+      <img src = "../../../assets/Circles-menu-3.gif">
+     </div>
+
+ <div>
+  <br>
+  <div class="table-responsive">
+    <div  *ngIf="tblProductos?.length > 0" class="{{carga}}">
+      <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cód Producto</th>
+            <th>Descripción</th>
+            <th>Cód Rápido</th>
+            <th>Cód Barra</th>
+            <th>Tipo</th>
+            <th>Grupo</th>
+            <th>Sub Grupo</th>
+            <th>Color</th>
+            <th>Mínimo</th>
+            <th>Inventariable</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let productos of tblProductos">
+            <th>{{productos.id}}</th>
+            <th>{{productos.cod_pareo}}</th>
+            <th>{{productos.descripcion}}</th>
+            <th>{{productos.cod_rapido}}</th>
+            <th>{{productos.cod_barra}}</th>
+            <th>{{productos.tipo}}</th>
+            <th>{{productos.grupo}}</th>
+            <th>{{productos.sub_grupo}}</th>
+            <th>{{productos.color}}</th>
+            <th>{{productos.minimo}}</th>
+            <th>
+              <span *ngIf="productos.inventariable =='S', else noena" >SI</span>
+            <ng-template #noena><span>NO</span></ng-template>
+            </th>
+
+            <th>  <a (click)="modelUp(productos)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a></th>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  </div>
+</div>
+  <!-- /.card-body -->
+  <div class="card-footer">
+    Marple
+  </div>
+  <!-- /.card-footer-->
+</div>

@@ -1,6 +1,7 @@
-import { Region } from "./region.model";
+import { Ciudad } from "./ciudad.model";
 
-export class Comuna extends Region{
+
+export class Comuna extends Ciudad{
 
   public  idCom     :number;
   public  comDes    :string;
@@ -15,9 +16,14 @@ export class Comuna extends Region{
               xregDes : string,
               xidReg  : number,
               xpaiDes : string,
-              xpaiCod : string ) {
+              xpaiCod : string,
+              xidCiu  : number,
+              xciuDes : string,
+              xciuCod : string ) {
 
-     super(xidReg,xregDes,xregCod , xidPai , xpaiDes , xpaiCod)
+     super(xidCiu , xciuDes , xciuCod , xidPai, xregCod ,xregDes ,xidReg  , xpaiDes, xpaiCod)
+
+
      this.idCom       = xid;
      this.comDes      = xcomDes;
      this.comCod      = xcomCod;

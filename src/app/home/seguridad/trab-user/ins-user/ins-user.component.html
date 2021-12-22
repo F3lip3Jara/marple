@@ -45,7 +45,7 @@
           <div class="form-group">
             <label for="empName">Nombre Usuario</label>
             <div class="input-group input-group-sm">
-            <input type="text" class="form-control" id="empName" placeholder="Ingresar nombre..." formControlName = 'empName'  >
+            <input type="text" class="form-control" id="empName" placeholder="Ingresar nombre..." oninput="this.value = this.value.toUpperCase()" formControlName = 'empName'  >
           </div>
         </div>
         <div *ngIf = "validNombre">  <span class="text-danger">Nombre invalido!</span></div>
@@ -82,7 +82,7 @@
             <label for="nombre">Fecha Nacimiento</label>
           <div class="input-group input-group-sm">
             <input class="form-control" placeholder="yyyy-mm-dd"
-                   name="dp"  ngbDatepicker #d="ngbDatepicker" formControlName = 'empFecNac' >
+                   name="dp"  ngbDatepicker #d="ngbDatepicker" formControlName = 'empFecNac'  [minDate]="{year: 1921, month: 1, day: 1}" [startDate]="{year: 1990, month: 1}"  >
             <div class="input-group-append">
               <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
             </div>

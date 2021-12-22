@@ -1,3 +1,14 @@
+import { TrabOrdenTrabajoComponent } from './produccion/trab-orden-trabajo/trab-orden-trabajo.component';
+import { UpProductosComponent } from './parametros/trab-productos/up-productos/up-productos.component';
+import { TrabOrdenProduccionComponent } from './produccion/trab-orden-produccion/trab-orden-produccion.component';
+import { InsOrdenProduccionComponent } from './produccion/trab-orden-produccion/ins-orden-produccion/ins-orden-produccion.component';
+import { InsProductosComponent } from './parametros/trab-productos/ins-productos/ins-productos.component';
+import { TrabProductosComponent } from './parametros/trab-productos/trab-productos.component';
+import { TrabSubGrupoComponent } from './parametros/trab-sub-grupo/trab-sub-grupo.component';
+import { TrabGrupoComponent } from './parametros/trab-grupo/trab-grupo.component';
+import { TrabUnidadMedidaComponent } from './parametros/trab-unidad-medida/trab-unidad-medida.component';
+import { TrabColorComponent } from './parametros/trab-color/trab-color.component';
+import { TrabMonedasComponent } from './parametros/trab-monedas/trab-monedas.component';
 import { UpProveedorComponent } from './parametros/trab-proveedores/up-proveedor/up-proveedor.component';
 import { TrabProveedoresComponent } from './parametros/trab-proveedores/trab-proveedores.component';
 import { InsProveedoresComponent } from './parametros/trab-proveedores/ins-proveedores/ins-proveedores.component';
@@ -11,7 +22,6 @@ import { LinksService } from './../servicios/links.service';
 import { TrabEtapasComponent } from './parametros/trab-etapas/trab-etapas.component';
 import { TrabRolesComponent } from './seguridad/trab-roles/trab-roles.component';
 import { Component, OnInit , EventEmitter ,Output , ComponentFactoryResolver , ViewChild, AfterViewInit} from '@angular/core';
-import { ProductosComponent } from './parametros/productos/productos.component';
 import { ReceptorDirective } from '../receptor.directive';
 import {  Observable } from 'rxjs';
 import { AlertasService } from '../servicios/alertas.service';
@@ -39,9 +49,6 @@ export class HomeComponent implements OnInit , AfterViewInit {
   imgName             : string  = '';
   name                : string  = '';
   isMenuCollapsed               = false;
-
-
-
 
   time  = new Observable(observer => {
     setInterval(()=> observer.next(new Date().toString() ), 1000);
@@ -78,20 +85,16 @@ export class HomeComponent implements OnInit , AfterViewInit {
   public links(link: any){
 
     let miComponent : any;
-
     switch (link) {
-
       case 'users':
           miComponent = TrabUserComponent;
           break;
       case 'insUsuario':
             miComponent = InsUserComponent;
           break;
-
       case 'roles':
           miComponent = TrabRolesComponent;
           break;
-
       case 'gerencia':
             miComponent = TrabGerenciaComponent;
             break;
@@ -119,11 +122,42 @@ export class HomeComponent implements OnInit , AfterViewInit {
         case 'insProveedor':
             miComponent = InsProveedoresComponent
             break;
-        case 'producto':
-              miComponent = ProductosComponent
-              break;
         case 'upProveedor':
              miComponent  = UpProveedorComponent
+             break;
+        case 'moneda':
+              miComponent  = TrabMonedasComponent
+             break;
+        case 'color':
+              miComponent  = TrabColorComponent
+             break;
+        case 'unidad':
+             miComponent  = TrabUnidadMedidaComponent
+             break;
+        case 'grupo':
+             miComponent  = TrabGrupoComponent
+             break;
+        case 'subgrupo':
+              miComponent  = TrabSubGrupoComponent
+              break;
+        case 'productos':
+              miComponent  = TrabProductosComponent
+              break;
+        case 'insProducto':
+              miComponent  = InsProductosComponent
+              break;
+        case 'op':
+              miComponent  = TrabOrdenProduccionComponent
+              break;
+        case 'insOp':
+              miComponent  = InsOrdenProduccionComponent
+              break;
+        case 'upProducto':
+              miComponent  = UpProductosComponent
+              break;
+        case 'ot':
+              miComponent  = TrabOrdenTrabajoComponent
+              break;
 
 
     }

@@ -8,8 +8,8 @@
   </div>
   <div class="card-body">
 
-      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ><i class="fas fa-file-csv"></i>Excel</button>
-      <a (click) = "userNuevo()" class="btn  btn-outline-primary btn-sm" ><i class="fas fa-address-card" ></i>Nuevo</a>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel" ><i class="fas fa-file-csv"></i>Excel</button>
+      <a (click) = "userNuevo()" class="btn  btn-outline-primary btn-sm" ngbTooltip="Nuevo" ><i class="fas fa-address-card" ></i>Nuevo</a>
 
 
     <div class="loading" *ngIf= "loading" >
@@ -48,7 +48,7 @@
             <th>{{usuario.reinicio}}</th>
             <th>{{usuario.created_at.substr(0 , 10)}}</th>
             <th>
-              <a (click)="modelUp(modalRolesUdp, usuario)" class="btn btn-warning btn-xs" placeholder="actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+              <a (click)="modelUp(modalRolesUdp, usuario)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
 
             </th>
           </tr>

@@ -9,6 +9,7 @@ import { RestService } from 'src/app/servicios/rest.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { Alert } from 'src/app/model/alert.model';
+import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-trab-comuna',
@@ -35,6 +36,7 @@ export class TrabComunaComponent implements OnInit {
   val          : boolean              = false;
   dato         : number               = 0;
   validCod     : boolean              = false;
+  ciudades     : any;
 
   constructor(private fb: FormBuilder,
     private servicio : UsersService,
@@ -52,6 +54,10 @@ export class TrabComunaComponent implements OnInit {
          idReg : ['' , Validators.compose([
           Validators.required,
          ])],
+         idCiu : ['' , Validators.compose([
+          Validators.required,
+         ])],
+
          comCod : ['' , Validators.compose([
           Validators.required,
          ])],
@@ -68,8 +74,8 @@ export class TrabComunaComponent implements OnInit {
       });
       this.regiones = {};
       this.paises   = {};
-
-      this.comuna = new Comuna(0, '', '' , 0 , '' , '',0,'','');
+      this.ciudades = {};
+      this.comuna = new Comuna(0, '', '' , 0 , '' , '',0,'','',0 , '' , '');
 
     }
 
@@ -107,12 +113,19 @@ export class TrabComunaComponent implements OnInit {
             });
         });
 
-
-        this.insComuna.controls['comCod'].valueChanges.subscribe(field => {
+        this.insComuna.controls['idReg'].valueChanges.subscribe(field => {
+          this.ciudades   = {};
+          this.parametros = [{key :'idReg' ,value: field} , {key:'idPai' , value: this.insComuna.controls['idPai'].value}];
+          this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
+            this.ciudades = data;
+            });
+        });
+        this.insComuna.controls['comCod'].valueChanges.pipe(
+          filter(text => text.length >=2),
+          debounceTime(200),
+          distinctUntilChanged()).subscribe(field => {
           this.validaRegion(field);
         });
-
-
       this.tblData();
   }
 
@@ -140,6 +153,7 @@ export class TrabComunaComponent implements OnInit {
   this.comuna.setPaicod(xcomuna.paiCod);
   this.comuna.setregDes(xcomuna.regDes);
   this.comuna.setIdReg(xcomuna.idReg);
+  this.comuna.setidCom(xcomuna.idCiu);
   this.comuna.setidCom(xcomuna.idCom);
   this.comuna.setcomCod(xcomuna.comCod);
   this.updComuna.controls['upcomDes'].setValue(xcomuna.comDes);
@@ -155,10 +169,7 @@ public delComuna (comuna : any) : boolean{
        resp.forEach((elementx : any)  => {
          if(elementx.error == '0'){
            this.modal.dismissAll();
-           this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-
            setTimeout(()=>{
-             this.servicioaler.setAlert('','');
             this.tblComuna = {};
              this.rest.get('trabComuna' , this.token, this.parametros).subscribe(data => {
                  this.tblComuna = data;
@@ -175,22 +186,19 @@ public delComuna (comuna : any) : boolean{
          }else{
            this.carga    = 'visible';
            this.loading  = false;
-           this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-
-           setTimeout(()=>{
-             this.servicioaler.setAlert('','');
-           },1500);
          }
        });
    });
+
+   this.servicioaler.disparador.emit(this.servicioaler.getAlert());
    return false;
 }
 
-public action(xidPai : any , xidReg : any , xcomCod : any , xcomDes : any , tipo : string ) : boolean{
+public action(xidPai : any , xidReg : any ,xidCiud : any , xcomCod : any , xcomDes : any , tipo : string ) : boolean{
   let url      = '';
   this.carga   = 'invisible';
   this.loading = true;
-  let xcomuna  = new Comuna(this.comuna.idCom , xcomDes , xcomCod , xidPai , '','', xidReg , '','' );
+  let xcomuna  = new Comuna(this.comuna.idCom , xcomDes , xcomCod , xidPai , '','', xidReg , '','',xidCiud ,'', '');
   this.val     = true;
 
   if(tipo =='up'){
@@ -203,22 +211,16 @@ public action(xidPai : any , xidReg : any , xcomCod : any , xcomDes : any , tipo
       resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
           this.modal.dismissAll();
-
           setTimeout(()=>{
-            this.servicioaler.setAlert('','');
             this.tblComuna = {};
-
             this.rest.get('trabComuna' , this.token, this.parametros).subscribe(data => {
                 this.tblComuna = data;
             });
-
             this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
               dtInstance.destroy().draw();
             });
-
            this.insComuna.controls['comDes'].setValue('');
            this.insComuna.controls['comCod'].setValue('');
-
             this.carga    = 'visible';
             this.loading  = false;
             this.val      = false;
@@ -231,8 +233,7 @@ public action(xidPai : any , xidReg : any , xcomCod : any , xcomDes : any , tipo
     });
   });
 
-  let alerta : Alert = this.servicioaler.getAlert();
-  this.servicioaler.disparador.emit(alerta);
+  this.servicioaler.disparador.emit(this.servicioaler.getAlert());
   return false;
 }
 

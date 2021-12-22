@@ -1,0 +1,104 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Orden de Trabajo</h3>
+
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+        <i class="fas fa-minus"></i></button>
+    </div>
+
+  </div>
+  <div class="card-body">
+      <h3 class="card-title">Filtros</h3>
+      <form
+      [formGroup] = "filtroOp">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <td>N° OP</td>
+            <td><input type="text"   [(ngModel)]="model"
+              [ngbTypeahead]="search"
+              (focus)="focus$.next($any($event).target.value)"
+              (click)="click$.next($any($event).target.value)"
+              #instance="ngbTypeahead"  value="" class="form-control" placeholder="Ingrese N° Orden Producción"  formControlName='orpNumRea' /> </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "buscar(filtroOp.controls['orpNumRea'].value)" ngbTooltip="Buscar"><i class="fas fa-search"></i>Buscar</button>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "refrescar()" ngbTooltip="Refrescar"><i class="fas fa-sync-alt"></i>Refrescar</button>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "Excel()"  ngbTooltip="Excel" ><i class="fas fa-file-csv"></i>Excel</button>
+
+    </form>
+
+    <div class="loading" *ngIf= "loading" >
+      <img src = "../../../assets/Circles-menu-3.gif">
+     </div>
+
+ <div>
+  <br>
+  <div class="table-responsive">
+    <div  *ngIf="tblOrdenPrd?.length > 0" class="{{carga}}">
+      <table #datatableElement datatable  id="tblOrdenPrd" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Nro Op</th>
+            <th>Fecha Op</th>
+            <th>Estado Ot</th>
+            <th>Prioridad</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let orden of tblOrdenPrd">
+            <th>{{orden.id}}</th>
+            <th>{{orden.usuario_genera}}</th>
+            <th>{{orden.orden_produccion}}</th>
+            <th>{{orden.orden_prod_fec}}</th>
+            <th>{{orden.estado}}</th>
+            <th>
+              <span [ngSwitch]="orden.prioridad">
+                <span *ngSwitchCase="'A'">
+                  <small class="badge badge-danger">Alta</small>
+                </span>
+                <span *ngSwitchCase="'M'">
+                    <small class="badge badge-primary">Medio</small>
+                </span>
+                <span *ngSwitchCase="'B'">
+                  <small class="badge badge-secondary">Bajo</small>
+                </span>
+              </span>
+            </th>
+            <th></th>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  </div>
+</div>
+  <!-- /.card-body -->
+  <div class="card-footer">
+    Marple
+  </div>
+  <!-- /.card-footer-->
+</div>

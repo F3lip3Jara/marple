@@ -73,7 +73,7 @@ export class LoginComponent implements OnInit {
                 setTimeout(()=>{
                   this.router.navigate(['/home']);
                   this.log = false;
-                },2000);
+                },500);
               }
         }
       });

@@ -1,34 +1,62 @@
+ <span [ngSwitch]="alerta.getType()">
+  <span *ngSwitchCase="'danger'">
+    <div  id="alert" role="alert" aria-atomic="true"
+    [ngClass]="(show)? 'toast bg-danger text-light alert-danger  alert-service show ' : 'toast bg-danger text-light alert-danger  alert-service fade' " >
+      <div class="toast-header">
+        <strong class="mr-auto">Información</strong>
+        <button type="button" class="btn btn-tool" (click)="show=false" >
+          <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="toast-body">
+      <p class="ngalert"><i class="icon fas fa-exclamation-triangle"></i>  {{alerta.getMessage()}} !</p>
+    </div>
+  </div>
+  </span>
 
-      <span [ngSwitch]="alerta.getType()">
-        <span *ngSwitchCase="'danger'">
-          <div class="alert alert-danger alert-dismissible">
+  <span *ngSwitchCase="'info'">
+    <div  id="alert"  role="alert" aria-atomic="true"
+    [ngClass]="(show)? 'toast toast-info  text-light alert-danger  alert-service show' : 'toast toast-info text-light alert-danger  alert-service fade' " >
+      <div class="toast-header">
+        <strong class="mr-auto">Información</strong>
+        <button type="button" class="btn btn-tool" (click)="show=false" >
+          <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="toast-body">
+      <p class="ngalert"><i class="icon fas fa-ban"></i>  {{alerta.getMessage()}} !</p>
+    </div>
+  </div>
+  </span>
+  <span *ngSwitchCase="'warning'">
+      <div   id="alert" role="alert" aria-atomic="true"
+      [ngClass]="(show)? 'toast toast-warnig   alert-danger  alert-service show' : 'toast toast-warnig  alert-danger  alert-service fade' " >
+        <div class="toast-header">
+          <strong class="mr-auto">Información</strong>
+          <button type="button" class="btn btn-tool" (click)="show=false" >
+            <i class="fas fa-times"></i>
+          </button>
+      </div>
+      <div class="toast-body">
+        <p class="ngalert"><i class="icon fas fa-exclamation-triangle"></i>  {{alerta.getMessage()}} !</p>
+      </div>
+    </div>
+  </span>
 
-          <h5><i class="icon fas fa-ban"></i> Alert!</h5>
-            {{alerta.getMessage()}}
-        </div>
-      </span>
 
-        <span *ngSwitchCase="'info'">
-          <div class="alert alert-info alert-dismissible">
-
-            <h5><i class="icon fas fa-info"></i> Alert!</h5>
-            {{alerta.getMessage()}}
+  <span *ngSwitchCase="'success'">
+        <div  id="alert" role="alert" aria-atomic="true"
+            [ngClass]="(show)? 'toast bg-success  text-light alert-danger  alert-service show' : 'toast bg-success text-light alert-danger  alert-service fade' " >
+              <div class="toast-header">
+                <strong class="mr-auto">Información</strong>
+                <button type="button" class="btn btn-tool" (click)="show=false" >
+                  <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="toast-body">
+              <p class="ngalert"><i class="icon fas fa-ban"></i>  {{alerta.getMessage()}} !</p>
+            </div>
           </div>
-        </span>
+  </span>
+ </span>
 
-        <span *ngSwitchCase="'warning'">
-          <div class="alert alert-warning alert-dismissible">
-
-            <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
-            {{alerta.getMessage()}}
-          </div>
-        </span>
-
-        <span *ngSwitchCase="'success'">
-          <div class="alert alert-success alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h5><i class="icon fas fa-check"></i> Alert!</h5>
-            {{alerta.getMessage()}}
-          </div>
-        </span>
-       </span>

@@ -97,7 +97,7 @@ public delGerencia( gerencia : any) : boolean{
            this.servicioaler.disparador.emit(this.servicioaler.getAlert());
 
            setTimeout(()=>{
-             this.servicioaler.setAlert('','');
+
              this.tblGerencia = {};
              this.rest.get('trabGerencia' , this.token, this.parametros).subscribe(data => {
                  this.tblGerencia = data;
@@ -114,14 +114,12 @@ public delGerencia( gerencia : any) : boolean{
          }else{
            this.carga    = 'visible';
            this.loading  = false;
-           this.servicioaler.disparador.emit(this.servicioaler.getAlert());
 
-           setTimeout(()=>{
-             this.servicioaler.setAlert('','');
-           },1500);
          }
-       });
+      });
    });
+
+   this.servicioaler.disparador.emit(this.servicioaler.getAlert());
    return false;
 }
 
@@ -140,22 +138,16 @@ public action(gerDesx : any , tipo :string ) : boolean{
       resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
           this.modal.dismissAll();
-
           setTimeout(()=>{
-            this.servicioaler.setAlert('','');
             this.tblGerencia = {};
-
             this.rest.get('trabGerencia' , this.token, this.parametros).subscribe(data => {
                 this.tblGerencia = data;
             });
-
             this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
               dtInstance.destroy().draw();
             });
-
             this.carga    = 'visible';
             this.loading  = false;
-
           },1500);
       }else {
         this.carga    = 'visible';
@@ -164,8 +156,7 @@ public action(gerDesx : any , tipo :string ) : boolean{
     });
   });
 
-  let alerta : Alert = this.servicioaler.getAlert();
-  this.servicioaler.disparador.emit(alerta);
+  this.servicioaler.disparador.emit(this.servicioaler.getAlert());
   return false;
 }
 

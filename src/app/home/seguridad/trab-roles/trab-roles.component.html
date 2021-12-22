@@ -8,8 +8,8 @@
   </div>
   <div class="card-body">
 
-      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ><i class="fas fa-file-csv"></i>Excel</button>
-      <a (click) = "modalIns(modalRolesIns)" class="btn  btn-outline-primary btn-sm" ><i class="fas fa-address-card" ></i>Nuevo</a>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel" ><i class="fas fa-file-csv"></i>Excel</button>
+      <a (click) = "modalIns(modalRolesIns)" class="btn  btn-outline-primary btn-sm" ngbTooltip= "Nuevo"><i class="fas fa-address-card" ></i>Nuevo</a>
 
 
     <div class="loading" *ngIf= "loading" >
@@ -32,8 +32,8 @@
           <th>{{roles.idRol}}</th>
           <th>{{roles.rolDes}}</th>
           <th>
-            <a (click) = "modelUp(modalRolesUdp , roles)" class="btn btn-warning btn-xs" placeholder="actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
-            <a (click) = "delRoles(roles)" class="btn btn-warning btn-xs" placeholder="eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
+            <a (click) = "modelUp(modalRolesUdp , roles)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+            <a (click) = "delRoles(roles)" class="btn btn-warning btn-xs" ngbTooltip="Eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
           </th>
         </tr>
       </tbody>
@@ -59,11 +59,11 @@
       <div class="card-body">
         <div class="form-group">
           <label for="">Código</label>
-          <input type="text" class="form-control" id="" placeholder="" value="{{roles.idRol}}"   disabled>
+          <input type="text" class="form-control" id="" placeholder="" value="{{roles.idRol}}"  oninput="this.value = this.value.toUpperCase()"  disabled>
         </div>
         <div class="form-group">
           <label for="">Descripción</label>
-          <input type="text" class="form-control" name = "rolDes" id="rolDes" placeholder="" value="{{roles.rolDes}}" #uprolDes >
+          <input type="text" class="form-control" name = "rolDes" id="rolDes" placeholder=""  oninput="this.value = this.value.toUpperCase()" value="{{roles.rolDes}}" #uprolDes >
         </div>
       </div>
       <!-- /.card-body -->
@@ -91,7 +91,7 @@
       <div class="card-body">
         <div class="form-group">
           <label for="">Descripción</label>
-          <input type="text" class="form-control" name = "rolDes" id="rolDes" placeholder="" value="" #insrolDes >
+          <input type="text" class="form-control" name = "rolDes" id="rolDes" placeholder="" value="" oninput="this.value = this.value.toUpperCase()" #insrolDes >
         </div>
       </div>
       <!-- /.card-body -->

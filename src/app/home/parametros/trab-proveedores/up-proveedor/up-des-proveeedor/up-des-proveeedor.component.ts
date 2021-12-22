@@ -58,4 +58,45 @@ export class UpDesProveeedorComponent implements OnInit {
     this.excel.exportAsExcelFile(this.tblProveedor, 'proveedores');
     return false;
    }
+
+
+   public delPrvDir( proveedor : any){
+    let url      = 'delPrvDir';
+    this.carga   = 'invisible';
+    this.loading = true;
+
+     this.rest.post(url ,this.token, proveedor ).subscribe(resp => {
+         resp.forEach((elementx : any)  => {
+           if(elementx.error == '0'){
+
+             this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+
+             setTimeout(()=>{
+               this.servicioaler.setAlert('','');
+               this.tblProveedor = {};
+               this.rest.get('trabPrvDir' , this.token, this.parametros).subscribe(data => {
+                   this.tblProveedor = data;
+               });
+
+               this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
+                 dtInstance.destroy().draw();
+               });
+
+               this.carga    = 'visible';
+               this.loading  = false;
+             },1500);
+
+           }else{
+             this.carga    = 'visible';
+             this.loading  = false;
+             this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+
+             setTimeout(()=>{
+               this.servicioaler.setAlert('','');
+             },1500);
+           }
+         });
+     });
+     return false;
+   }
 }

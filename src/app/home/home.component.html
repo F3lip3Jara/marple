@@ -7,7 +7,7 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body class="hold-transition sidebar-mini pace-primary  text-sm">
+<body class="sidebar-mini layout-fixed  text-sm" style="height: auto;">
 <!-- Site wrapper -->
 <div class="wrapper">
   <!-- Navbar -->
@@ -18,7 +18,7 @@
         <a class="nav-link" data-widget="pushmenu" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="/#/home" class="nav-link">Home</a>
+        <a href="/#/home" class="nav-link" >Home</a>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto">
@@ -32,7 +32,7 @@
             <!-- Message Start -->
             <div  class="collapse navbar-collapse media">
               <div *ngIf="imgName"  class="image">
-                <img src="{{imgName}}" class="img-size-50 mr-3 img-circle" alt="User Image">
+                <img src="{{imgName}}" class="img-size-50 mr-3 img-circle">
               </div>
               <div class="media-body">
                 <h3 class="dropdown-item-title">
@@ -62,13 +62,13 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar elevation-4 sidebar-light-danger">
     <!-- Brand Logo -->
-    <a  class="brand-link">
+    <p  class="brand-link ">
       <img src="../../assets/pixlr-bg-result.png"
            alt="Logo"
            class="brand-image img-circle elevation-3"
            style="opacity: .8">
-      <span class="brand-text font-weight-light">MarpleERP</span>
-    </a>
+      <span class="brand-text font-weight-light h6">MARPLE-ERP</span>
+    </p>
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user (optional) -->
@@ -96,7 +96,7 @@
   </div>
 
   <!-- /.content-wrapper -->
-  <footer class="main-footer">
+  <footer class="main-footer  py-4">
 
     <div class="float-right d-none d-sm-block">
       Fecha {{ time | async}}

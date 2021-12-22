@@ -3,3 +3,12 @@
   list-style: none;
   padding: 0;
 }
+
+.nav-link >i{
+  font-size: 15px !important;
+}
+
+.nav-sidebar .nav-item > .nav-link {
+  position: relative;
+  font-size: 12px !important;
+}

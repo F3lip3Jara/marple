@@ -1,3 +1,4 @@
+
 import { NgModule, Component } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
@@ -7,7 +8,6 @@ import { LoginComponent } from './login/login.component';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import {MenuLateralComponent} from './home/menu-lateral/menu-lateral.component';
-import { ProductosComponent } from './home/parametros/productos/productos.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {FormsModule , ReactiveFormsModule   } from '@angular/forms';
 import { InterceptorsErrorService } from './interceptors/interceptors-error.service';
@@ -34,6 +34,19 @@ import { NgxMaskModule, IConfig } from 'ngx-mask';
 import { UpProveedorComponent } from './home/parametros/trab-proveedores/up-proveedor/up-proveedor.component';
 import { VerProveedorComponent } from './home/parametros/trab-proveedores/ver-proveedor/ver-proveedor.component';
 import { UpDesProveeedorComponent } from './home/parametros/trab-proveedores/up-proveedor/up-des-proveeedor/up-des-proveeedor.component';
+import { TrabMonedasComponent } from './home/parametros/trab-monedas/trab-monedas.component';
+import { TrabColorComponent } from './home/parametros/trab-color/trab-color.component';
+import { TrabUnidadMedidaComponent } from './home/parametros/trab-unidad-medida/trab-unidad-medida.component';
+import { TrabGrupoComponent } from './home/parametros/trab-grupo/trab-grupo.component';
+import { TrabSubGrupoComponent } from './home/parametros/trab-sub-grupo/trab-sub-grupo.component';
+import { TrabProductosComponent } from './home/parametros/trab-productos/trab-productos.component';
+import { InsProductosComponent } from './home/parametros/trab-productos/ins-productos/ins-productos.component';
+import { TrabOrdenProduccionComponent } from './home/produccion/trab-orden-produccion/trab-orden-produccion.component';
+import { InsOrdenProduccionComponent } from './home/produccion/trab-orden-produccion/ins-orden-produccion/ins-orden-produccion.component';
+import { UpProductosComponent } from './home/parametros/trab-productos/up-productos/up-productos.component';
+import { TrabOrdenTrabajoComponent } from './home/produccion/trab-orden-trabajo/trab-orden-trabajo.component';
+import { InsOrdTrabajoComponent } from './home/produccion/trab-orden-trabajo/ins-ord-trabajo/ins-ord-trabajo.component';
+
 
 
 const routes: Routes = [
@@ -53,7 +66,6 @@ const routes: Routes = [
     LoginComponent,
     HomeComponent,
     MenuLateralComponent,
-    ProductosComponent,
     ReceptorDirective,
     AlertsComponent,
     TrabUserComponent,
@@ -73,6 +85,18 @@ const routes: Routes = [
     UpProveedorComponent,
     VerProveedorComponent,
     UpDesProveeedorComponent,
+    TrabMonedasComponent,
+    TrabColorComponent,
+    TrabUnidadMedidaComponent,
+    TrabGrupoComponent,
+    TrabSubGrupoComponent,
+    TrabProductosComponent,
+    InsProductosComponent,
+    TrabOrdenProduccionComponent,
+    InsOrdenProduccionComponent,
+    UpProductosComponent,
+    TrabOrdenTrabajoComponent,
+    InsOrdTrabajoComponent,
 
   ],
   imports: [
@@ -86,6 +110,9 @@ const routes: Routes = [
     DataTablesModule,
     NgbModule,
     NgxMaskModule.forRoot(),
+
+
+
 
   ],
   providers: [

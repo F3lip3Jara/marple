@@ -8,6 +8,7 @@ import { LinksService } from 'src/app/servicios/links.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
 import { toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
+import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 
 @Component({
@@ -96,7 +97,10 @@ export class InsUserComponent implements OnInit {
      this.gerencia = data;
   });
 
-  this.insUser.controls['empName'].valueChanges.subscribe(field => {
+  this.insUser.controls['empName'].valueChanges.pipe(
+    filter(text => text.length > 3),
+    debounceTime(200),
+    distinctUntilChanged()).subscribe(field => {
       this.validaNombre(field);
     });
 

@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
+import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-ins-proveedores',
@@ -114,33 +115,36 @@ export class InsProveedoresComponent implements OnInit {
 
       this.insProv.controls['idReg'].valueChanges.subscribe(field => {
         if(field > 0){
-          this.comunas = {};
+
           this.ciudades= {};
+          this.comunas = {};
           this.insProv.controls['idCom'].setValue('');
           this.insProv.controls['idCiu'].setValue('');
-          this.parametros = [{key :'idReg' ,value: field}];
-          this.rest.get('comReg' , this.token, this.parametros).subscribe(data => {
+          this.parametros = [{key :'idReg' ,value: field} , {key : 'idPai' , value:  this.insProv.controls['idPai'].value}];
+          this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
+          this.ciudades = data;
+
+        });
+        }
+      });
+
+      this.insProv.controls['idCiu'].valueChanges.subscribe(field => {
+        if(field > 0){
+          this.comunas = {};
+          this.insProv.controls['idCom'].setValue('');
+          this.parametros = [{key :'idCiu' ,value: field} , {key :'idReg' , value : this.insProv.controls['idReg'].value } , {key : 'idPai' , value:  this.insProv.controls['idPai'].value} ];
+          this.rest.get('ciuCom' , this.token, this.parametros).subscribe(data => {
             this.comunas = data;
             });
         }
-      });
-
-      this.insProv.controls['idCom'].valueChanges.subscribe(field => {
-        if(field > 0){
-          this.ciudades = {};
-          this.insProv.controls['idCiu'].setValue('');
-          this.parametros = [{key :'idCom' ,value: field}];
-          this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
-            this.ciudades = data;
-            });
-        }
 
       });
 
-      this.insProv.controls['prvRut'].valueChanges.subscribe(field => {
-        if(field != ''){
+      this.insProv.controls['prvRut'].valueChanges.pipe(
+        filter(text => text.length > 7),
+        debounceTime(200),
+        distinctUntilChanged()).subscribe(field => {
           this.parametros = [{key :'prvRut' ,value: field.trim()}];
-
           this.rest.get('valPrvRut', this.token , this.parametros).subscribe( (data : any) => {
             data.forEach((elementx : any)  => {
                 if(elementx.error == 1  ){
@@ -152,10 +156,8 @@ export class InsProveedoresComponent implements OnInit {
                    this.mensaje= elementx.mensaje;
                    this.servicioaler.setAlert('','');
                 }
-
             });
           });
-        }
       });
   }
 

@@ -9,6 +9,7 @@ import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { Alert } from 'src/app/model/alert.model';
 import { Pais } from 'src/app/model/pais.model';
+import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-trab-region',
@@ -92,7 +93,10 @@ export class TrabRegionComponent implements OnInit {
         this.paises = data;
         });
 
-      this.insRegion.controls['regCod'].valueChanges.subscribe(field => {
+      this.insRegion.controls['regCod'].valueChanges.pipe(
+        filter(text => text.length > 1),
+        debounceTime(200),
+        distinctUntilChanged()).subscribe(field => {
           this.validaRegion(field);
         });
 
@@ -134,10 +138,7 @@ public delRegion (region : any) : boolean{
        resp.forEach((elementx : any)  => {
          if(elementx.error == '0'){
            this.modal.dismissAll();
-           this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-
            setTimeout(()=>{
-             this.servicioaler.setAlert('','');
              this.tblRegion = {};
              this.rest.get('trabRegion' , this.token, this.parametros).subscribe(data => {
                  this.tblRegion = data;
@@ -154,14 +155,10 @@ public delRegion (region : any) : boolean{
          }else{
            this.carga    = 'visible';
            this.loading  = false;
-           this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-
-           setTimeout(()=>{
-             this.servicioaler.setAlert('','');
-           },1500);
          }
        });
    });
+   this.servicioaler.disparador.emit(this.servicioaler.getAlert());
    return false;
 }
 
@@ -182,22 +179,16 @@ public action(xidPai : any , xregDes: any , xregCod : any ,  tipo :string ) : bo
       resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
           this.modal.dismissAll();
-
           setTimeout(()=>{
-            this.servicioaler.setAlert('','');
             this.tblRegion = {};
-
             this.rest.get('trabRegion' , this.token, this.parametros).subscribe(data => {
                 this.tblRegion = data;
             });
-
             this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
               dtInstance.destroy().draw();
             });
-
             this.insRegion.controls['regDes'].setValue('');
             this.insRegion.controls['regCod'].setValue('');
-
             this.carga    = 'visible';
             this.loading  = false;
             this.val      = false;
@@ -209,9 +200,7 @@ public action(xidPai : any , xregDes: any , xregCod : any ,  tipo :string ) : bo
       }
     });
   });
-
-  let alerta : Alert = this.servicioaler.getAlert();
-  this.servicioaler.disparador.emit(alerta);
+  this.servicioaler.disparador.emit(this.servicioaler.getAlert());
   return false;
 }
 

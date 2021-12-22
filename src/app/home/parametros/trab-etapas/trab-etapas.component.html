@@ -7,8 +7,8 @@
     </div>
   </div>
   <div class="card-body">
-      <button type = 'button' class="btn  btn-outline-primary btn-sm"><i class="fas fa-file-csv"></i>Excel</button>
-      <a (click)= "modalIns(modalInsEta)" class="btn  btn-outline-primary btn-sm" ><i class="fas fa-address-card" ></i>Nuevo</a>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" ngbTooltip="Excel"><i class="fas fa-file-csv"></i>Excel</button>
+      <a (click)= "modalIns(modalInsEta)" class="btn  btn-outline-primary btn-sm" ngbTooltip="Nuevo"><i class="fas fa-address-card" ></i>Nuevo</a>
 
 
     <div class="loading" *ngIf = 'loading'>
@@ -31,8 +31,8 @@
           <th>{{etapas.idEta}}</th>
           <th>{{etapas.etaDes}}</th>
           <th>
-            <a (click) = "modelUp(modalEtaUdp , etapas)" class="btn btn-warning btn-xs" placeholder="actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
-            <a (click) = "delEtapas(etapas)" class="btn btn-warning btn-xs" placeholder="eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
+            <a (click) = "modelUp(modalEtaUdp , etapas)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+            <a (click) = "delEtapas(etapas)" class="btn btn-warning btn-xs" ngbTooltip="Eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
           </th>
         </tr>
       </tbody>
@@ -64,7 +64,7 @@
         </div>
         <div class="form-group">
           <label for="">Descripción</label>
-          <input type="text" class="form-control" name = "etaDes" id="etaDes" placeholder="" value="{{etapas.etaDes}}" #etaDes >
+          <input type="text" class="form-control" name = "etaDes" id="etaDes" placeholder="" value="{{etapas.etaDes}}" #etaDes  oninput="this.value = this.value.toUpperCase()">
         </div>
       </div>
       <!-- /.card-body -->
@@ -93,7 +93,7 @@
       <div class="card-body">
         <div class="form-group">
           <label for="">Descripción</label>
-          <input type="text" class="form-control" name = "etaDes" id="etaDEs" placeholder="" value="" #etaDes >
+          <input type="text" class="form-control" name = "etaDes" id="etaDEs" placeholder="" value="" #etaDes  oninput="this.value = this.value.toUpperCase()">
         </div>
       </div>
       <!-- /.card-body -->

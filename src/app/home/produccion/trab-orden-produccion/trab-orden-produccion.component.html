@@ -1,0 +1,195 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Orden Producción</h3>
+
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+        <i class="fas fa-minus"></i></button>
+    </div>
+
+  </div>
+  <div class="card-body">
+      <h3 class="card-title">Filtros</h3>
+      <form
+      [formGroup] = "filtroOp">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <td>N° OP</td>
+            <td><input type="text"   [(ngModel)]="model"
+              [ngbTypeahead]="search"
+              (focus)="focus$.next($any($event).target.value)"
+              (click)="click$.next($any($event).target.value)"
+              #instance="ngbTypeahead"  value="" class="form-control" placeholder="Ingrese N° Orden Producción"  formControlName='orpNumRea' /> </td>
+            <!--<td>Fecha de Creación</td>
+            <td>
+              <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd"
+                       name="dp"  ngbDatepicker #d="ngbDatepicker">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
+                </div>
+              </div>
+            </td>-->
+
+          </tr>
+
+        </tbody>
+      </table>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "buscar(filtroOp.controls['orpNumRea'].value)" ngbTooltip="Buscar"><i class="fas fa-search"></i>Buscar</button>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "refrescar()" ngbTooltip="Refrescar"><i class="fas fa-sync-alt"></i>Refrescar</button>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "Excel()"  ngbTooltip="Excel" ><i class="fas fa-file-csv"></i>Excel</button>
+      <a (click)="ordNuevo()" class="btn  btn-outline-primary btn-sm"  ngbTooltip="Nuevo" ><i class="fas fa-address-card"></i>Nuevo</a>
+    </form>
+
+    <div class="loading" *ngIf= "loading" >
+      <img src = "../../../assets/Circles-menu-3.gif">
+     </div>
+
+ <div>
+  <br>
+  <div class="table-responsive">
+    <div  *ngIf="tblOrdenPrd?.length > 0" class="{{carga}}">
+      <table #datatableElement datatable  id="tblOrdenPrd" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Nro de Oc</th>
+            <th>Nro Op</th>
+            <th>Rut Cliente</th>
+            <th>Fecha</th>
+            <th>Estado Ord</th>
+            <th>Estado Prod</th>
+            <th>Observaciones</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let orden of tblOrdenPrd">
+            <th>{{orden.id}}</th>
+            <th>{{orden.usuario}}</th>
+            <th>{{orden.orden_compra}}</th>
+            <th>{{orden.orden_produccion}}</th>
+            <th>{{orden.rut_cliente}}</th>
+            <th>{{orden.fecha}}</th>
+            <th>{{orden.estado_ord}}</th>
+            <th>{{orden.estado_pro}}</th>
+            <th>{{orden.observaciones}}</th>
+            <th> <a (click) = "addOT(orden , modalCiuUdp)" class="btn btn-warning btn-xs"  ngbTooltip="Orden de trabajo" ><i class="fas fa-folder-plus"></i></a></th>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  </div>
+</div>
+  <!-- /.card-body -->
+  <div class="card-footer">
+    Marple
+  </div>
+  <!-- /.card-footer-->
+</div>
+
+
+<ng-template #modalCiuUdp let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal Ingreso de Orden Trabajo</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form
+                         >
+  <div class="modal-body">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="nombre">Orden Compra</label>
+          <div class=" input-group-sm" >
+            <input type="text" class="form-control" id="" placeholder="" value="{{xorden.orden_compra}}" disabled>
+            <input type="hidden" class="form-control" name = "idOrp" id="idPai" placeholder="" value="{{xorden.id}}" disabled  #idOrp>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="nombre">Orden de Producción</label>
+          <div class=" input-group-sm">
+            <input type="text" class="form-control" id="" placeholder="" value="{{xorden.orden_produccion}}" disabled>
+
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="regDes">Fecha</label>
+          <div class="input-group input-group-sm">
+          <input type="text" class="form-control" id="ciuCod" placeholder="Ingresar descripción..."  value="{{xorden.fecha}}" disabled >
+        </div>
+      </div>
+      <div *ngIf ="! orptPrio.value">
+        <span class="text-danger">Debe seleccionar prioridad!</span>
+      </div>
+      <div class="form-group">
+        <label for="regDes">Prioridad</label>
+      <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" #orptPrio >
+        <option   value="">Seleccione</option>
+        <option   value="A">Alto</option>
+        <option   value="M">Medio</option>
+        <option   value="B">Bajo</option>
+      </select>
+      </div>
+
+      <div *ngIf ="ot.length == 0">
+        <span class="text-danger">Debe seleccionar un producto!</span>
+      </div>
+      <div class="table-responsive" *ngIf="xorddet.length > 0">
+        <table class="table table-hover text-nowrap">
+          <thead>
+              <tr>
+                  <td>Acciones</td>
+                  <td>Cód Producto</td>
+                  <td>Descripción</td>
+                  <td>Cantidad Sol</td>
+                  <td>Total a Producir</td>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let ord of xorddet; let i= index;">
+                    <td>
+                        <input type="checkbox" ng-true-value="S" ng-false-value="N"  (change)="argrerDet(ord , $event.target  )"  >
+                   </td>
+
+                   <td>
+                      <span>{{ord.orpdPrdCod}}</span>
+                  </td>
+                  <td>
+                    <span>{{ord.orpdPrdDes}}</span>
+                  </td>
+                  <td>
+                    <span>{{ord.orpdCant}}</span>
+                  </td>
+                  <td>
+                    <span>{{ord.orpdTotP}}</span>
+                  </td>
+              </tr>
+
+          </tbody>
+          </table>
+
+      </div>
+      <!-- /.card-body -->
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary btn-block"  [disabled]="val" *ngIf="ot.length > 0 && orptPrio.value " (click)="guardarOT(idOrp.value , orptPrio.value)" >
+      <div *ngIf= "val" >
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!val">
+        Guardar
+      </div>
+
+    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+</ng-template>

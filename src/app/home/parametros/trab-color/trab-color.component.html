@@ -1,0 +1,147 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Color</h3>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+        <i class="fas fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="card-body">
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel"><i class="fas fa-file-csv"></i>Excel</button>
+      <a (click) = "modalIns(modalInsCol)" class="btn  btn-outline-primary btn-sm"  ngbTooltip="Nuevo"><i class="fas fa-address-card" ></i>Nuevo</a>
+
+
+    <div class="loading" *ngIf= "loading" >
+      <img src = "../../../assets/Circles-menu-3.gif">
+     </div>
+
+ <div>
+  <br>
+
+  <div class="table-responsive"   *ngIf="tblColor?.length > 0" class="{{carga}}">
+    <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Cód. Color</th>
+          <th>Descripción</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let color of tblColor">
+          <th>{{color.idCol}}</th>
+          <th>{{color.colCod}}</th>
+          <th>{{color.colDes}}</th>
+          <th>
+            <a (click) = "modelUp(modalUpCol , color)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+            <a (click) = "del(color)"  class="btn btn-warning btn-xs" ngbTooltip="Eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
+
+          </th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+</div>
+  <!-- /.card-body -->
+  <div class="card-footer">
+    Marple
+  </div>
+  <!-- /.card-footer-->
+</div>
+<ng-template #modalUpCol let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal actualiza Color</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>  <!-- /.card-header -->
+  <form  [formGroup] = "upCol"
+  (ngSubmit)  = "action( upCol.controls['colDes'].value ,
+                         upColCod.value ,
+                         'up' )">
+  <div class="modal-body">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="">Código</label>
+          <input type="text" class="form-control" id="" placeholder="" value="{{color.idCol}}" disabled>
+        </div>
+        <div class="form-group">
+          <label for="">Cód. Color</label>
+          <input type="text" class="form-control" name = "colCod" id="colCod" placeholder="" value="{{color.colCod}}"  #upColCod disabled>
+        </div>
+        <div class="form-group">
+          <label for="">Descripción</label>
+          <input type="text" class="form-control" name = "colDes" id="colDes" placeholder="" value="{{ color.colDes}}" formControlName = 'colDes' oninput="this.value = this.value.toUpperCase()">
+        </div>
+        <div *ngIf = "upCol.controls['colDes'].hasError('required')">
+         <span class="text-danger">Campo obligatorio!</span>
+       </div>
+      </div>
+      <!-- /.card-body -->
+    <!-- form start -->
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="upCol.valid" [disabled]="val">
+      <div *ngIf= "val">
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!val">
+        Guardar
+      </div>
+    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+
+</ng-template>
+
+
+<ng-template #modalInsCol let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal ingreso Color</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form  [formGroup] = "insCol"
+  (ngSubmit)  = "action( insCol.controls['colDes'].value ,
+                         insCol.controls['colCod'].value ,
+                        'ins' )">
+  <div class="modal-body">
+
+      <div class="card-body">
+        <div class="form-group">
+          <label for="">Cód. Color</label>
+          <input type="text" class="form-control" name = "colCod" id="colCod" placeholder="" value="" formControlName = 'colCod' oninput="this.value = this.value.toUpperCase()">
+        </div>
+         <div *ngIf = "validCod">  <span class="text-danger">Código invalido!</span></div>
+         <div *ngIf = "insCol.controls['colCod'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+        <div class="form-group">
+          <label for="">Descripción</label>
+          <input type="text" class="form-control" name = "colDes" id="colDes" placeholder="" value="" formControlName = 'colDes' oninput="this.value = this.value.toUpperCase()">
+        </div>
+        <div *ngIf = "insCol.controls['colDes'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+      </div>
+      <!-- /.card-body -->
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="insCol.valid && validCod == false" [disabled]="val">
+      <div *ngIf= "val">
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!val">
+        Guardar
+      </div>
+    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+</ng-template>

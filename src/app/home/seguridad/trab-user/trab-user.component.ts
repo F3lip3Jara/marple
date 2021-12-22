@@ -147,7 +147,19 @@ export class TrabUserComponent implements OnInit {
     this.usuario.setName(xusuario.name);
     this.usuario.setGerencia(xusuario.gerencia);
     this.usuario.setRol(xusuario.rol);
-    console.log(xusuario);
+
+    this.parametros = [{key :'idUser' ,value: xusuario.id}];
+
+    this.rest.get('getUsuarios' , this.token , this.parametros).subscribe((data : any) =>{
+        data.forEach((element : any) => {
+
+          this.udpUser.controls['rol'].setValue(element['idRol']);
+          this.udpUser.controls['gerencias'].setValue(element['gerId']);
+
+        });
+
+    });
+
 
     this.udpUser.controls['empNombre'].setValue(this.usuario.emploNom);
     this.udpUser.controls['empApe'].setValue(this.usuario.emploApe);

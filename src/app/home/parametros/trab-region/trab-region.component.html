@@ -8,8 +8,8 @@
   </div>
   <div class="card-body">
 
-      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ><i class="fas fa-file-csv"></i>Excel</button>
-      <a (click) = "modalIns(modalPaisIns)" class="btn  btn-outline-primary btn-sm" ><i class="fas fa-address-card" ></i>Nuevo</a>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel" ><i class="fas fa-file-csv"></i>Excel</button>
+      <a (click) = "modalIns(modalPaisIns)" class="btn  btn-outline-primary btn-sm"  ngbTooltip="Nuevo"><i class="fas fa-address-card" ></i>Nuevo</a>
 
 
     <div class="loading" *ngIf= "loading" >
@@ -38,8 +38,8 @@
           <th>{{region.regCod}}</th>
           <th>{{region.regDes}}</th>
           <th>
-            <a (click) = "modelUp(modalPaisUdp , region)" class="btn btn-warning btn-xs" placeholder="actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
-            <a (click) = "delRegion(region)" class="btn btn-warning btn-xs" placeholder="eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
+            <a (click) = "modelUp(modalPaisUdp , region)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+            <a (click) = "delRegion(region)" class="btn btn-warning btn-xs" ngbTooltip="Eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
           </th>
         </tr>
       </tbody>
@@ -88,7 +88,7 @@
 
         <div class="form-group">
           <label for="">Descripción</label>
-          <input type="text" class="form-control" name = "regDes" id="paiDes" placeholder="" value="{{region.regDes}}" formControlName = 'upregDes'>
+          <input type="text" class="form-control" name = "regDes" id="paiDes" placeholder="" value="{{region.regDes}}" formControlName = 'upregDes' oninput="this.value = this.value.toUpperCase()">
         </div>
       </div>
       <!-- /.card-body -->
@@ -141,7 +141,7 @@
         <div class="form-group">
           <label for="regCod">Cód. Región</label>
           <div class="input-group input-group-sm">
-          <input type="text" class="form-control" id="regCod" placeholder="Ingresar cód. ISO..." formControlName = 'regCod'  >
+          <input type="text" class="form-control" id="regCod" placeholder="Ingresar cód. ISO..." formControlName = 'regCod'  oninput="this.value = this.value.toUpperCase()" >
         </div>
       </div>
       <div *ngIf = "validCod">  <span class="text-danger">Código invalido!</span></div>
@@ -152,7 +152,7 @@
         <div class="form-group">
           <label for="regDes">Descripción</label>
           <div class="input-group input-group-sm">
-          <input type="text" class="form-control" id="regDes" placeholder="Ingresar descripción..." formControlName = 'regDes'  >
+          <input type="text" class="form-control" id="regDes" placeholder="Ingresar descripción..." formControlName = 'regDes' oninput="this.value = this.value.toUpperCase()" >
         </div>
       </div>
         <div *ngIf = "insRegion.controls['regDes'].hasError('required')">
