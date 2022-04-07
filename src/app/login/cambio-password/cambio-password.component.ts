@@ -12,11 +12,6 @@ import { RestService } from 'src/app/servicios/rest.service';
   styleUrls: ['./cambio-password.component.css']
 })
 
-
-
-
-
-
 export class CambioPasswordComponent implements OnInit {
 
   changePassword      : FormGroup;

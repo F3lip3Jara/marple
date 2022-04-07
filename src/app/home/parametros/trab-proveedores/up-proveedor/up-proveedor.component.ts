@@ -51,9 +51,15 @@ export class UpProveedorComponent implements OnInit {
       this.datPrv.forEach((element : any) => {
          this.idPai = element.idPai;
          this.idReg = element.idReg;
-         this.idCom = element.idCom;
          this.idCiu = element.idCiu;
+         this.idCom = element.idCom;
+
+        console.log(this.idCom);
+
+
+
       });
+
 
       if(this.proveedor.es_cliente == 'S'){
           this.escliente = true;
@@ -100,12 +106,13 @@ export class UpProveedorComponent implements OnInit {
        idReg : [this.idReg , Validators.compose([
          Validators.required,
        ])],
-       idCom : [this.idCom, Validators.compose([
-         Validators.required,
-        ])],
+
        idCiu : [this.idCiu, Validators.compose([
          Validators.required,
         ])],
+        idCom : [this.idCom, Validators.compose([
+          Validators.required,
+         ])],
         prvCli : [this.escliente, Validators.compose([
         ])],
         prvPrv: [this.esproveedor , Validators.compose([
@@ -120,15 +127,11 @@ export class UpProveedorComponent implements OnInit {
 
        this.paises   = {};
        this.regiones = {};
-       this.comunas  = {};
        this.ciudades = {};
-
+       this.comunas  = {};
    }
 
   ngOnInit(): void {
-
-
-
     this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
       this.paises = data;
       });
@@ -154,9 +157,8 @@ export class UpProveedorComponent implements OnInit {
         this.comunas = {};
         this.ciudades = {};
         this.insProv.controls['idReg'].setValue('');
-        this.insProv.controls['idCom'].setValue('');
         this.insProv.controls['idCiu'].setValue('');
-
+        this.insProv.controls['idCom'].setValue('');
         this.parametros = [{key :'idPai' ,value: field}];
         this.rest.get('regPai' , this.token, this.parametros).subscribe(data => {
           this.regiones = data;
@@ -167,8 +169,8 @@ export class UpProveedorComponent implements OnInit {
         if(field > 0){
           this.comunas = {};
           this.ciudades= {};
-          this.insProv.controls['idCom'].setValue('');
           this.insProv.controls['idCiu'].setValue('');
+          this.insProv.controls['idCom'].setValue('');
           this.parametros = [{key :'idReg' ,value: field} , {key : 'idPai' , value:  this.insProv.controls['idPai'].value}];
           this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
             this.ciudades = data;
@@ -176,7 +178,7 @@ export class UpProveedorComponent implements OnInit {
         }
       });
 
-      this.insProv.controls['idCiu'].valueChanges.subscribe(field => {
+     this.insProv.controls['idCiu'].valueChanges.subscribe(field => {
         if(field > 0){
           this.comunas = {};
           this.insProv.controls['idCom'].setValue('');
@@ -185,8 +187,12 @@ export class UpProveedorComponent implements OnInit {
             this.comunas = data;
             });
         }
-
       });
+
+
+
+
+
   }
 
   public volver():boolean{

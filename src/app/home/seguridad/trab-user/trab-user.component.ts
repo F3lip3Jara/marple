@@ -1,12 +1,13 @@
-import { toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
+import { LogSysService } from './../../../servicios/log-sys.service';
+import { LogSys } from './../../../model/logSys.model';
 import { tblUsuario } from './../../../model/tblUsuario.model';
 import { LinksService } from './../../../servicios/links.service';
 import { DataTableDirective } from 'angular-datatables';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component,  OnInit,  ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbModal , NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 
@@ -42,7 +43,8 @@ export class TrabUserComponent implements OnInit {
     private excel           : ExcelService,
     private modal           : NgbModal,
     private alertas         : AlertasService,
-    fgUpUser                : FormBuilder
+    fgUpUser                : FormBuilder,
+    private serLogSys       : LogSysService
     ) {
     this.token = this.servicio.getToken();
 
@@ -185,13 +187,28 @@ export class TrabUserComponent implements OnInit {
      this.rest.post('upUsuario' , this.token , tbl_Usuario).subscribe(data =>{
         data.forEach((element : any) => {
           this.modal.dismissAll();
-
           if(element.error == '0' ){
             this.alertas.disparador.emit(this.alertas.getAlert());
             setTimeout(()=>{
               this.alertas.setAlert('','');
             },1500);
             this.tblData();
+
+            if(xReinicio == 'S'){
+              let des     = 'El usuario ' + xname + ' fue reiniciado.'
+              let serLog  = new LogSys(1, '' , 3 , 'REINICIO DE USUARIO' , des );
+              this.serLogSys.disparador.emit(serLog);
+            }
+
+            if(xActivado == 'D'){
+              let des     = 'El usuario ' + xname + ' fue deshabilitado.'
+              let serLog  = new LogSys(1, '' , 4 , 'DESHABILITAR USUARIO' , des);
+              this.serLogSys.disparador.emit(serLog);
+            }else{
+              let des               = 'El usuario ' + xname + ' fue habilitado.';
+              const serLog : LogSys = new LogSys(1, '' , 5 , 'HABILITAR USUARIO' , des);
+              this.serLogSys.disparador.emit(serLog);
+            }
 
           }else{
             this.alertas.disparador.emit(this.alertas.getAlert());

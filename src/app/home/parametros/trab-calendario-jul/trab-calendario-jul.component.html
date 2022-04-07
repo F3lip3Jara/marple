@@ -1,0 +1,128 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Calendario Juliano</h3>
+
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+        <i class="fas fa-minus"></i></button>
+    </div>
+
+  </div>
+  <div class="card-body">
+      <h3 class="card-title">Filtros</h3>
+      <form
+      [formGroup] = "filtro">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <td>Año</td>
+            <td>  <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'flCalAno'>
+              <option  *ngFor = "let anos of ano"  value="{{anos}}">{{anos}}</option>
+            </select></td>
+          </tr>
+
+        </tbody>
+      </table>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "buscar(filtro.controls['flCalAno'].value)" ngbTooltip="Buscar"><i class="fas fa-search"></i>Buscar</button>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "refrescar()" ngbTooltip="Refrescar"><i class="fas fa-sync-alt"></i>Refrescar</button>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "Excel()"  ngbTooltip="Excel" ><i class="fas fa-file-csv"></i>Excel</button>
+      <a (click)="nuevo(modalInsJul)" class="btn  btn-outline-primary btn-sm"  ngbTooltip="Nuevo" ><i class="fas fa-address-card"></i>Nuevo</a>
+    </form>
+
+    <div class="loading" *ngIf= "loading" >
+      <img src = "../../../assets/Circles-menu-3.gif">
+     </div>
+
+ <div>
+  <br>
+  <div class="table-responsive">
+    <div    *ngIf="tblCal?.length > 0" class="{{carga}}">
+      <table #datatableElement datatable  id="tblCal" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Día</th>
+            <th>Mes</th>
+            <th>Año</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let calendario of tblCal">
+            <th>{{calendario.idCal}}</th>
+            <th>{{calendario.calDia}}</th>
+            <th>{{calendario.calMesDes}}</th>
+            <th>{{calendario.calAno}}</th>
+            <th>{{calendario.calValor}}</th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  </div>
+</div>
+  <!-- /.card-body -->
+  <div class="card-footer">
+    Marple
+  </div>
+  <!-- /.card-footer-->
+</div>
+
+
+<ng-template #modalInsJul let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal Ingreso de Carga Excel</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form
+  [formGroup] = "insCal"
+  (ngSubmit)  = "cargarCal(insCal.controls['calAno'].value , converJson)"
+  >
+  <div class="modal-body">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="nombre">Año</label>
+          <div class=" input-group-sm">
+            <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'calAno'>
+              <option  *ngFor = "let anos of ano"  value="{{anos}}">{{anos}}</option>
+            </select>
+          </div>
+          <div *ngIf = "insCal.controls['calAno'].hasError('required')">
+            <span class="text-danger">Campo obligatorio!</span>
+          </div>
+          <div class="form-group">
+          <label for="">Archivo</label>
+
+          <div class="input-group input-group-sm mb-3">
+            <div class="custom-file">
+              <input (change) = "capturarFile($event)" type="file" class="custom-file-input" accept =".xls , .xlsx , .csv" >
+              <label class="custom-file-label"><i class="fas fa-search"></i> Seleccionar archivo</label>
+            </div>
+          </div>
+          <div *ngIf = "converJson.length == 0">
+            <span class="text-danger">Campo obligatorio!</span>
+          </div>
+        </div>
+
+        </div>
+
+      <!-- /.card-body -->
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary btn-block" *ngIf="insCal.valid && converJson.length > 0" [disabled]="val">
+      <div *ngIf= "val">
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!val">
+        Guardar
+      </div>
+    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+</ng-template>

@@ -74,7 +74,13 @@
             <th>{{productos.descripcion}}</th>
             <th>{{productos.cod_rapido}}</th>
             <th>{{productos.cod_barra}}</th>
-            <th>{{productos.tipo}}</th>
+              <th *ngIf=" productos.tipo == 'P'">Producto Terminado</th>
+              <th *ngIf=" productos.tipo == 'M'">Materia Prima</th>
+              <th *ngIf=" productos.tipo == 'S'">Servicio</th>
+              <th *ngIf=" productos.tipo == 'Z'">Mezcla</th>
+              <th *ngIf=" productos.tipo == 'D'">P.P Molido</th>
+              <th *ngIf=" productos.tipo == 'A'">P.A.I Molido</th>
+              <th *ngIf=" productos.tipo == 'T'">PET Molido</th>
             <th>{{productos.grupo}}</th>
             <th>{{productos.sub_grupo}}</th>
             <th>{{productos.color}}</th>
@@ -83,7 +89,6 @@
               <span *ngIf="productos.inventariable =='S', else noena" >SI</span>
             <ng-template #noena><span>NO</span></ng-template>
             </th>
-
             <th>  <a (click)="modelUp(productos)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a></th>
         </tbody>
       </table>

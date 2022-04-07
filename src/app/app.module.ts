@@ -46,6 +46,17 @@ import { InsOrdenProduccionComponent } from './home/produccion/trab-orden-produc
 import { UpProductosComponent } from './home/parametros/trab-productos/up-productos/up-productos.component';
 import { TrabOrdenTrabajoComponent } from './home/produccion/trab-orden-trabajo/trab-orden-trabajo.component';
 import { InsOrdTrabajoComponent } from './home/produccion/trab-orden-trabajo/ins-ord-trabajo/ins-ord-trabajo.component';
+import { TrabEtapaDetalleComponent } from './home/parametros/trab-etapa-detalle/trab-etapa-detalle.component';
+import { TrabMaquinasComponent } from './home/parametros/trab-maquinas/trab-maquinas.component';
+import { UpUserComponent } from './home/seguridad/trab-user/up-user/up-user.component';
+import { TrabCalendarioJulComponent } from './home/parametros/trab-calendario-jul/trab-calendario-jul.component';
+import { TrabMezclaComponent } from './home/produccion/trab-mezcla/trab-mezcla.component';
+import { InsMezclaComponent } from './home/produccion/trab-mezcla/ins-mezcla/ins-mezcla.component';
+import { SelProductoComponent } from './home/selector/sel-producto/sel-producto.component';
+import { TrabExtursionComponent } from './home/produccion/trab-extursion/trab-extursion.component';
+import { InsExtursionComponent } from './home/produccion/trab-extursion/ins-extursion/ins-extursion.component';
+import { TrabLogComponent } from './home/seguridad/trab-log/trab-log.component';
+import { TrabBincorComponent } from './home/parametros/trab-bincor/trab-bincor.component';
 
 
 
@@ -97,6 +108,17 @@ const routes: Routes = [
     UpProductosComponent,
     TrabOrdenTrabajoComponent,
     InsOrdTrabajoComponent,
+    TrabEtapaDetalleComponent,
+    TrabMaquinasComponent,
+    UpUserComponent,
+    TrabCalendarioJulComponent,
+    TrabMezclaComponent,
+    InsMezclaComponent,
+    SelProductoComponent,
+    TrabExtursionComponent,
+    InsExtursionComponent,
+    TrabLogComponent,
+    TrabBincorComponent,
 
   ],
   imports: [
@@ -110,10 +132,6 @@ const routes: Routes = [
     DataTablesModule,
     NgbModule,
     NgxMaskModule.forRoot(),
-
-
-
-
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS,

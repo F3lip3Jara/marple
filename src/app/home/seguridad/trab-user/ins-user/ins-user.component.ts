@@ -1,13 +1,13 @@
+import { LogSys } from './../../../../model/logSys.model';
+import { LogSysService } from './../../../../servicios/log-sys.service';
 import { Alert } from 'src/app/model/alert.model';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { Empleado } from './../../../../model/empleado.model';
-import { Roles } from 'src/app/model/rol.model';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LinksService } from 'src/app/servicios/links.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
-import { toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 
@@ -33,7 +33,9 @@ export class InsUserComponent implements OnInit {
     private servicio     : UsersService,
     private rest         : RestService,
     private servicioLink : LinksService,
-    private alertas      : AlertasService ) {
+    private alertas      : AlertasService,
+    private serLogSys    : LogSysService ) {
+
 
       this.insUser = fgInsUser.group({
         empApe : ['' , Validators.compose([
@@ -70,6 +72,8 @@ export class InsUserComponent implements OnInit {
                   this.servicioLink.disparador.emit(d);
                   this.alertas.setAlert('','');
                 },1500);
+                const serLog : LogSys = new LogSys(1, '' , 2 , 'INGRESO DE USUARIO' , '');
+                this.serLogSys.disparador.emit(serLog);
               }else{
                 this.alertas.disparador.emit(this.alertas.getAlert());
                 setTimeout(()=>{

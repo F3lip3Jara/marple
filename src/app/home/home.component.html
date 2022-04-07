@@ -23,9 +23,9 @@
     </ul>
     <ul class="navbar-nav ml-auto">
       <!-- Messages Dropdown Menu -->
-      <li class="nav-item dropdown ">
+      <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown"   (click)="isMenuCollapsed = !isMenuCollapsed" aria-expanded="true">
-          <span class="badge badge-danger navbar-badge">   <i class="fas fa-sign-out-alt"></i> Salir</span>
+          <span class="badge badge-danger navbar-badge"> <i class="fas fa-user-cog"></i> Inicio</span>
         </a>
         <div *ngIf="isMenuCollapsed" class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
           <a  class="dropdown-item">
@@ -45,8 +45,10 @@
             <!-- Message End -->
           </a>
           <div class="dropdown-divider"></div>
+          <span class=" "> <a (click)="editar()" class="dropdown-item dropdown-footer"> <i class="fas fa-cog"></i>Configuración </a></span>
+          <div class="dropdown-divider"></div>
+          <span class=" "> <a (click)="salir()" class="dropdown-item dropdown-footer"> <i class="fas fa-sign-out-alt"></i> Salir </a></span>
 
-          <a (click)="salir()" class="dropdown-item dropdown-footer">Salir</a>
         </div>
       </li>
       <li class="nav-item">
@@ -103,10 +105,12 @@
       <b>Version</b> 3.0.5
     </div>
     <strong>Copyright &copy; 2021 <a href="">AgileTiCL </a>.</strong> Todos los derechos reservados.
+
   </footer>
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
     <!-- Control sidebar content goes here -->
+
   </aside>
   <!-- /.control-sidebar -->
 </div>

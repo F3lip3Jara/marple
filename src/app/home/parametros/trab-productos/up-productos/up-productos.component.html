@@ -23,7 +23,7 @@
       <div class="col-md-12">
         <div class="card card-outline card-primary">
           <div class="card-header">
-            <h3 class="card-title">Actualziar Productos/ Servicio</h3>
+            <h3 class="card-title">Actualizar Productos/ Servicio</h3>
             <div class="card-tools">
               <button type="button" class="btn btn-tool" data-card-widget="collapse">
                 <i class="fas fa-minus"></i>
@@ -155,6 +155,10 @@
                         <option   value="P">Producto Terminado</option>
                         <option   value="M">Materia Prima</option>
                         <option   value="S">Servicio</option>
+                        <option   value="Z">Mezcla</option>
+                        <option   value="D">P.P Molido</option>
+                        <option   value="A">P.A.I Molido</option>
+                        <option   value="T">PET Molido</option>
                       </select>
                     </div>
                     <div *ngIf = "insProd.controls['prdTip'].hasError('required')">
@@ -162,7 +166,6 @@
                     </div>
                   </div>
                 </div>
-
                 <hr>
               <h6>Datos Adicionales</h6>
               <div class="col-md-6">

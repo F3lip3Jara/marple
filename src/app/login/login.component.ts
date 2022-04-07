@@ -1,3 +1,5 @@
+
+import { LogServiciosService } from 'src/app/servicios/log-servicios.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup , Validators  } from '@angular/forms';
@@ -13,13 +15,15 @@ import {UsersService} from "../servicios/users.service";
 })
 export class LoginComponent implements OnInit {
 
-  login      : FormGroup;
-  log        : boolean = false;
+  login        : FormGroup;
+  log          : boolean = false;
 
-  constructor(fb: FormBuilder ,
+
+  constructor(fb                   : FormBuilder ,
               private UsersService : UsersService,
-              private router : Router ,
-              private servicioAler : AlertasService) {
+              private router       : Router ,
+              private servicioAler : AlertasService ,
+              private serviLogSys  : LogServiciosService) {
 
     this.login = fb.group({
       email : ['' , Validators.compose([
@@ -33,7 +37,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.servicioAler.disparador.subscribe();
+
   }
 
   guardar(email : string , password:string  ) : boolean {
@@ -43,7 +47,6 @@ export class LoginComponent implements OnInit {
     const userx = new Usuario(1,'' , password , '', email);
 
      this.UsersService.login(userx).subscribe( data => {
-
       data.forEach((element:any) => {
          if(element.error == "1"){
               this.servicioAler.disparador.emit(this.servicioAler.getAlert());
@@ -56,28 +59,30 @@ export class LoginComponent implements OnInit {
               datx = data;
               let reinicio : string  = '';
               let token    : string  = '';
+              let name     : string  = '';
 
               if(datx){
-
                 Object.values(datx).forEach(element=>{
                     token    = element.token;
                     reinicio = element.reinicio;
+                    name     = element.name;
                 });
-
                 this.UsersService.setToken(token);
               }
 
               if (reinicio == 'S'){
                 this.router.navigate(['/changePassword']);
               }else{
-                setTimeout(()=>{
-                  this.router.navigate(['/home']);
-                  this.log = false;
-                },500);
+               // const serLog  = new LogSys(1, '', 1 , 'LOGEO DE USUARIO' , '');
+                //this.serviLogSys.setLogSys(serLog);
+
+                this.router.navigate(['/home']);
+                this.log = false;
               }
-        }
+          }
       });
     });
+
 
      return false;
   }

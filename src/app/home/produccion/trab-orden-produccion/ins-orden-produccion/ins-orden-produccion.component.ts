@@ -115,31 +115,20 @@ export class InsOrdenProduccionComponent implements OnInit {
         debounceTime(200),
         distinctUntilChanged()
       ).subscribe( field => {
-
         this.valproddet   = false;
         let parm : any[]  = [{key :'prdCod' ,value: field} ];
         let error ;
-
         this.rest.get('valPrdOrd' , this.token, parm).subscribe(data =>{
-            //this.productos = data;
              error = data ;
-            if(error == 1 ){
-              this.valproddet= true;
-            }else{
-              if(error == 2){
+             if(error == 2){
                 this.rest.get('filPrdCod' , this.token, parm).subscribe(data =>{
                    this.productos = data;
                 });
                 this.valprod      = true;
               }else{
                 this.productos = [];
-
-                console.log('aqui');
                 this.valprod      = false;
-
               }
-            }
-
             this.ordenes.forEach(element => {
               if(element.prdCod == field){
                 this.valproddet= true;
@@ -184,7 +173,6 @@ export class InsOrdenProduccionComponent implements OnInit {
         filter(text => text.length > 1),
         debounceTime(200),
         distinctUntilChanged()).subscribe(field => {
-
           this.validaNumRea(field);
         });
 
@@ -275,8 +263,6 @@ export class InsOrdenProduccionComponent implements OnInit {
           'orpObs'   : orpObs,
           'idPrv'    : this.idPrv,
           'ordenes'  : this.ordenes
-
-
       });
 
       this.rest.post('insOrd', this.token, ordenPrd).subscribe(resp => {
@@ -286,12 +272,15 @@ export class InsOrdenProduccionComponent implements OnInit {
         if(elementx.error == '0'){
             setTimeout(()=>{
               this.servicioaler.setAlert('','');
-              this.val      = false;
+              this.val        = false;
+              this.valproddet = false;
+
             },2000);
             this.insOrd.reset();
             this.prvNom = '';
             this.idPrv  = 0;
             this.ordenes=[];
+            this.insPrd.reset();
         }else {
           this.val      = false;
         }

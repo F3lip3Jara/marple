@@ -1,0 +1,310 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Trabajar con Mezcla</h3>
+
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+        <i class="fas fa-minus"></i></button>
+    </div>
+
+  </div>
+  <div class="card-body">
+      <h3 class="card-title">Filtros</h3>
+      <form  [formGroup] = "filtro"
+      >
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <td>Lote Salida</td>
+            <td><input type="text" value="" class="form-control" placeholder="Ingrese Lote Salida"  formControlName='lote_salida' /> </td>
+          </tr>
+
+        </tbody>
+      </table>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "buscar(filtro.controls['lote_salida'].value)" ngbTooltip="Buscar"><i class="fas fa-search"></i>Buscar</button>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "refrescar()" ngbTooltip="Refrescar"><i class="fas fa-sync-alt"></i>Refrescar</button>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "Excel()"  ngbTooltip="Excel" ><i class="fas fa-file-csv"></i>Excel</button>
+      <a (click)="mezNuevo()" class="btn  btn-outline-primary btn-sm"  ngbTooltip="Nuevo" ><i class="fas fa-address-card"></i>Nuevo</a>
+    </form>
+
+    <div class="loading" *ngIf= "loading" >
+      <img src = "../../../assets/Circles-menu-3.gif">
+     </div>
+
+ <div>
+  <br>
+  <div class="table-responsive">
+    <div  *ngIf="tblMezcla?.length > 0" class="{{carga}}">
+      <table #datatableElement datatable  id="tblOrdenPrd" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Lote Salida</th>
+            <th>Kilos Salida</th>
+            <th>Tipo</th>
+            <th>Maquina</th>
+            <th>Producto</th>
+            <th>Estado Operador</th>
+            <th>Estado Control</th>
+            <th>Turno</th>
+            <th>Destino</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let mezcla of tblMezcla">
+            <th>{{mezcla.id}}</th>
+            <th>{{mezcla.usuario}}</th>
+            <th>{{mezcla.lote_salida}}</th>
+            <th>{{mezcla.kilos}}</th>
+            <th>{{mezcla.tipo}}</th>
+            <th>{{mezcla.maquina}}</th>
+            <th>{{mezcla.producto}}</th>
+            <th>{{mezcla.estado_pro}}</th>
+            <th>{{mezcla.estado_control}}</th>
+            <th>{{mezcla.turno}}</th>
+            <th>{{mezcla.etapa}}</th>
+            <th>
+               <a style= "margin : 1px ;" class="btn btn-warning btn-xs" (click)="autorizar(modalAutoMez , mezcla , 'A')"  ngbTooltip="Autorizar" ><i class="fas fa-check-double"></i></a>
+               <a style= "margin : 1px ;" class="btn btn-warning btn-xs" (click)="rechazar(modalRechazarMez , mezcla)"  ngbTooltip="Rechazar" ><i class="fas fa-ban"></i></a>
+               <a style= "margin : 1px ;" class="btn btn-warning btn-xs" (click)="autorizar(modalAutoMez , mezcla , 'V')"  ngbTooltip="Ver" ><i class="fas fa-eye"></i></a>
+            </th>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </div>
+
+  </div>
+
+  <!-- /.card-body -->
+  <div class="card-footer">
+    Marple
+  </div>
+  <!-- /.card-footer-->
+</div>
+
+<ng-template #modalAutoMez let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal de confirmación Mezcla</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" >
+    <div class="row">
+      <div class="form-group col-md-4">
+        <label for="">Lote Salida</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{mezcla.lote_salida}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Usuario</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{mezcla.usuario}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Turno</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{mezcla.turno}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Maquina</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{mezcla.maquina}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Tipo</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{mezcla.tipo}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Producto</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{mezcla.producto}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Kilos Salida</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{mezcla.kilos}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Estado Operación</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{mezcla.estado_pro}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Estado Control</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{mezcla.estado_control}}"   disabled>
+      </div>
+      <div class="form-group col-md-12">
+          <label>Obs</label>
+          <textarea class="form-control" rows="2" placeholder="{{mezcla.observaciones}}" disabled></textarea>
+      </div>
+    </div>
+
+   <hr>
+    <h6>Detalles</h6>
+    <br>
+    <div  *ngIf=" !mezProd.length ">
+      <div class="spinner-border spinner-border-sm" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <div class="spinner-grow spinner-grow-sm" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <div class="table-responsive" *ngIf="mezProd.length > 0" >
+        <table class="table table-hover text-nowrap">
+          <thead>
+              <tr>
+                  <td>Cód Producto</td>
+                  <td>Decripción</td>
+                  <td>Lote Entrada</td>
+                  <td>Kilos Entrada</td>
+                  <td>% Uso</td>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let mez of mezProd; let i= index;">
+                  <td>
+                      <span>{{mez.mezdprdCod}}</span>
+                  </td>
+                  <td>
+                    <span>{{mez.mezdprdDes}}</span>
+                  </td>
+                  <td>
+                    <span>{{mez.mezdLotIng}}</span>
+                  </td>
+                  <td>
+                    <span>{{mez.mezdKil}}</span>
+                  </td>
+                  <td>
+                    <span>{{mez.mezdUso}}</span>
+                  </td>
+              </tr>
+          </tbody>
+          </table>
+    </div>
+   <!-- /.card-body -->
+</div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-primary btn-block" *ngIf="ver == 'A'" (click)="confirmar(mezcla)">
+    <div *ngIf= "val">
+      Autorizando..
+      <span class="spinner-border spinner-border-sm mr-2"></span>
+    </div>
+    <div *ngIf= "!val">
+      Autorizar
+    </div>
+</button>
+  <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+</div>
+</ng-template>
+
+<ng-template #modalRechazarMez let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal de confirmación Mezcla</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" >
+    <div class="row">
+      <div class="form-group col-md-4">
+        <label for="">Lote Salida</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{mezcla.lote_salida}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Usuario</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{mezcla.usuario}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Turno</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{mezcla.turno}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Maquina</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{mezcla.maquina}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Tipo</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{mezcla.tipo}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Producto</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{mezcla.producto}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Kilos Salida</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{mezcla.kilos}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Estado Operación</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{mezcla.estado_pro}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Estado Control</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{mezcla.estado_control}}"   disabled>
+      </div>
+      <div class="form-group col-md-12">
+        <label for="">Obs</label>
+        <textarea class="form-control" rows="2" placeholder="Enter ..." #mezObs></textarea>
+      </div>
+      <div *ngIf = "!mezObs.value">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+    </div>
+
+   <hr>
+    <h6>Detalles</h6>
+    <br>
+    <div  *ngIf=" !mezProd.length ">
+      <div class="spinner-border spinner-border-sm" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <div class="spinner-grow spinner-grow-sm" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <div class="table-responsive" *ngIf="mezProd.length > 0" >
+        <table class="table table-hover text-nowrap">
+          <thead>
+              <tr>
+                  <td>Cód Producto</td>
+                  <td>Decripción</td>
+                  <td>Lote Entrada</td>
+                  <td>Kilos Entrada</td>
+                  <td>% Uso</td>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let mez of mezProd; let i= index;">
+                  <td>
+                      <span>{{mez.mezdprdCod}}</span>
+                  </td>
+                  <td>
+                    <span>{{mez.mezdprdDes}}</span>
+                  </td>
+                  <td>
+                    <span>{{mez.mezdLotIng}}</span>
+                  </td>
+                  <td>
+                    <span>{{mez.mezdKil}}</span>
+                  </td>
+                  <td>
+                    <span>{{mez.mezdUso}}</span>
+                  </td>
+              </tr>
+          </tbody>
+          </table>
+    </div>
+   <!-- /.card-body -->
+</div>
+<div class="modal-footer"  >
+  <button type="submit" class="btn btn-primary btn-block" (click)="confRechazar(mezcla , mezObs.value)" *ngIf ="mezObs.value">
+    <div *ngIf= "val">
+      Rechazando..
+      <span class="spinner-border spinner-border-sm mr-2"></span>
+    </div>
+    <div *ngIf= "!val">
+      Rechazar
+    </div>
+</button>
+  <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+</div>
+</ng-template>
+

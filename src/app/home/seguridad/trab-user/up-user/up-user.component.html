@@ -1,0 +1,57 @@
+<div class="col-md-8">
+  <div class="card card-primary card-outline">
+  <div class="card-body box-profile">
+  <div class="text-center">
+    <div *ngIf="imgName"  class="image">
+      <img class="profile-user-img img-fluid img-circle" src="{{imgName}}" alt="User profile picture">
+    </div>
+
+  </div>
+  <h3 class="profile-username text-center">{{nombre}}</h3>
+  <p class="text-muted text-center">{{rol}}</p>
+
+  <form
+  [formGroup] = "updUser"
+  (ngSubmit)  = "guardar()"
+  >
+  <div class="modal-body">
+          <div class="form-group">
+            <label for="empName">Nombre Usuario</label>
+            <div class="input-group input-group-sm">
+            <input type="text" class="form-control" id="empName"  value="{{nombre}}" disabled >
+          </div>
+        </div>
+
+
+          <div class="form-group">
+            <label for="">Avatar</label>
+            <div *ngIf="previsualizador" >
+                <img [src] = "previsualizador" class="previsualizar-img">
+            </div>
+            <div class="input-group input-group-sm mb-3">
+              <div class="custom-file">
+                <input (change) = "capturarFile($event)" type="file" class="custom-file-input" >
+                <label class="custom-file-label"><i class="fas fa-search"></i> Seleccionar archivo</label>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block"  *ngIf ="updUser.valid" [disabled]="val">
+            <div *ngIf= "val">
+              Guardando..
+              <span class="spinner-border spinner-border-sm mr-2"></span>
+            </div>
+            <div *ngIf= "!val">
+              Guardar
+            </div>
+
+          </button>
+        </div>
+      </form>
+
+  </div>
+
+  </div>
+
+
+
+  </div>

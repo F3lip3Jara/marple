@@ -13,23 +13,16 @@ import { AlertasService } from 'src/app/servicios/alertas.service';
 
 export class AlertsComponent implements OnInit , AfterViewInit {
 
-
-
   public show          = false;
-
-
-    type     : string  = '';
-    alerta   : Alert   = new Alert('', '');
+  type     : string  = '';
+  alerta   : Alert   = new Alert('', '');
 
     constructor( private  servicio : AlertasService,
                 private el         : ElementRef) {
-
      }
 
     ngOnInit() {
-
-
-      this.servicio.disparador.subscribe(data=>{
+     this.servicio.disparador.subscribe(data=>{
           if(data){
               this.alerta  = data;
               this.show    = true;
@@ -37,7 +30,6 @@ export class AlertsComponent implements OnInit , AfterViewInit {
                 this.show = false;
               },5000);
           }
-
     });
 
     }

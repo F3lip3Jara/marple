@@ -1,3 +1,5 @@
+import { LogSysService } from './../../../servicios/log-sys.service';
+import { LogSys } from './../../../model/logSys.model';
 import { Alert } from 'src/app/model/alert.model';
 import { AlertasService } from './../../../servicios/alertas.service';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -29,12 +31,13 @@ export class TrabRolesComponent implements OnInit {
   carga        : string               = "invisible";
 
 
-  constructor(private fb: FormBuilder,
-    private servicio : UsersService,
-    private rest : RestService,
-    private modal : NgbModal,
-    private excel: ExcelService,
-    private servicioaler : AlertasService
+  constructor(private fb  : FormBuilder,
+    private servicio      : UsersService,
+    private rest          : RestService,
+    private modal         : NgbModal,
+    private excel         : ExcelService,
+    private servicioaler  : AlertasService,
+    private serLogSys     : LogSysService
     ) {
       this.token = this.servicio.getToken();
       this.roles = new Roles(0, '');
@@ -62,6 +65,8 @@ export class TrabRolesComponent implements OnInit {
           previous: 'Ant.'
         }
       }}
+
+
   }
 
   public tblData(){
@@ -90,11 +95,20 @@ export class TrabRolesComponent implements OnInit {
     this.carga   = 'invisible';
     this.loading = true;
     let rolesx   = new Roles(this.roles.idRol , rolDesx  );
+    let des      = '';
+    let idEtaDes = 0;
+    let lgDes    = '';
 
     if(tipo =='up'){
-       url = 'updRoles';
+      url = 'updRoles';
+      des      = 'Rol ' + rolesx.rolDes + ' fue actualizado.';
+      idEtaDes = 7;
+      lgDes    = 'ACUALIZAR ROL';
     }else{
       url = 'insRoles';
+      des      = 'Rol ' + rolesx.rolDes + ' fue ingresado.';
+      idEtaDes = 6;
+      lgDes    = 'INGRESO DE ROL';
     }
    this.rest.post(url, this.token, rolesx).subscribe(resp => {
         resp.forEach((elementx : any)  => {
@@ -108,8 +122,11 @@ export class TrabRolesComponent implements OnInit {
               this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
                 dtInstance.destroy().draw();
               });
-              this.carga    = 'visible';
-              this.loading  = false;
+              this.carga             = 'visible';
+              this.loading           = false;
+              const serLog  : LogSys = new LogSys(1, '' , idEtaDes, lgDes  , des);
+
+              this.serLogSys.disparador.emit(serLog);
             },1500);
         }else {
           this.carga    = 'visible';
@@ -141,6 +158,9 @@ export class TrabRolesComponent implements OnInit {
                 });
                 this.carga    = 'visible';
                 this.loading  = false;
+                let des     = 'Rol ' + rol.rolDes + ' fue eliminado.'
+                let serLog  = new LogSys(1, '' , 8 , 'ELIMINAR ROL' , des);
+                this.serLogSys.disparador.emit(serLog);
 
               },1500);
 

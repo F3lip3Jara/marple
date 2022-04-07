@@ -124,11 +124,12 @@ ngAfterViewInit(): void {
          });
     }else{
       this.servicioAlert.setAlert('Debe ingresar un filtro', 'warning');
-      this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
-      setTimeout(()=> {
-        this.servicioAlert.setAlert('', '');
-     },2000 );
+
     }
+    this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
+    setTimeout(()=> {
+      this.servicioAlert.setAlert('', '');
+   },2000 );
   }
 
 

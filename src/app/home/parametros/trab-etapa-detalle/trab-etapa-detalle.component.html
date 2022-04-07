@@ -1,0 +1,123 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Usuario - Etapas - Detalle</h3>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+        <i class="fas fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="card-body">
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" ngbTooltip="Excel"><i class="fas fa-file-csv"></i>Excel</button>
+      <a (click)= "modalIns(modalInsEta)" class="btn  btn-outline-primary btn-sm" ngbTooltip="Nuevo"><i class="fas fa-address-card" ></i>Nuevo</a>
+
+    <div class="loading" *ngIf = 'loading'>
+      <img src = "../../../assets/Circles-menu-3.gif">
+     </div>
+
+ <div>
+  <br>
+  <div    *ngIf="tblEtapas?.length > 0" class="{{carga}}">
+    <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Etapa</th>
+          <th>Descripción</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let etapas of tblEtapas">
+          <th>{{etapas.idEtaDes}}</th>
+          <th>{{etapas.etaDes}}</th>
+          <th>{{etapas.etaDesDes}}</th>
+          <th>
+            <a style= "margin : 1px ;" (click) = "modelUp(modalEtaUdp , etapas)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+
+            <a style= "margin : 1px ;" (click) = "delEtapas(etapas)" class="btn btn-warning btn-xs" ngbTooltip="Eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
+          </th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+  <a href= "#/home"  (click)="volver()">Volver</a>
+</div>
+  <!-- /.card-body -->
+  <div class="card-footer">
+
+    Marple
+  </div>
+  <!-- /.card-footer-->
+</div>
+<ng-template #modalEtaUdp let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal Ingreso Etapas Detalle</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>  <!-- /.card-header -->
+  <form >
+
+  <div class="modal-body">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="">Código Etapa</label>
+          <input type="text" class="form-control" id="" placeholder="" value="{{etapasDet.idEta}}"   disabled>
+        </div>
+        <div class="form-group">
+          <label for="">Descripción Etapa</label>
+          <input type="text" class="form-control" name = "etaDes" id="etaDes" placeholder="" value="{{etapasDet.etaDes}}"  disabled oninput="this.value = this.value.toUpperCase()">
+        </div>
+        <div class="form-group">
+          <label for="">Descripción Detalle</label>
+          <input type="text" class="form-control" name = "etaDes" id="etaDesDes" value="{{etapasDet.etaDesDes}}" placeholder="" value=""  #etaDes oninput="this.value = this.value.toUpperCase()">
+        </div>
+
+      </div>
+      <!-- /.card-body -->
+    <!-- form start -->
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click) ="actionEtapaDet(etaDes.value , 'up')" [disabled]="loading">Guardar</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+</ng-template>
+
+
+<ng-template #modalInsEta let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal Ingreso Etapas Detalle</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>  <!-- /.card-header -->
+  <form >
+
+  <div class="modal-body">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="">Código Etapa</label>
+          <input type="text" class="form-control" id="" placeholder="" value="{{etapas.idEta}}"   disabled>
+        </div>
+        <div class="form-group">
+          <label for="">Descripción Etapa</label>
+          <input type="text" class="form-control" name = "etaDes" id="etaDes" placeholder="" value="{{etapas.etaDes}}"  disabled oninput="this.value = this.value.toUpperCase()">
+        </div>
+        <div class="form-group">
+          <label for="">Descripción Detalle</label>
+          <input type="text" class="form-control" name = "etaDes" id="etaDes" placeholder="" value=""  #etaDes oninput="this.value = this.value.toUpperCase()">
+        </div>
+
+      </div>
+      <!-- /.card-body -->
+    <!-- form start -->
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click) ="actionEtapaDet(etaDes.value , 'ins')" [disabled]="loading">Guardar</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+</ng-template>
+

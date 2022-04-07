@@ -1,3 +1,5 @@
+import { LinksService } from 'src/app/servicios/links.service';
+import { EtapasdetService } from './../../../servicios/etapasdet.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -31,10 +33,12 @@ export class TrabEtapasComponent implements OnInit {
     private rest : RestService,
     private modal : NgbModal,
     private excel: ExcelService,
-    private servicioaler : AlertasService) {
+    private servicioaler : AlertasService,
+    private etapasser : EtapasdetService,
+    private servicioLink     : LinksService) {
 
       this.token = servicio.getToken();
-      this.etapas= new Etapas(0, '');
+      this.etapas= new Etapas(0, '' , '');
     }
 
   ngOnInit(): void {
@@ -79,6 +83,7 @@ export class TrabEtapasComponent implements OnInit {
   public modelUp(content :any , etapasx: Etapas){
     this.etapas.setIdEta(etapasx.idEta);
     this.etapas.setEtaDes(etapasx.etaDes);
+    this.etapas.setEtProd(etapasx.etaProd);
     this.modal.open(content);
   }
 
@@ -120,9 +125,9 @@ export class TrabEtapasComponent implements OnInit {
      return false;
   }
 
-  public actionEtapa(etapas : any , tipo :string ){
+  public actionEtapa(etapas : any , etaProd: any, tipo :string ){
     let url      = '';
-    let etapasx  = new Etapas(this.etapas.idEta , etapas);
+    let etapasx  = new Etapas(this.etapas.idEta , etapas , etaProd );
     this.carga   = 'invisible';
     this.loading = true;
 
@@ -156,6 +161,11 @@ export class TrabEtapasComponent implements OnInit {
     });
     this.servicioaler.disparador.emit(this.servicioaler.getAlert());
     return false;
+  }
+
+  public desEtapa( etapasx : any) {
+    this.etapasser.setEtapa(etapasx);
+    this.servicioLink.disparador.emit('insEtapasDet');
   }
 
 }

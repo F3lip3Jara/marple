@@ -1,0 +1,230 @@
+<div class="row" >
+  <form
+  [formGroup] = "insExt"
+  >
+    <div class="col-md-9">
+      <div class="col-md-12">
+        <div class="card card-outline card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Ingreso de  Exstursion</h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+            </div>
+            <!-- /.card-tools -->
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <div class="modal-body">
+              <div class="loading" *ngIf= "loading" >
+                <img src = "../../../assets/Circles-menu-3.gif">
+               </div>
+              <div class="row"  class="{{carga}}">
+               <div class="form-group">
+                <label for="">Turno</label>
+                <div class="input-group input-group-sm">
+                  <select  class="custom-select rounded-0 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName= "extTurn">
+                    <option  value="">Seleccione</option>
+                    <option value="1">Turno 1</option>
+                    <option value="2">Turno 2</option>
+                  </select>
+                </div>
+                 </div>
+              <div *ngIf = "insExt.controls['extTurn'].hasError('required')">
+                <span class="text-danger">Campo obligatorio!</span>
+              </div>
+                <div class="form-group">
+                  <label for="">LOTE SACA</label>
+                  <div  *ngIf=" !sacas.length ">
+                    <div class="spinner-border spinner-border-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
+                  <div class="input-group input-group-sm" *ngIf="sacas.length > 0">
+                  <select  id="extMaq" name= "extMaq" class="custom-select rounded-0 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName= "extMaq">
+                    <option  value="">Seleccione</option>
+                    <option  *ngFor = "let saca of sacas"  value="{{saca.idMez}}">{{saca.mezLotSal}}</option>
+                  </select>
+                  </div>
+                  <div *ngIf = "insExt.controls['extMaq'].hasError('required')">
+                    <span class="text-danger">Campo obligatorio!</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="">LOTE BOBINA</label>
+                  <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" placeholder="" value="" disabled>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="">Nota</label>
+                  <div class="input-group input-group-sm">
+                    <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)="Notas(modalInsNot)"  ngbTooltip="Excel" ><i class="fas fa-address-book"></i>Notas</button>
+                  </div>
+                </div>
+                <hr>
+                <h6>Detalles</h6>
+                <div class="col-md-3">
+                  <button type="button" (click)="insOt(modalInsOt)" class="btn btn-danger btn-sm"><i class="fas fa-plus-circle"></i></button>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+              </div>
+
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary btn-block" *ngIf="" [disabled]="val">
+                    <div *ngIf= "val">
+                      Guardando..
+                      <span class="spinner-border spinner-border-sm mr-2"></span>
+                    </div>
+                    <div *ngIf= "!val">
+                      Guardar
+                    </div>
+                  </button>
+                   <a href="" (click)="volver()">Volver</a>
+                </div>
+             </div>
+            </div>
+             <!-- /.card-body -->
+          </div>
+        </div>
+      </div>
+
+  </form>
+  </div>
+
+
+  <ng-template #modalInsOt let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Modal ingreso Extursión</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form
+    [formGroup] = "insdExt"
+    (ngSubmit)  = "modConfirmar(insdExt.controls['extdHorIni'].value ,
+                                insdExt.controls['extdHorFin'].value ,
+                                insdExt.controls['extdEsIzq'].value ,
+                                insdExt.controls['extdEsCen'].value ,
+                                insdExt.controls['extdEsDer'].value
+
+                )"
+    >
+    <div class="modal-body" >
+      <div class="row">
+      <div class="col-md-12">
+      <div class="form-group">
+        <label>Hora Inicio</label>
+        <div class="input-group input-group-sm">
+        <ngb-timepicker  [spinners]="spinners" formControlName="extdHorIni"></ngb-timepicker>
+        </div>
+        <div *ngIf = "insdExt.controls['extdHorIni'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+     </div>
+     <div class="form-group">
+        <label>Hora Fin</label>
+        <div class="input-group input-group-sm">
+        <ngb-timepicker [spinners]="spinners" formControlName="extdHorFin"></ngb-timepicker>
+        </div>
+        <div *ngIf = "insdExt.controls['extdHorFin'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+    </div>
+    <div class="form-group">
+      <label for="">Espesor</label>
+    </div>
+   </div>
+    <hr>
+    <div class="form-group col-md-4">
+      <label for="">Izq</label>
+      <input type="text" class="form-control form-control-sm" id="" placeholder="" value="" formControlName="extdEsIzq"  >
+      <div *ngIf = "insdExt.controls['extdEsIzq'].hasError('required')">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+    </div>
+
+    <div class="form-group col-md-4">
+      <label for="">Centro</label>
+      <input type="text" class="form-control form-control-sm" id="" placeholder="" value=""  formControlName="extdEsCen" >
+      <div *ngIf = "insdExt.controls['extdEsCen'].hasError('required')">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+    </div>
+
+    <div class="form-group col-md-4">
+      <label for="">Der</label>
+      <input type="text" class="form-control form-control-sm" id="" placeholder="" value=""  formControlName="extdEsDer" >
+      <div *ngIf = "insdExt.controls['extdEsDer'].hasError('required')">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+    </div>
+
+    </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary btn-block" *ngIf="insdExt.valid" [disabled]="val" >
+        <div *ngIf= "val">
+          Guardando..
+          <span class="spinner-border spinner-border-sm mr-2"></span>
+        </div>
+        <div *ngIf= "!val">
+          Guardar
+        </div>
+    </button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+  </form>
+  </ng-template>
+
+  <ng-template #modalInsNot let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Modal ingreso Notas Extursión</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form
+    >
+    <div class="modal-body" >
+      <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="">Motivo Rechazo</label>
+          <div class="input-group input-group-sm">
+            <select  class="custom-select rounded-0 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" >
+              <option  value="">Seleccione</option>
+              <option value="1">Turno 1</option>
+              <option value="2">Turno 2</option>
+            </select>
+          </div>
+           </div>
+           <div class="form-group col-md-12">
+            <label>Obs</label>
+            <textarea class="form-control" rows="2" placeholder="Observaciones"></textarea>
+          </div>
+      </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary btn-block"  >
+        <div *ngIf= "val">
+          Guardando..
+          <span class="spinner-border spinner-border-sm mr-2"></span>
+        </div>
+        <div *ngIf= "!val">
+          Guardar
+        </div>
+    </button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+  </form>
+  </ng-template>
+

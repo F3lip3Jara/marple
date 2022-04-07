@@ -10,9 +10,16 @@ const EXCEL_EXTENSION = '.xlsx';
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class ExcelService {
 
-  constructor() { }
+  public converJson : string ;
+
+  constructor() {
+
+      this.converJson = '';
+  }
 
 
   public exportAsExcelFile(json: any[], excelFileName: string)
@@ -33,8 +40,6 @@ export class ExcelService {
     const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     this.saveAsExcelFile(excelBuffer, excelFileName);
-
-
   }
 
 

@@ -10,7 +10,6 @@
       <button type = 'button' class="btn  btn-outline-primary btn-sm" ngbTooltip="Excel"><i class="fas fa-file-csv"></i>Excel</button>
       <a (click)= "modalIns(modalInsEta)" class="btn  btn-outline-primary btn-sm" ngbTooltip="Nuevo"><i class="fas fa-address-card" ></i>Nuevo</a>
 
-
     <div class="loading" *ngIf = 'loading'>
       <img src = "../../../assets/Circles-menu-3.gif">
      </div>
@@ -23,6 +22,7 @@
         <tr>
           <th>ID</th>
           <th>Descripción</th>
+          <th>Es Producción</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -30,9 +30,12 @@
         <tr *ngFor = "let etapas of tblEtapas">
           <th>{{etapas.idEta}}</th>
           <th>{{etapas.etaDes}}</th>
+          <th *ngIf="etapas.etaProd == 'S', else noact">SI</th>
+          <ng-template #noact> <th>NO</th></ng-template>
           <th>
-            <a (click) = "modelUp(modalEtaUdp , etapas)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
-            <a (click) = "delEtapas(etapas)" class="btn btn-warning btn-xs" ngbTooltip="Eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
+            <a style= "margin : 1px ;" (click) = "modelUp(modalEtaUdp , etapas)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+            <a style= "margin : 1px ;" (click) = "desEtapa( etapas)" class="btn btn-warning btn-xs" ngbTooltip="Agregar Log"><i class="fas fa-plus-circle"></i></a>
+            <a style= "margin : 1px ;" (click) = "delEtapas(etapas)" class="btn btn-warning btn-xs" ngbTooltip="Eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
           </th>
         </tr>
       </tbody>
@@ -56,11 +59,19 @@
   <form >
 
   <div class="modal-body">
-
       <div class="card-body">
         <div class="form-group">
           <label for="">Código</label>
           <input type="text" class="form-control" id="" placeholder="" value="{{etapas.idEta}}"   disabled>
+        </div>
+        <div class="form-group">
+          <label>Es Producción</label>
+          <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" #etaProd>
+            <option *ngIf="etapas.etaProd == 'N', else norei"  selected value ='N'>NO</option>
+            <ng-template #norei> <option value ='S' selected>SI</option></ng-template>
+            <option *ngIf="etapas.etaProd == 'N', else noreix"  value ='S'>SI</option>
+            <ng-template #noreix> <option value ='N' >NO</option></ng-template>
+          </select>
         </div>
         <div class="form-group">
           <label for="">Descripción</label>
@@ -68,16 +79,13 @@
         </div>
       </div>
       <!-- /.card-body -->
-
     <!-- form start -->
-
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click) ="actionEtapa(etaDes.value , 'up' )" [disabled]="loading">Guardar</button>
+    <button type="button" class="btn btn-primary" (click) ="actionEtapa(etaDes.value , etaProd.value , 'up' )" [disabled]="loading">Guardar</button>
     <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
   </div>
 </form>
-
 </ng-template>
 
 
@@ -92,15 +100,24 @@
     <form >
       <div class="card-body">
         <div class="form-group">
+          <label>Es Producción</label>
+          <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" #etaProd>
+            <option value="N">NO</option>
+            <option value="S">SI</option>
+          </select>
+        </div>
+        <div class="form-group">
           <label for="">Descripción</label>
           <input type="text" class="form-control" name = "etaDes" id="etaDEs" placeholder="" value="" #etaDes  oninput="this.value = this.value.toUpperCase()">
         </div>
       </div>
+
       <!-- /.card-body -->
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click) ="actionEtapa(etaDes.value , 'ins' )" [disabled]="loading" >Guardar</button>
+    <button type="button" class="btn btn-primary" (click) ="actionEtapa(etaDes.value , etaProd.value , 'ins' )" [disabled]="loading" >Guardar</button>
     <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
   </div>
 </ng-template>
+

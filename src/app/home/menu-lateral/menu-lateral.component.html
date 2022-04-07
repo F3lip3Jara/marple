@@ -46,6 +46,18 @@
     <div [ngbCollapse]="isMenuCollapsed2" class="menu-is-opening menu-open" style="padding-left: 2%;">
       <ul class="nav nav-treeview" style="display: block;">
         <li class="nav-item">
+          <a  (click)="elinks('binCol')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Correlativo bins.</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a  (click)="elinks('calJul')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Calendario Jul.</p>
+          </a>
+        </li>
+        <li class="nav-item">
           <a  (click)="elinks('empresa')" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>Empresa</p>
@@ -146,8 +158,15 @@
                 <p>Unidad Medida</p>
               </a>
             </li>
+
            </ul>
           </div>
+        </li>
+        <li class="nav-item">
+          <a  (click)="elinks('maquinas')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Maquina</p>
+          </a>
         </li>
       </ul>
     </div>
@@ -155,15 +174,29 @@
 
   <li   class="nav-item has-treeview">
     <a  class="nav-link"  (click)="isMenuCollapsed5 = !isMenuCollapsed5">
-      <i class="nav-icon fas fa-folder"></i>
+      <i class="nav-icon  fas fa-industry"></i>
+
+
       <p>
-        Ordenes
+        Producción
         <i   [ngClass]="(isMenuCollapsed5)?' right fas fa-angle-left':' right fas fa-angle-down'"  ></i>
       </p>
     </a>
 
     <div [ngbCollapse]="isMenuCollapsed5" class="menu-is-opening menu-open" style="padding-left: 2%;">
       <ul class="nav nav-treeview" style="display: block;">
+        <li class="nav-item">
+          <a  (click)="elinks('mezcla')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Mezcla</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a  (click)="elinks('extursion')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Extursión</p>
+          </a>
+        </li>
         <li class="nav-item">
           <a  (click)="elinks('op')" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
