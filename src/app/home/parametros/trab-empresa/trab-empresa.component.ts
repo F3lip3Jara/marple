@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RestService } from './../../../servicios/rest.service';
 import { UsersService } from './../../../servicios/users.service';
@@ -26,12 +27,13 @@ export class TrabEmpresaComponent implements OnInit {
   carga        : string               = "invisible";
 
 
-  constructor(private fb: FormBuilder,
-    private servicio : UsersService,
-    private rest : RestService,
-    private modal : NgbModal,
-    private excel: ExcelService,
-    private servicioaler : AlertasService
+  constructor(private fb           : FormBuilder,
+              private servicio     : UsersService,
+              private rest         : RestService,
+              private modal        : NgbModal,
+              private excel        : ExcelService,
+              private servicioaler : AlertasService,
+              private serviLoad    : LoadingService
     ) {
             this.token = this.servicio.getToken();
     }
@@ -61,6 +63,7 @@ export class TrabEmpresaComponent implements OnInit {
   }
 
   public tblData(){
+    this.serviLoad.sumar.emit(1);
     this.tblEmpresa = {};
     this.rest.get('trabEmpresa' , this.token, this.parametros).subscribe(data => {
         this.tblEmpresa = data;

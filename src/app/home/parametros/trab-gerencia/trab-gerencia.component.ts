@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { Alert } from 'src/app/model/alert.model';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -27,12 +28,13 @@ export class TrabGerenciaComponent implements OnInit {
   carga        : string               = "invisible";
   gerencia     : Gerencia;
 
-  constructor(private fb: FormBuilder,
-    private servicio : UsersService,
-    private rest : RestService,
-    private modal : NgbModal,
-    private servicioaler: AlertasService,
-    private excel: ExcelService) {
+  constructor(private fb          : FormBuilder,
+              private servicio    : UsersService,
+              private rest        : RestService,
+              private modal       : NgbModal,
+              private servicioaler: AlertasService,
+              private excel       : ExcelService,
+              private serviLoad   : LoadingService) {
 
       this.token    = this.servicio.getToken();
       this.gerencia = new Gerencia(0, '');
@@ -64,6 +66,7 @@ export class TrabGerenciaComponent implements OnInit {
   }
 
   public tblData(){
+    this.serviLoad.sumar.emit(1);
     this.tblGerencia = {};
     this.rest.get('trabGerencia' , this.token, this.parametros).subscribe(data => {
         this.tblGerencia = data;
@@ -89,32 +92,27 @@ public delGerencia( gerencia : any) : boolean{
   let url      = 'delGerencia';
   this.carga   = 'invisible';
   this.loading = true;
-
+  this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, gerencia).subscribe(resp => {
        resp.forEach((elementx : any)  => {
          if(elementx.error == '0'){
            this.modal.dismissAll();
            this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-
            setTimeout(()=>{
-
+            this.serviLoad.sumar.emit(1);
              this.tblGerencia = {};
              this.rest.get('trabGerencia' , this.token, this.parametros).subscribe(data => {
                  this.tblGerencia = data;
              });
-
              this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
                dtInstance.destroy().draw();
              });
-
              this.carga    = 'visible';
              this.loading  = false;
            },1500);
-
          }else{
            this.carga    = 'visible';
            this.loading  = false;
-
          }
       });
    });
@@ -134,6 +132,8 @@ public action(gerDesx : any , tipo :string ) : boolean{
   }else{
     url = 'insGerencia';
   }
+
+ this.serviLoad.sumar.emit(2);
  this.rest.post(url, this.token, gerenciax).subscribe(resp => {
       resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){

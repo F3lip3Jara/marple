@@ -1,0 +1,131 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Motivo de Rechazo</h3>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+        <i class="fas fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="card-body">
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel"><i class="fas fa-file-csv"></i>Excel</button>
+      <a (click) = "modalIns(modalInsMon)" class="btn  btn-outline-primary btn-sm" ngbTooltip="Nuevo" ><i class="fas fa-address-card" ></i>Nuevo</a>
+
+
+    <div class="loading" *ngIf= "loading" >
+      <img src = "../../../assets/Circles-menu-3.gif">
+     </div>
+
+ <div>
+  <br>
+
+  <div class="table-responsive"   *ngIf="tblMotivo?.length > 0" class="{{carga}}">
+    <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Cód. Motivo</th>
+          <th>Descripción</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let motivo of tblMotivo">
+          <th>{{motivo.idMot}}</th>
+          <th>{{motivo.motDes}}</th>
+          <th>
+            <a style= "margin : 1px ;" (click) = "modelUp(modalUpMon , motivo)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+            <a style= "margin : 1px ;" (click) = "del(motivo)"  class="btn btn-warning btn-xs" ngbTooltip="Eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
+
+          </th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+</div>
+  <!-- /.card-body -->
+  <div class="card-footer">
+    Marple
+  </div>
+  <!-- /.card-footer-->
+</div>
+<ng-template #modalUpMon let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal actualiza Motivo</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>  <!-- /.card-header -->
+  <form  [formGroup] = "upMot"
+  (ngSubmit)  = "action( upMot.controls['motDes'].value ,
+                         'up' )">
+  <div class="modal-body">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="">Código</label>
+          <input type="text" class="form-control" id="" placeholder="" value="{{motivo.idMot}}" disabled>
+        </div>
+        <div class="form-group">
+          <label for="">Descripción</label>
+          <input type="text" class="form-control" name = "monDes" id="motDes" placeholder="" value="{{ motivo.motDes}}" formControlName = 'motDes' oninput="this.value = this.value.toUpperCase()">
+        </div>
+        <div *ngIf = "upMot.controls['motDes'].hasError('required')">
+         <span class="text-danger">Campo obligatorio!</span>
+       </div>
+      </div>
+      <!-- /.card-body -->
+    <!-- form start -->
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="upMot.valid" [disabled]="val">
+      <div *ngIf= "val">
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!val">
+        Guardar
+      </div>
+    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+
+</ng-template>
+
+
+<ng-template #modalInsMon let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal ingreso Motivo</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form  [formGroup] = "insMot"
+  (ngSubmit)  = "action( insMot.controls['motDes'].value ,
+                        'ins' )">
+  <div class="modal-body">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="">Descripción</label>
+          <input type="text" class="form-control" name = "motDes" id="motDes" placeholder="" value="" formControlName = 'motDes' oninput="this.value = this.value.toUpperCase()">
+        </div>
+        <div *ngIf = "insMot.controls['motDes'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+      </div>
+      <!-- /.card-body -->
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="insMot.valid" [disabled]="val">
+      <div *ngIf= "val">
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!val">
+        Guardar
+      </div>
+    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+</ng-template>

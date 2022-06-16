@@ -29,12 +29,14 @@ export class InsOrdenProduccionComponent implements OnInit {
   parametros   : any []               = [];
   prvNom       :string                = '';
   idPrv        :number                = 0;
-  productos    : any ;
+  productos    : any [];
+  cProductos   : any ;
   ordenes      : any []               = [];
   valcod       : boolean              = false;
   orpdTotP     : number               = 0;
   valprod                             = false;
   valproddet                          = false;
+  etapas       : any ;
 
   constructor(
     private servicio     : UsersService,
@@ -62,6 +64,7 @@ export class InsOrdenProduccionComponent implements OnInit {
 
          ])],
 
+
       });
 
       this.insOrd = fb.group({
@@ -73,17 +76,21 @@ export class InsOrdenProduccionComponent implements OnInit {
          ])],
 
          orpObs : ['' , Validators.compose([
-
          ])],
 
          orpNumRea : ['' , Validators.compose([
           Validators.required,
-         ])]
+         ])],
+
+         idEta:['', Validators.compose([
+          Validators.required
+        ]) ]
 
         });
 
-
-
+        this.productos = [];
+        this.cProductos= [];
+        this.etapas    = {};
   }
 
   ngOnInit(): void {
@@ -108,64 +115,43 @@ export class InsOrdenProduccionComponent implements OnInit {
         }
       }}
 
+      this.rest.get('prodTerm' , this.token , this.parametros).subscribe(data => {
+        this.cProductos = data;
+      });
 
       this.insPrd.controls['prdCod'].valueChanges.pipe(
-        filter(text => text != null &&  text.length >= 2
+        filter(text => text != null &&  text.length > 1
           ),
         debounceTime(200),
         distinctUntilChanged()
       ).subscribe( field => {
-        this.valproddet   = false;
-        let parm : any[]  = [{key :'prdCod' ,value: field} ];
-        let error ;
-        this.rest.get('valPrdOrd' , this.token, parm).subscribe(data =>{
-             error = data ;
-             if(error == 2){
-                this.rest.get('filPrdCod' , this.token, parm).subscribe(data =>{
-                   this.productos = data;
-                });
-                this.valprod      = true;
-              }else{
-                this.productos = [];
-                this.valprod      = false;
-              }
-            this.ordenes.forEach(element => {
-              if(element.prdCod == field){
-                this.valproddet= true;
-              }else{
-                this.valproddet= false;
+        this.productos = [];
+        this.parametros= [{key : 'prdCod' , value :field }];
 
-              }
-          });
+        this.rest.get('valPrdCod', this.token , this.parametros).subscribe(data => {
+            if(data == 0){
+              this.cProductos.filter(
+                (producto : any) =>{
+                    if((producto.prdDes.indexOf(field) > -1) == true){
+                     this.productos.push(producto);
+                   }
+                  });
+                  this.valprod = true;
+            }else{
+              this.productos = [];
+              this.valprod   = false;
+            }
+        });
 
-          })
       });
+
+
 
       this.insPrd.controls['orpdCant'].valueChanges.pipe(
         filter(text => text != null && text.length >= 0),
         debounceTime(200),
         distinctUntilChanged()).subscribe(field => {
-            this.valprod = false;
-            let parm : any[]  = [{key :'prdCod' ,value: this.insPrd.controls['prdCod'].value} ];
-            this.rest.get('valPrdOrd' , this.token, parm).subscribe(data =>{
-                  if(data == 2){
-                      this.valprod = true;
-                  }else{
-                    this.valprod = false;
-                    this.rest.get('filPrdCod' , this.token, parm).subscribe((data : any) =>{
-                      let elemprdCod = <HTMLInputElement> document.getElementById('prdCod');
-                      let elemprdDes = <HTMLInputElement> document.getElementById('prdDes');
-                      data.forEach((element: any) => {
-                        elemprdCod.value = element.cod_pareo;
-                        elemprdDes.value = element.descripcion;
-                        console.log(element.cod_pareo);
-                        this.productos   = [];
-                        this.insPrd.controls['prdCod'].setValue( element.cod_pareo);
-                    });
 
-                   });
-                  }
-            });
 
         });
 
@@ -176,6 +162,9 @@ export class InsOrdenProduccionComponent implements OnInit {
           this.validaNumRea(field);
         });
 
+        this.rest.get('etapasProd' , this.token , this.parametros).subscribe(data =>{
+          this.etapas	= data;
+       });
 
 
   }
@@ -239,20 +228,19 @@ export class InsOrdenProduccionComponent implements OnInit {
    }
 
    selectorPrd(xproducto:any){
-     let elemprdCod = <HTMLInputElement> document.getElementById('prdCod');
-     let elemprdDes = <HTMLInputElement> document.getElementById('prdDes');
-
-     elemprdCod.value = xproducto.cod_pareo;
-     elemprdDes.value = xproducto.descripcion;
      this.productos   = [];
-     this.insPrd.controls['prdCod'].setValue( xproducto.cod_pareo);
+     let elemprdCod  = <HTMLInputElement> document.getElementById('prdCod');
+     let elemprdDes  = <HTMLInputElement> document.getElementById('prdDes');
+     elemprdCod.value = xproducto.prdCod;
+     elemprdDes.value = xproducto.prdDes;
+     this.insPrd.controls['prdCod'].setValue( xproducto.prdCod);
    }
 
    delPrd(index:any){
      this.ordenes.splice(index , 1);
    }
 
-   generaOP(orpFech: any ,orpNumOc : any , orpNumRea: any  , orpObs : any ){
+   generaOP(orpFech: any ,orpNumOc : any , orpNumRea: any  , orpObs : any , idEta: any ){
 
        let ordenPrd : any [] = [];
        this.val              = true;
@@ -262,7 +250,8 @@ export class InsOrdenProduccionComponent implements OnInit {
           'orpNumRea': orpNumRea,
           'orpObs'   : orpObs,
           'idPrv'    : this.idPrv,
-          'ordenes'  : this.ordenes
+          'ordenes'  : this.ordenes,
+          'idEta'    : idEta
       });
 
       this.rest.post('insOrd', this.token, ordenPrd).subscribe(resp => {

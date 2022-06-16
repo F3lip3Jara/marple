@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InsOrdTrabajoComponent } from './ins-ord-trabajo.component';
+import { UpExtrusionCComponent } from './up-extrusion-c.component';
 
-describe('InsOrdTrabajoComponent', () => {
-  let component: InsOrdTrabajoComponent;
-  let fixture: ComponentFixture<InsOrdTrabajoComponent>;
+describe('UpExtrusionCComponent', () => {
+  let component: UpExtrusionCComponent;
+  let fixture: ComponentFixture<UpExtrusionCComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InsOrdTrabajoComponent ]
+      declarations: [ UpExtrusionCComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InsOrdTrabajoComponent);
+    fixture = TestBed.createComponent(UpExtrusionCComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

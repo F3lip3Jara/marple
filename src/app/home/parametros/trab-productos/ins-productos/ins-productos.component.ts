@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../../servicios/loading.service';
 import { Producto } from 'src/app/model/producto.model';
 import { LinksService } from 'src/app/servicios/links.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
@@ -30,11 +31,13 @@ export class InsProductosComponent implements OnInit {
   mensaje      : string               = '';
 
 
-  constructor(private fg: FormBuilder,
-    private servicio : UsersService,
-    private rest : RestService,
-    private servicioaler: AlertasService,
-    private servicioLink : LinksService) {
+  constructor(private fg            : FormBuilder,
+              private servicio      : UsersService,
+              private rest          : RestService,
+              private servicioaler  : AlertasService,
+              private servicioLink  : LinksService,
+              private serviLoad     : LoadingService
+              ) {
 
       this.medidas       = {};
       this.monedas       = {};
@@ -177,6 +180,7 @@ export class InsProductosComponent implements OnInit {
       });
 
     });
+    this.serviLoad.sumar.emit(4);
   }
 
 
@@ -207,6 +211,7 @@ export class InsProductosComponent implements OnInit {
 
     let producto : Producto  = new Producto(0, prdDes , prdCod , prdObs, '', prdEan , prdTip , prdCost , prdNet , prdBrut , prdInv , prdPes , prdMin , idGrp , idSubGrp , idCol , idMon , idUn )
     this.val                 = true;
+    this.serviLoad.sumar.emit(1);
     this.rest.post('insProducto', this.token, producto).subscribe(resp => {
      resp.forEach((elementx : any)  => {
           if(elementx.error == '0' ){

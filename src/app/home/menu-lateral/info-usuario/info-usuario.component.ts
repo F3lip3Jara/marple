@@ -67,14 +67,16 @@ export class InfoUsuarioComponent implements OnInit {
 
   ngOnInit(): void {
     let  usuariox : any ;
+
     this.rest.get('getUsuario' , this.token, this.parametros).subscribe(respuesta => {
-      usuariox = respuesta;
+     usuariox = respuesta;
       Object.values(respuesta).forEach(element=>{
         this.usuario  = element.name;
         this.rol      = element.rolDes;
         this.imgName  = element.imgName;
       });
-        if(this.usuario == ''){
+
+      if(this.usuario == ''){
            this.router.navigate(['/login']);
            this.alertas.setAlert('','');
            this.servicioUser.eliminarToken();

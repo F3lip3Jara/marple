@@ -152,13 +152,12 @@
                     <div class=" input-group-sm">
                       <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName ='prdTip'>
                         <option   value="">Seleccione</option>
-                        <option   value="P">Producto Terminado</option>
+                        <option   value="I">Insumos</option>
+                        <option   value="B">Materia Base</option>
                         <option   value="M">Materia Prima</option>
+                        <option   value="V">Materia Virgen</option>
+                        <option   value="P">Producto Terminado</option>
                         <option   value="S">Servicio</option>
-                        <option   value="Z">Mezcla</option>
-                        <option   value="D">P.P Molido</option>
-                        <option   value="A">P.A.I Molido</option>
-                        <option   value="T">PET Molido</option>
                       </select>
                     </div>
                     <div *ngIf = "insProd.controls['prdTip'].hasError('required')">

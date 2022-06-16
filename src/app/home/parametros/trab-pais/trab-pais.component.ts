@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RestService } from './../../../servicios/rest.service';
 import { UsersService } from './../../../servicios/users.service';
@@ -33,12 +34,13 @@ export class TrabPaisComponent implements OnInit {
   upPais       : FormGroup;
   val          : boolean              = false;
 
-  constructor(private fb: FormBuilder,
-    private servicio : UsersService,
-    private rest : RestService,
-    private modal : NgbModal,
-    private servicioaler: AlertasService,
-    private excel: ExcelService) {
+  constructor(private fb          : FormBuilder,
+              private servicio    : UsersService,
+              private rest        : RestService,
+              private modal       : NgbModal,
+              private servicioaler: AlertasService,
+              private excel       : ExcelService,
+              private serviLoad   : LoadingService) {
 
       this.token    = this.servicio.getToken();
       this.pais = new Pais(0, '' , '');
@@ -100,6 +102,7 @@ export class TrabPaisComponent implements OnInit {
 
   public tblData(){
     this.tblPais = {};
+    this.serviLoad.sumar.emit(1);
     this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
         this.tblPais = data;
     });
@@ -127,10 +130,11 @@ public delPais( gerencia : any) : boolean{
   let url      = 'delPais';
   this.carga   = 'invisible';
   this.loading = true;
-
+  this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, gerencia).subscribe(resp => {
        resp.forEach((elementx : any)  => {
          if(elementx.error == '0'){
+          this.serviLoad.sumar.emit(1);
            this.modal.dismissAll();
            setTimeout(()=>{
              this.tblPais = {};
@@ -167,9 +171,11 @@ public action(xpaiDes : any , xpaicod : any , tipo :string ) : boolean{
   }else{
     url = 'insPais';
   }
+  this.serviLoad.sumar.emit(1);
  this.rest.post(url, this.token, paisx).subscribe(resp => {
       resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
+        this.serviLoad.sumar.emit(1);
           this.modal.dismissAll();
           setTimeout(()=>{
             this.tblPais = {};

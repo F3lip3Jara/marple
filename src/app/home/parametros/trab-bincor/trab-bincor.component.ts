@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { RestService } from 'src/app/servicios/rest.service';
@@ -18,17 +19,17 @@ export class TrabBincorComponent implements OnInit {
 
   loading      : boolean              = true;
   dtOptions    : DataTables.Settings  = {} ;
-  tblBins   : any                  = {};
+  tblBins      : any                  = {};
   token        : string               = '';
   parametros   : any []               = [];
   carga        : string               = "invisible";
 
 
-  constructor(
-    private servicio : UsersService,
-    private rest : RestService,
-    private excel: ExcelService,
-    private servicioaler : AlertasService
+  constructor( private servicio     : UsersService,
+              private rest          : RestService,
+              private excel         : ExcelService,
+              private servicioaler  : AlertasService,
+              private serviLoad     : LoadingService
     ) {
             this.token = this.servicio.getToken();
     }
@@ -58,6 +59,7 @@ export class TrabBincorComponent implements OnInit {
   }
 
   public tblData(){
+    this.serviLoad.sumar.emit(1);
     this.tblBins = {};
     this.rest.get('trabBins' , this.token, this.parametros).subscribe(data => {
         this.tblBins = data;

@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RestService } from 'src/app/servicios/rest.service';
@@ -30,21 +31,19 @@ export class TrabMaquinasComponent implements OnInit {
   etapas       : any;
 
 
-  constructor(private fb: FormBuilder,
-    private servicio : UsersService,
-    private rest : RestService,
-    private modal : NgbModal,
-    private excel: ExcelService,
-    private servicioaler : AlertasService) {
+  constructor(private fb          : FormBuilder,
+              private servicio    : UsersService,
+              private rest        : RestService,
+              private modal       : NgbModal,
+              private excel       : ExcelService,
+              private servicioaler: AlertasService,
+              private serviLoad   : LoadingService) {
+
       this.token     = servicio.getToken();
       this.maquina  = new Maquinas(0,'','',0,'' , '' , '');
-
-
-        this.rest.get('etapasProd' , this.token, this.parametros).subscribe(data => {
+      this.serviLoad.sumar.emit(1);
+      this.rest.get('etapasProd' , this.token, this.parametros).subscribe(data => {
             this.etapas   = data;
-
-            console.log(this.etapas);
-
        });
     }
 
@@ -74,7 +73,7 @@ export class TrabMaquinasComponent implements OnInit {
 
   public tblData(){
     this.tblMaquinas = {};
-
+    this.serviLoad.sumar.emit(1);
     this.rest.get('trabMaquinas' , this.token, this.parametros).subscribe(data => {
         this.tblMaquinas = data;
     });
@@ -109,10 +108,11 @@ public delEtapas(maquina : any){
   let url      = 'delMaquinas';
   this.carga   = 'invisible';
   this.loading = true;
-
+  this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, maquina).subscribe(resp => {
        resp.forEach((elementx : any)  => {
          if(elementx.error == '0'){
+          this.serviLoad.sumar.emit(1);
            this.modal.dismissAll();
            setTimeout(()=>{
              this.servicioaler.setAlert('','');
@@ -145,12 +145,13 @@ public actionMaq(  idEta : any , idMaq : any , maqDes: any   ,tipo :string , maq
   }else{
     url = 'insMaquinas';
   }
-
+  this.serviLoad.sumar.emit(1);
   this.rest.post(url, this.token, maquinax).subscribe((resp:any) => {
     resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
         this.modal.dismissAll();
         setTimeout(()=>{
+          this.serviLoad.sumar.emit(1);
           this.tblMaquinas = {};
           this.rest.get('trabMaquinas' , this.token, this.parametros).subscribe(data => {
               this.tblMaquinas = data;

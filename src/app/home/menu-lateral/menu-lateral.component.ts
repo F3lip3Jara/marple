@@ -1,4 +1,3 @@
-import { LogSysService } from './../../servicios/log-sys.service';
 import { Component, OnInit ,Output , EventEmitter} from '@angular/core';
 import { Links } from 'src/app/model/link.model';
 
@@ -18,7 +17,7 @@ export class MenuLateralComponent implements OnInit {
   @Output() onItemAdded: EventEmitter<any>;
   public links : Links |undefined;
 
-  constructor(private serviciologSys : LogSysService) {
+  constructor() {
 
     this.onItemAdded = new EventEmitter();
    }

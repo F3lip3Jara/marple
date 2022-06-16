@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../../servicios/loading.service';
 import { ProductosServiceService } from './../../../../servicios/productos-service.service';
 import { LinksService } from './../../../../servicios/links.service';
 import { AlertasService } from './../../../../servicios/alertas.service';
@@ -36,7 +37,9 @@ export class UpProductosComponent implements OnInit {
               private rest        : RestService,
               private servicioaler: AlertasService,
               private servicioLink: LinksService,
-              private servicioPrd : ProductosServiceService) {
+              private servicioPrd : ProductosServiceService,
+              private serviLoad   : LoadingService
+              ) {
 
       this.medidas       = {};
       this.monedas       = {};
@@ -229,6 +232,8 @@ export class UpProductosComponent implements OnInit {
         });
       }
       });
+
+      this.serviLoad.sumar.emit(4);
   }
 
   public guardar(

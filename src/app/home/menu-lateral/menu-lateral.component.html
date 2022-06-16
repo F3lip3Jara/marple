@@ -168,6 +168,12 @@
             <p>Maquina</p>
           </a>
         </li>
+        <li class="nav-item">
+          <a  (click)="elinks('motivo')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Motivo</p>
+          </a>
+        </li>
       </ul>
     </div>
   </li>
@@ -192,9 +198,9 @@
           </a>
         </li>
         <li class="nav-item">
-          <a  (click)="elinks('extursion')" class="nav-link">
+          <a  (click)="elinks('extrusion')" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
-            <p>Extursión</p>
+            <p>Extrusión</p>
           </a>
         </li>
         <li class="nav-item">
@@ -203,12 +209,33 @@
             <p>OP</p>
           </a>
         </li>
-        <li class="nav-item">
+
+        <li class="nav-item has-treeview">
+          <a  class="nav-link"  (click)="isMenuCollapsed3 = !isMenuCollapsed3">
+            <i class="nav-icon far fa-circle nav-icon"></i>
+            <p>
+              OT
+              <i   [ngClass]="(isMenuCollapsed3)?' right fas fa-angle-left':' right fas fa-angle-down'"  ></i>
+            </p>
+          </a>
+          <div [ngbCollapse]="isMenuCollapsed3" class="menu-is-opening menu-open" style="padding-left: 2%;">
+           <ul  class="nav nav-treeview" style="display: block;">
+            <li class="nav-item">
+              <a  (click)="elinks('Ot_Ter')" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>OT - Termoformado</p>
+              </a>
+            </li>
+
+           </ul>
+          </div>
+        </li>
+       <!-- <li class="nav-item">
           <a  (click)="elinks('ot')" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>OT</p>
           </a>
-        </li>
+        </li>-->
       </ul>
     </div>
   </li>

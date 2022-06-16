@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { Comuna } from './../../../model/comuna.model';
 import { Region } from 'src/app/model/region.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -38,12 +39,13 @@ export class TrabComunaComponent implements OnInit {
   validCod     : boolean              = false;
   ciudades     : any;
 
-  constructor(private fb: FormBuilder,
-    private servicio : UsersService,
-    private rest : RestService,
-    private modal : NgbModal,
-    private servicioaler: AlertasService,
-    private excel: ExcelService) {
+  constructor(private fb            : FormBuilder,
+              private servicio      : UsersService,
+              private rest          : RestService,
+              private modal         : NgbModal,
+              private servicioaler  : AlertasService,
+              private excel         : ExcelService,
+              private serviLoad     : LoadingService) {
 
       this.token     = this.servicio.getToken();
 
@@ -100,7 +102,7 @@ export class TrabComunaComponent implements OnInit {
           previous: 'Ant.'
         }
       }}
-
+      this.serviLoad.sumar.emit(1);
       this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
         this.paises = data;
         });
@@ -133,6 +135,7 @@ export class TrabComunaComponent implements OnInit {
 
 
   public tblData(){
+    this.serviLoad.sumar.emit(1);
     this.tblComuna = {};
     this.rest.get('trabComuna' , this.token, this.parametros).subscribe(data => {
         this.tblComuna = data;
@@ -164,11 +167,12 @@ public delComuna (comuna : any) : boolean{
   let url      = 'delComuna';
   this.carga   = 'invisible';
   this.loading = true;
-
+  this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, comuna ).subscribe(resp => {
        resp.forEach((elementx : any)  => {
          if(elementx.error == '0'){
            this.modal.dismissAll();
+           this.serviLoad.sumar.emit(1);
            setTimeout(()=>{
             this.tblComuna = {};
              this.rest.get('trabComuna' , this.token, this.parametros).subscribe(data => {
@@ -206,10 +210,11 @@ public action(xidPai : any , xidReg : any ,xidCiud : any , xcomCod : any , xcomD
   }else{
     url = 'insComuna';
   }
-
+  this.serviLoad.sumar.emit(1);
  this.rest.post(url, this.token, xcomuna).subscribe(resp => {
       resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
+        this.serviLoad.sumar.emit(1);
           this.modal.dismissAll();
           setTimeout(()=>{
             this.tblComuna = {};

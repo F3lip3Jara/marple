@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../../servicios/loading.service';
 import { LinksService } from './../../../../servicios/links.service';
 import { Proveedor } from './../../../../model/proveedor.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -26,11 +27,12 @@ export class InsProveedoresComponent implements OnInit {
   valRut       : boolean              = false;
   mensaje      : string               = '';
 
-  constructor( private fg: FormBuilder,
-    private servicio : UsersService,
-    private rest : RestService,
-    private servicioaler: AlertasService,
-    private servicioLink : LinksService
+  constructor( private fg                 : FormBuilder,
+              private servicio            : UsersService,
+              private rest                : RestService,
+              private servicioaler        : AlertasService,
+              private servicioLink        : LinksService,
+              private serviLoad           : LoadingService
   ) {
 
   this.insProv = fg.group({
@@ -94,7 +96,7 @@ export class InsProveedoresComponent implements OnInit {
    }
 
   ngOnInit(): void {
-
+    this.serviLoad.sumar.emit(1);
     this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
       this.paises = data;
       });
@@ -106,7 +108,7 @@ export class InsProveedoresComponent implements OnInit {
         this.insProv.controls['idReg'].setValue('');
         this.insProv.controls['idCom'].setValue('');
         this.insProv.controls['idCiu'].setValue('');
-
+        this.serviLoad.sumar.emit(1);
         this.parametros = [{key :'idPai' ,value: field}];
         this.rest.get('regPai' , this.token, this.parametros).subscribe(data => {
           this.regiones = data;
@@ -120,6 +122,7 @@ export class InsProveedoresComponent implements OnInit {
           this.comunas = {};
           this.insProv.controls['idCom'].setValue('');
           this.insProv.controls['idCiu'].setValue('');
+          this.serviLoad.sumar.emit(1);
           this.parametros = [{key :'idReg' ,value: field} , {key : 'idPai' , value:  this.insProv.controls['idPai'].value}];
           this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
           this.ciudades = data;
@@ -132,6 +135,7 @@ export class InsProveedoresComponent implements OnInit {
         if(field > 0){
           this.comunas = {};
           this.insProv.controls['idCom'].setValue('');
+          this.serviLoad.sumar.emit(1);
           this.parametros = [{key :'idCiu' ,value: field} , {key :'idReg' , value : this.insProv.controls['idReg'].value } , {key : 'idPai' , value:  this.insProv.controls['idPai'].value} ];
           this.rest.get('ciuCom' , this.token, this.parametros).subscribe(data => {
             this.comunas = data;
@@ -190,7 +194,7 @@ export class InsProveedoresComponent implements OnInit {
     }
     let proveedor : Proveedor  = new Proveedor(0,prvRut, prvNom , prvNom2 , prvGiro , prvDir, prvNum, idPai, idReg, idCom , idCiu , prvMail , prvTel , prvCli , prvPrv , true);
     this.val                   = true;
-
+    this.serviLoad.sumar.emit(1);
     this.rest.post('insProveedor', this.token, proveedor).subscribe(resp => {
      resp.forEach((elementx : any)  => {
           if(elementx.error == '0' ){

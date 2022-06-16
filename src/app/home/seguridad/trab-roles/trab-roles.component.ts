@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { LogSysService } from './../../../servicios/log-sys.service';
 import { LogSys } from './../../../model/logSys.model';
 import { Alert } from 'src/app/model/alert.model';
@@ -37,7 +38,8 @@ export class TrabRolesComponent implements OnInit {
     private modal         : NgbModal,
     private excel         : ExcelService,
     private servicioaler  : AlertasService,
-    private serLogSys     : LogSysService
+    private serLogSys     : LogSysService,
+    private serviLoad     : LoadingService
     ) {
       this.token = this.servicio.getToken();
       this.roles = new Roles(0, '');
@@ -70,6 +72,7 @@ export class TrabRolesComponent implements OnInit {
   }
 
   public tblData(){
+    this.serviLoad.sumar.emit(1);
     this.tblRoles = {};
     this.rest.get('trabRoles' , this.token, this.parametros).subscribe(data => {
         this.tblRoles = data;
@@ -110,6 +113,7 @@ export class TrabRolesComponent implements OnInit {
       idEtaDes = 6;
       lgDes    = 'INGRESO DE ROL';
     }
+    this.serviLoad.sumar.emit(2);
    this.rest.post(url, this.token, rolesx).subscribe(resp => {
         resp.forEach((elementx : any)  => {
         if(elementx.error == '0'){
@@ -126,7 +130,7 @@ export class TrabRolesComponent implements OnInit {
               this.loading           = false;
               const serLog  : LogSys = new LogSys(1, '' , idEtaDes, lgDes  , des);
 
-              this.serLogSys.disparador.emit(serLog);
+
             },1500);
         }else {
           this.carga    = 'visible';
@@ -143,12 +147,13 @@ export class TrabRolesComponent implements OnInit {
      let url      = 'delRoles';
      this.carga   = 'invisible';
      this.loading = true;
-
+     this.serviLoad.sumar.emit(1);
       this.rest.post(url ,this.token, rol).subscribe(resp => {
           resp.forEach((elementx : any)  => {
             if(elementx.error == '0'){
               this.modal.dismissAll();
               setTimeout(()=>{
+                this.serviLoad.sumar.emit(1);
                 this.tblRoles = {};
                 this.rest.get('trabRoles' , this.token, this.parametros).subscribe(data => {
                     this.tblRoles = data;
@@ -160,7 +165,7 @@ export class TrabRolesComponent implements OnInit {
                 this.loading  = false;
                 let des     = 'Rol ' + rol.rolDes + ' fue eliminado.'
                 let serLog  = new LogSys(1, '' , 8 , 'ELIMINAR ROL' , des);
-                this.serLogSys.disparador.emit(serLog);
+
 
               },1500);
 

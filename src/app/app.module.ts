@@ -45,7 +45,6 @@ import { TrabOrdenProduccionComponent } from './home/produccion/trab-orden-produ
 import { InsOrdenProduccionComponent } from './home/produccion/trab-orden-produccion/ins-orden-produccion/ins-orden-produccion.component';
 import { UpProductosComponent } from './home/parametros/trab-productos/up-productos/up-productos.component';
 import { TrabOrdenTrabajoComponent } from './home/produccion/trab-orden-trabajo/trab-orden-trabajo.component';
-import { InsOrdTrabajoComponent } from './home/produccion/trab-orden-trabajo/ins-ord-trabajo/ins-ord-trabajo.component';
 import { TrabEtapaDetalleComponent } from './home/parametros/trab-etapa-detalle/trab-etapa-detalle.component';
 import { TrabMaquinasComponent } from './home/parametros/trab-maquinas/trab-maquinas.component';
 import { UpUserComponent } from './home/seguridad/trab-user/up-user/up-user.component';
@@ -53,10 +52,16 @@ import { TrabCalendarioJulComponent } from './home/parametros/trab-calendario-ju
 import { TrabMezclaComponent } from './home/produccion/trab-mezcla/trab-mezcla.component';
 import { InsMezclaComponent } from './home/produccion/trab-mezcla/ins-mezcla/ins-mezcla.component';
 import { SelProductoComponent } from './home/selector/sel-producto/sel-producto.component';
-import { TrabExtursionComponent } from './home/produccion/trab-extursion/trab-extursion.component';
-import { InsExtursionComponent } from './home/produccion/trab-extursion/ins-extursion/ins-extursion.component';
 import { TrabLogComponent } from './home/seguridad/trab-log/trab-log.component';
 import { TrabBincorComponent } from './home/parametros/trab-bincor/trab-bincor.component';
+import { TrabExtrusionComponent } from './home/produccion/trab-extrusion/trab-extrusion.component';
+import { InsExtrusionComponent } from './home/produccion/trab-extrusion/ins-extrusion/ins-extrusion.component';
+import { UpExtrusionOComponent } from './home/produccion/trab-extrusion/up-extrusion-o/up-extrusion-o.component';
+import { UpExtrusionCComponent } from './home/produccion/trab-extrusion/up-extrusion-c/up-extrusion-c.component';
+import { TrabMovRechazoComponent } from './home/parametros/trab-mov-rechazo/trab-mov-rechazo.component';
+import { TrabOrdenTermoformadoComponent } from './home/produccion/trab-orden-trabajo/trab-orden-termoformado/trab-orden-termoformado.component';
+import { InsTermoformadoComponent } from './home/produccion/trab-orden-trabajo/trab-orden-termoformado/ins-termoformado/ins-termoformado.component';
+import { SelExtrusionComponent } from './home/selector/sel-extrusion/sel-extrusion.component';
 
 
 
@@ -107,7 +112,6 @@ const routes: Routes = [
     InsOrdenProduccionComponent,
     UpProductosComponent,
     TrabOrdenTrabajoComponent,
-    InsOrdTrabajoComponent,
     TrabEtapaDetalleComponent,
     TrabMaquinasComponent,
     UpUserComponent,
@@ -115,10 +119,16 @@ const routes: Routes = [
     TrabMezclaComponent,
     InsMezclaComponent,
     SelProductoComponent,
-    TrabExtursionComponent,
-    InsExtursionComponent,
     TrabLogComponent,
     TrabBincorComponent,
+    TrabExtrusionComponent,
+    InsExtrusionComponent,
+    UpExtrusionOComponent,
+    UpExtrusionCComponent,
+    TrabMovRechazoComponent,
+    TrabOrdenTermoformadoComponent,
+    InsTermoformadoComponent,
+    SelExtrusionComponent,
 
   ],
   imports: [

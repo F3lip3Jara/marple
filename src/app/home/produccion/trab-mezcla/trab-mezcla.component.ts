@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { AlertasService } from './../../../servicios/alertas.service';
 import { ExcelService } from './../../../servicios/excel.service';
@@ -35,7 +36,8 @@ export class TrabMezclaComponent implements OnInit {
                private modal        : NgbModal,
                private excel        : ExcelService,
                private servicioAlert: AlertasService,
-               private fb           : FormBuilder){
+               private fb           : FormBuilder,
+               private serviLoad    : LoadingService){
             this.filtro = fb.group({
               lote_salida : ['']
             });
@@ -73,6 +75,7 @@ export class TrabMezclaComponent implements OnInit {
   }
 
   public tblData(){
+    this.serviLoad.sumar.emit(1);
     this.tblMezcla = {};
 
     this.restService.get('trabMezcla', this.token , this.parametros).subscribe(data =>{
@@ -88,8 +91,10 @@ export class TrabMezclaComponent implements OnInit {
 
   autorizar(content : any, mezcla: any , tipo : string){
     this.mezProd    = {};
-    if(mezcla.estado_control == 'PENDIENTE' && tipo == 'A'){
 
+
+    if(mezcla.estado_control == 'PENDIENTE' && tipo == 'A'){
+      this.serviLoad.sumar.emit(1);
       this.mezcla     = mezcla;
       this.ver        = tipo;
       this.parametros = [{key:'idMez' , value: mezcla.id}];
@@ -105,11 +110,12 @@ export class TrabMezclaComponent implements OnInit {
         this.servicioAlert.setAlert('Le Mezcla ya fue autorizada', 'danger');
         this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
       }else{
-        if(mezcla.estado_control == "RECHAZADA"){
+        if(mezcla.estado_control == "RECHAZADA" ){
           this.servicioAlert.setAlert('Le Mezcla ya fue rechazada', 'danger');
           this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
         }else{
             if( tipo == 'V'){
+              this.serviLoad.sumar.emit(1);
               this.mezcla     = mezcla;
               this.ver        = tipo;
               this.parametros = [{key:'idMez' , value: mezcla.id}];
@@ -188,10 +194,6 @@ export class TrabMezclaComponent implements OnInit {
           });
         }
     }
-
-    console.log(mezcla);
-
-
   }
 
   confRechazar(mezcla: any , obs : any){

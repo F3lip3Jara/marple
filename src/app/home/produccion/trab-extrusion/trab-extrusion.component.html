@@ -1,0 +1,438 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Trabajar con Extrusión</h3>
+
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+        <i class="fas fa-minus"></i></button>
+    </div>
+
+  </div>
+  <div class="card-body">
+      <h3 class="card-title">Filtros</h3>
+      <form  [formGroup] = "filtro"
+      >
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <td>Lote Bobina</td>
+            <td><input type="text" value="" class="form-control" placeholder="Ingrese Lote Bobina"  formControlName='lote_salida' /> </td>
+          </tr>
+
+        </tbody>
+      </table>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "buscar(filtro.controls['lote_salida'].value)" ngbTooltip="Buscar"><i class="fas fa-search"></i>Buscar</button>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "refrescar()" ngbTooltip="Refrescar"><i class="fas fa-sync-alt"></i>Refrescar</button>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "Excel()"  ngbTooltip="Excel" ><i class="fas fa-file-csv"></i>Excel</button>
+      <a (click)="extNuevo()" class="btn  btn-outline-primary btn-sm"  ngbTooltip="Nuevo" ><i class="fas fa-address-card"></i>Nuevo</a>
+    </form>
+
+    <div class="loading" *ngIf= "loading" >
+      <img src = "../../../assets/Circles-menu-3.gif">
+     </div>
+
+ <div>
+  <br>
+  <div class="table-responsive">
+    <div  *ngIf="tblExtrusion?.length > 0" class="{{carga}}">
+      <table #datatableElement datatable  id="tblOrdenPrd" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Lote Mezcla</th>
+            <th>Lote Bobina</th>
+            <th>Ancho Bobina</th>
+            <th>Maquina</th>
+            <th>Producto</th>
+            <th>Estado Operador</th>
+            <th>Estado Control</th>
+            <th>Turno</th>
+            <th>Formato</th>
+            <th>Destino</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let extrusion of tblExtrusion">
+            <th>{{extrusion.id}}</th>
+            <th>{{extrusion.usuario}}</th>
+            <th>{{extrusion.lote_mezcla}}</th>
+            <th>{{extrusion.lote_bobina}}</th>
+            <th>{{extrusion.ancho_bobina}}</th>
+            <th>{{extrusion.maquina}}</th>
+            <th>{{extrusion.producto}}</th>
+            <th>{{extrusion.estado_pro}}</th>
+            <th>{{extrusion.estado_control}}</th>
+            <th>{{extrusion.turno}}</th>
+            <th>{{extrusion.formato}}</th>
+            <th>{{extrusion.etapa}}</th>
+            <th>
+              <a style= "margin : 1px ;" (click)="upExtrusion(extrusion , 'O')" class="btn btn-warning btn-xs"   ngbTooltip="Actualizar Operador"><i class="fa fa-edit" aria-hidden="true"></i></a>
+              <a style= "margin : 1px ;" (click)="upExtrusion(extrusion , 'C')" class="btn btn-warning btn-xs"   ngbTooltip="Actualizar Calidad"><i class="fa fa-edit" aria-hidden="true"></i></a>
+               <a style= "margin : 1px ;" class="btn btn-warning btn-xs" (click)="autorizar(modalAutoMez , extrusion , 'A')"  ngbTooltip="Autorizar" ><i class="fas fa-check-double"></i></a>
+               <a style= "margin : 1px ;" class="btn btn-warning btn-xs"   (click)="rechazar(modalRechazarExt , extrusion)"  ngbTooltip="Rechazar" ><i class="fas fa-ban"></i></a>
+               <a style= "margin : 1px ;" class="btn btn-warning btn-xs" (click)="autorizar(modalAutoMez , extrusion , 'V')"  ngbTooltip="Ver" ><i class="fas fa-eye"></i></a>
+            </th>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </div>
+
+  </div>
+
+  <!-- /.card-body -->
+  <div class="card-footer">
+    Marple
+  </div>
+  <!-- /.card-footer-->
+</div>
+
+
+<ng-template #modalAutoMez let-modal>
+  <form  [formGroup] = "aprobExt"
+         (ngSubmit)  = "confirmar(extrusion,
+                                  aprobExt.controls['extObs'].value,
+                                  aprobExt.controls['extKilApr'].value,
+                                  aprobExt.controls['extKilR'].value)"
+  >
+  <div class="modal-header">
+    <h5 class="modal-title">Modal de confirmación Extrusión</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" >
+        <div class="row">
+      <div class="form-group col-md-4">
+        <label for="">Lote Salida</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.lote_bobina}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Usuario</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.usuario}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Turno</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.turno}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Maquina</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.maquina}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Ancho Bobina</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.ancho_bobina}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Producto</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.producto}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Formato</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.formato}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Etapa</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.etapa}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Estado Operación</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.estado_pro}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Estado Control</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.estado_control}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Motivo Rechazo</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.mot_rechazo}}"   disabled>
+      </div>
+      <div class="form-group col-md-5">
+        <label for="">Kilos</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value=""   formControlName ='extKilApr' [readonly]="isEnabled">
+      <div *ngIf = "aprobExt.controls['extKilApr'].hasError('required')  && isEnabled == false">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+      <div *ngIf = "aprobExt.controls['extKilApr'].hasError('pattern')  && isEnabled == false">
+        <span class="text-danger">formato incorrecto!</span>
+      </div>
+    </div>
+
+      <div class="form-group col-md-5">
+        <label for="">Kilos Re Proceso</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value=""  formControlName ='extKilR'  [readonly]="isEnabled">
+      <div *ngIf = "aprobExt.controls['extKilR'].hasError('required')  && isEnabled == false">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+      <div *ngIf = "aprobExt.controls['extKilR'].hasError('pattern')  && isEnabled == false">
+        <span class="text-danger">formato incorrecto!</span>
+      </div>
+    </div>
+      <div class="form-group col-md-12">
+          <label>Obs</label>
+          <textarea class="form-control" rows="2" placeholder=""  formControlName ='extObs' [readonly]="isEnabled" ></textarea>
+      </div>
+      <div *ngIf = "aprobExt.controls['extObs'].hasError('required')  && isEnabled == false">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+    </div>
+
+   <hr>
+    <h6>Detalles</h6>
+    <br>
+    <div  *ngIf=" !extProd.length">
+      <div class="spinner-border spinner-border-sm" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <div class="spinner-grow spinner-grow-sm" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <div *ngIf="extProd.length == 0">
+      <span class="text-danger">No existe detalle ingresado!</span>
+    </div>
+    <div class="table-responsive" *ngIf="extProd.length > 0" >
+        <table class="table table-hover text-nowrap">
+          <thead>
+              <tr>
+                  <td>Hora Inicio</td>
+                  <td>Hora Final</td>
+                  <td>Usuario</td>
+                  <td>Izquierdo</td>
+                  <td>Centro</td>
+                  <td>Derecho</td>
+                  <td>Estado</td>
+                  <td>Obs</td>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let ext of extProd; let i= index;">
+                  <td>
+                      <span>{{ext.extdHorIni}}</span>
+                  </td>
+                  <td>
+                    <span>{{ext.extdHorFin}}</span>
+                  </td>
+                  <td>
+                    <span>{{ext.extdUso}}</span>
+                  </td>
+                  <td>
+                    <span>{{ext.extdIzq}}</span>
+                  </td>
+                  <td>
+                    <span>{{ext.extdCen}}</span>
+                  </td>
+                  <td>
+                    <span>{{ext.extdDer}}</span>
+                  </td>
+                  <td *ngIf="ext.extdEsEst == 'P', else noact">PENDIENTE</td>
+                    <ng-template #noact> <td>APROBADO</td></ng-template>
+                    <td>
+                      <span>{{ext.extdObs}}</span>
+                    </td>
+              </tr>
+          </tbody>
+          </table>
+    </div>
+   <!-- /.card-body -->
+</div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-primary btn-block" *ngIf="ver == 'A' && extProd.length > 0 && aprobExt.valid" >
+    <div *ngIf= "val">
+      Autorizando..
+      <span class="spinner-border spinner-border-sm mr-2"></span>
+    </div>
+    <div *ngIf= "!val">
+      Autorizar
+    </div>
+</button>
+  <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+</div>
+</form>
+</ng-template>
+
+
+
+<ng-template #modalRechazarExt let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal de rechazo Extrusión</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" >
+    <form
+    [formGroup] = "rechExt"
+    (ngSubmit)  = "rechExtrusion( rechExt.controls['idMot'].value,
+                                  rechExt.controls['extObs'].value,
+                                  rechExt.controls['extKilR'].value,
+                                  rechExt.controls['extKilApr'].value
+                             )"
+    >
+
+    <div class="row">
+      <div class="form-group col-md-4">
+        <label for="">Lote Salida</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.lote_bobina}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Usuario</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.usuario}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Turno</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.turno}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Maquina</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.maquina}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Ancho Bobina</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.ancho_bobina}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Producto</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.producto}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Formato</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.formato}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Etapa</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.etapa}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Estado Operación</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.estado_pro}}"   disabled>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Estado Control</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.estado_control}}"   disabled>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="">Motivo</label>
+        <div  *ngIf="!rechazo.length">
+          <div class="spinner-border spinner-border-sm" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow spinner-grow-sm" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+        <div class="input-group input-group-sm" *ngIf="rechazo.length > 0">
+        <select  id="idMot" name= "idMot" class="custom-select rounded-0 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true"  formControlName ='idMot'>
+          <option  value="">Seleccione</option>
+          <option  *ngFor = "let rechazo of rechazo"  value="{{rechazo.idMot}}">{{rechazo.motDes}}</option>
+        </select>
+        <div *ngIf = "rechExt.controls['idMot'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-md-5">
+      <label for="">Kilos</label>
+      <input type="text" class="form-control form-control-sm" id="" placeholder="" value=""   formControlName ='extKilApr' >
+    <div *ngIf = "rechExt.controls['extKilApr'].hasError('required')">
+      <span class="text-danger">Campo obligatorio!</span>
+    </div>
+    <div *ngIf = "rechExt.controls['extKilApr'].hasError('pattern')">
+      <span class="text-danger">formato incorrecto!</span>
+    </div>
+  </div>
+
+    <div class="form-group col-md-5">
+      <label for="">Kilos Re Proceso</label>
+      <input type="text" class="form-control form-control-sm" id="" placeholder="" value=""  formControlName ='extKilR'>
+      <div *ngIf = "rechExt.controls['extKilR'].hasError('required')">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+      <div *ngIf = "rechExt.controls['extKilR'].hasError('pattern')">
+        <span class="text-danger">formato incorrecto!</span>
+      </div>
+  </div>
+
+      <div class="form-group col-md-12">
+        <label for="">Obs</label>
+        <textarea class="form-control" rows="2" placeholder="Enter ..." formControlName ='extObs'></textarea>
+        <div *ngIf = "rechExt.controls['extObs'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+      </div>
+   <hr>
+    <h6>Detalles</h6>
+    <br>
+    <div  *ngIf=" !extProd.length">
+      <div class="spinner-border spinner-border-sm" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <div class="spinner-grow spinner-grow-sm" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <div *ngIf="extProd.length == 0">
+      <span class="text-danger">No existe detalle ingresado!</span>
+    </div>
+    <div class="table-responsive" *ngIf="extProd.length > 0" >
+        <table class="table table-hover text-nowrap">
+          <thead>
+              <tr>
+                  <td>Hora Inicio</td>
+                  <td>Hora Final</td>
+                  <td>Usuario</td>
+                  <td>Izquierdo</td>
+                  <td>Centro</td>
+                  <td>Derecho</td>
+                  <td>Estado</td>
+                  <td>Obs</td>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let ext of extProd; let i= index;">
+                  <td>
+                      <span>{{ext.extdHorIni}}</span>
+                  </td>
+                  <td>
+                    <span>{{ext.extdHorFin}}</span>
+                  </td>
+                  <td>
+                    <span>{{ext.extdUso}}</span>
+                  </td>
+                  <td>
+                    <span>{{ext.extdIzq}}</span>
+                  </td>
+                  <td>
+                    <span>{{ext.extdCen}}</span>
+                  </td>
+                  <td>
+                    <span>{{ext.extdDer}}</span>
+                  </td>
+                  <td *ngIf="ext.extdEsEst == 'P', else noact">PENDIENTE</td>
+                    <ng-template #noact> <td>APROBADO</td></ng-template>
+                    <td>
+                      <span>{{ext.extdObs}}</span>
+                    </td>
+              </tr>
+          </tbody>
+          </table>
+    </div>
+  </div>
+   <!-- /.card-body -->
+<div class="modal-footer">
+  <button type="submit" class="btn btn-primary btn-block" *ngIf="rechExt.valid">
+    <div *ngIf= "val">
+      Rechazando..
+      <span class="spinner-border spinner-border-sm mr-2"></span>
+    </div>
+    <div *ngIf= "!val">
+      Rechazar
+    </div>
+</button>
+  <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+</div>
+</form>
+</div>
+</ng-template>

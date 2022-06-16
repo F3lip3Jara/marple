@@ -1,3 +1,5 @@
+import { LogSysService } from './../../../../servicios/log-sys.service';
+import { LogSys } from './../../../../model/logSys.model';
 import { Alert } from 'src/app/model/alert.model';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { RestService } from 'src/app/servicios/rest.service';
@@ -24,7 +26,8 @@ export class UpUserComponent implements OnInit {
   constructor(private servicioUser : UsersService ,
               private  rest        : RestService,
               fgUpdUser            : FormBuilder,
-              private servicioAler : AlertasService) {
+              private servicioAler : AlertasService,
+              private serLog        : LogSysService) {
 
     this.token           = this.servicioUser.getToken();
 
@@ -79,9 +82,13 @@ export class UpUserComponent implements OnInit {
     let param = [{'imgName' : this.previsualizador }];
     this.rest.post('upUsuario2', this.token , param).subscribe(data => {
        data.forEach((element : any) => {
-            if(element.error == '0' ){
+            if(element.error == '0'){
               this.val=false;
               window.location.reload();
+            //  let   des    : string = 'Usuario actualizado ' + empName;
+            //  const log    : LogSys = new LogSys(1, '' , 2 , 'INGRESO DE USUARIO' , des);
+             // this.serLog.insLog(log);
+
             }else{
               this.servicioAler.disparador.emit(this.servicioAler.getAlert());
               setTimeout(()=>{

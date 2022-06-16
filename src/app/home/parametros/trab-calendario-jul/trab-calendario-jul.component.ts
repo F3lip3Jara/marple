@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { CalJulService } from './../../../servicios/cal-jul.service';
 import * as XLSX from 'xlsx';
 
@@ -44,14 +45,15 @@ export class TrabCalendarioJulComponent implements OnInit {
   anox         : any;
 
   constructor(private servicio    : UsersService ,
-    private servicioget  : RestService,
-    private fb           : FormBuilder,
-    private excel        : ExcelService,
-    private modal        : NgbModal,
-    private servicioLink : LinksService,
-    private servicioAlert: AlertasService ,
-    private servicoCal   : CalJulService,
-    private config       : NgbModalConfig ) {
+              private servicioget  : RestService,
+              private fb           : FormBuilder,
+              private excel        : ExcelService,
+              private modal        : NgbModal,
+              private servicioLink : LinksService,
+              private servicioAlert: AlertasService ,
+              private servicoCal   : CalJulService,
+              private config       : NgbModalConfig,
+              private serviLoad    : LoadingService ) {
 
       config.backdrop = 'static';
       config.keyboard = false;
@@ -96,6 +98,7 @@ export class TrabCalendarioJulComponent implements OnInit {
           previous: 'Ant.'
         }
       }}
+      this.serviLoad.sumar.emit(1);
   }
 
   public buscar(calAno : string ){
@@ -110,6 +113,8 @@ export class TrabCalendarioJulComponent implements OnInit {
           this.tblCal       = respuesta;
           this.loading      = false;
          });
+
+      this.serviLoad.sumar.emit(1);
     }else{
       this.servicioAlert.setAlert('Debe ingresar un filtro', 'warning');
       this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
@@ -139,6 +144,7 @@ export class TrabCalendarioJulComponent implements OnInit {
     this.carga         = 'invisible';
     this.tblCal   = {};
     this.tblData();
+    this.serviLoad.sumar.emit(1);
 
    }
     public Excel(){
@@ -183,8 +189,8 @@ export class TrabCalendarioJulComponent implements OnInit {
     if(validaForm > 0){
       let valCal = [{ 'key' : 'ano' ,'value' : calAno}];
       this.servicioget.get('valCal', this.token, valCal).subscribe((data: any) => {
-
           if(data.length == 0){
+            this.serviLoad.sumar.emit(2);
             this.parametros = [{ 'ano' : calAno ,'detalle' : json}];
             this.servicioget.post('insCalJul', this.token, this.parametros).subscribe(resp => {
                 resp.forEach((elementx : any)  => {
@@ -207,16 +213,14 @@ export class TrabCalendarioJulComponent implements OnInit {
                   }
                 });
             });
-
-
-
             if(this.anox != ' '){
                this.refrescar();
             }
-
           }else{
+
             var opcion = confirm("Esta seguro de volver a carga el calendario. Ya existe calendario cargado para el año seleccionado");
                 if (opcion == true) {
+                  this.serviLoad.sumar.emit(2);
                   this.parametros = [{ 'ano' : calAno ,'detalle' : json}];
                   this.servicioget.post('delCalJul' , this.token , this.parametros).subscribe(resp =>{
                     resp.forEach((elementx : any)  => {

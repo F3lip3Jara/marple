@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { Moneda } from './../../../model/moneda.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -34,12 +35,13 @@ export class TrabMonedasComponent implements OnInit {
   upMon        : FormGroup;
   val          : boolean              = false;
 
-  constructor(private fb: FormBuilder,
-    private servicio    : UsersService,
-    private rest        : RestService,
-    private modal       : NgbModal,
-    private servicioaler: AlertasService,
-    private excel       : ExcelService) {
+  constructor(private fb          : FormBuilder,
+              private servicio    : UsersService,
+              private rest        : RestService,
+              private modal       : NgbModal,
+              private servicioaler: AlertasService,
+              private excel       : ExcelService,
+              private serviLoad   : LoadingService) {
 
       this.token    = this.servicio.getToken();
       this.moneda = new Moneda(0, '' , '');
@@ -99,6 +101,7 @@ export class TrabMonedasComponent implements OnInit {
 
   public tblData(){
     this.tblMoneda = {};
+    this.serviLoad.sumar.emit(1);
     this.rest.get('trabMoneda' , this.token, this.parametros).subscribe(data => {
         this.tblMoneda = data;
     });
@@ -108,11 +111,9 @@ export class TrabMonedasComponent implements OnInit {
      },3000 );
    }
 
-   public modalIns(content : any ){
-
+  public modalIns(content : any ){
     this.modal.open(content);
-
- }
+  }
 
  public modelUp(content :any , xmoneda: Moneda ){
   this.moneda.setId(xmoneda.idMon);
@@ -126,10 +127,11 @@ public del( moneda : any) : boolean{
   let url      = 'delMoneda';
   this.carga   = 'invisible';
   this.loading = true;
-
+  this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, moneda).subscribe(resp => {
        resp.forEach((elementx : any)  => {
          if(elementx.error == '0'){
+          this.serviLoad.sumar.emit(1);
            this.modal.dismissAll();
            setTimeout(()=>{
              this.tblMoneda = {};
@@ -167,9 +169,11 @@ public action(xmonDes : any , xmonCod : any , tipo :string ) : boolean{
   }else{
     url = 'insMoneda';
   }
+  this.serviLoad.sumar.emit(1);
  this.rest.post(url, this.token, monedax).subscribe(resp => {
       resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
+        this.serviLoad.sumar.emit(1);
           this.modal.dismissAll();
           setTimeout(()=>{
             this.tblMoneda = {};

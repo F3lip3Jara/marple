@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -34,12 +35,13 @@ export class TrabColorComponent implements OnInit {
   upCol        : FormGroup;
   val          : boolean              = false;
 
-  constructor(private fb: FormBuilder,
-    private servicio    : UsersService,
-    private rest        : RestService,
-    private modal       : NgbModal,
-    private servicioaler: AlertasService,
-    private excel       : ExcelService) {
+  constructor(private fb          : FormBuilder,
+              private servicio    : UsersService,
+              private rest        : RestService,
+              private modal       : NgbModal,
+              private servicioaler: AlertasService,
+              private excel       : ExcelService,
+              private serviLoad   : LoadingService) {
 
       this.token     = this.servicio.getToken();
       this.color     = new Color(0, '' , '');
@@ -94,6 +96,7 @@ export class TrabColorComponent implements OnInit {
   }
 
   public tblData(){
+    this.serviLoad.sumar.emit(1);
     this.tblColor = {};
     this.rest.get('trabColor' , this.token, this.parametros).subscribe(data => {
         this.tblColor = data;
@@ -122,12 +125,12 @@ public del( color : any) : boolean{
   let url      = 'delColor';
   this.carga   = 'invisible';
   this.loading = true;
-
+  this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, color).subscribe(resp => {
        resp.forEach((elementx : any)  => {
          if(elementx.error == '0'){
            this.modal.dismissAll();
-
+           this.serviLoad.sumar.emit(1);
            setTimeout(()=>{
              this.tblColor = {};
              this.rest.get('trabColor' , this.token, this.parametros).subscribe(data => {
@@ -164,9 +167,11 @@ public action(xcolDes : any , xcolCod : any , tipo :string ) : boolean{
   }else{
     url = 'insColor';
   }
+  this.serviLoad.sumar.emit(1);
  this.rest.post(url, this.token, monedax).subscribe(resp => {
       resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
+        this.serviLoad.sumar.emit(1);
           this.modal.dismissAll();
           setTimeout(()=>{
             this.tblColor = {};

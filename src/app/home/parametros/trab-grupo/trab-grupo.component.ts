@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Grupo } from './../../../model/grupo.model';
@@ -34,12 +35,13 @@ export class TrabGrupoComponent implements OnInit {
   upGrp        : FormGroup;
   val          : boolean              = false;
 
-  constructor(private fb: FormBuilder,
-    private servicio    : UsersService,
-    private rest        : RestService,
-    private modal       : NgbModal,
-    private servicioaler: AlertasService,
-    private excel       : ExcelService) {
+  constructor(private fb          : FormBuilder,
+              private servicio    : UsersService,
+              private rest        : RestService,
+              private modal       : NgbModal,
+              private servicioaler: AlertasService,
+              private excel       : ExcelService,
+              private serviLoad   : LoadingService) {
 
       this.token    = this.servicio.getToken();
       this.grupo    = new Grupo(0, '' , '');
@@ -100,6 +102,7 @@ export class TrabGrupoComponent implements OnInit {
   }
 
   public tblData(){
+    this.serviLoad.sumar.emit(1);
     this.tblGrupo = {};
     this.rest.get('trabGrupo' , this.token, this.parametros).subscribe(data => {
         this.tblGrupo = data;
@@ -128,10 +131,11 @@ public del( color : any) : boolean{
   let url      = 'delGrupo';
   this.carga   = 'invisible';
   this.loading = true;
-
+  this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, color).subscribe(resp => {
        resp.forEach((elementx : any)  => {
          if(elementx.error == '0'){
+          this.serviLoad.sumar.emit(1);
            this.modal.dismissAll();
            this.servicioaler.disparador.emit(this.servicioaler.getAlert());
 
@@ -172,9 +176,11 @@ public action(xgrpDes : any , xgrpCod : any , tipo :string ) : boolean{
   }else{
     url = 'insGrupo';
   }
+  this.serviLoad.sumar.emit(1);
  this.rest.post(url, this.token, grupox).subscribe(resp => {
       resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
+        this.serviLoad.sumar.emit(1);
           this.modal.dismissAll();
           setTimeout(()=>{
             this.tblGrupo = {};

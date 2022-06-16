@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../servicios/loading.service';
 
 import { Proveedor } from './../../../model/proveedor.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -49,7 +50,8 @@ export class TrabProveedoresComponent implements OnInit {
     private alertas         : AlertasService,
     private fg              : FormBuilder,
     private router          : Router,
-    private serProveedor    : ProveedoresService
+    private serProveedor    : ProveedoresService,
+    private serviLoad       : LoadingService
     )
      {
     this.token = this.servicio.getToken();
@@ -113,6 +115,7 @@ export class TrabProveedoresComponent implements OnInit {
           previous: 'Ant.'
         }
       }}
+      this.serviLoad.sumar.emit(1);
 
       this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
         this.paises = data;
@@ -125,7 +128,7 @@ export class TrabProveedoresComponent implements OnInit {
           this.insProv.controls['idReg'].setValue('');
           this.insProv.controls['idCom'].setValue('');
           this.insProv.controls['idCiu'].setValue('');
-
+          this.serviLoad.sumar.emit(1);
           this.parametros = [{key :'idPai' ,value: field}];
           this.rest.get('regPai' , this.token, this.parametros).subscribe(data => {
             this.regiones = data;
@@ -139,6 +142,7 @@ export class TrabProveedoresComponent implements OnInit {
             this.insProv.controls['idCom'].setValue('');
             this.insProv.controls['idCiu'].setValue('');
             this.parametros = [{key :'idReg' ,value: field} , {key : 'idPai' , value:  this.insProv.controls['idPai'].value}];
+            this.serviLoad.sumar.emit(1);
             this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
               this.ciudades = data;
               });
@@ -150,6 +154,7 @@ export class TrabProveedoresComponent implements OnInit {
             this.comunas = {};
             this.insProv.controls['idCom'].setValue('');
             this.parametros = [{key :'idCiu' ,value: field} , {key :'idReg' , value : this.insProv.controls['idReg'].value } , {key : 'idPai' , value:  this.insProv.controls['idPai'].value} ];
+            this.serviLoad.sumar.emit(1);
             this.rest.get('ciuCom' , this.token, this.parametros).subscribe(data => {
               this.comunas = data;
               });
@@ -163,6 +168,7 @@ export class TrabProveedoresComponent implements OnInit {
 
   public tblData(){
     this.tblProveedor = {};
+    this.serviLoad.sumar.emit(1);
     this.rest.get('trabProveedor' , this.token, this.parametros).subscribe(data => {
       this.tblProveedor = data;
     });
@@ -193,7 +199,7 @@ export class TrabProveedoresComponent implements OnInit {
  public insDir(idPrv : any , prvDir : any , prvNum : any , idPai : any , idReg : any , idCom : any , idCiu: any){
 
   let proveedorx : Proveedor = new Proveedor(idPrv, '' , '' , '','',prvDir, prvNum , idPai , idReg , idCom , idReg , '' , '' ,'','', true);
-
+  this.serviLoad.sumar.emit(1);
   this.rest.post('insPrvDes', this.token , proveedorx).subscribe(
     resp => {
       resp.forEach((elementx : any)  => {
@@ -216,6 +222,7 @@ export class TrabProveedoresComponent implements OnInit {
       const proveedor = proveedorx;
       this.serProveedor.setProveedor(proveedor);
       this.parametros = [{key :'idPrv' ,value: proveedorx.id}];
+      this.serviLoad.sumar.emit(1);
       this.rest.get('datPrv' , this.token, this.parametros).subscribe(data => {
         this.serProveedor.setDatPrv(data);
         setTimeout(()=>{
