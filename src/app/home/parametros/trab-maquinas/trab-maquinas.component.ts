@@ -33,19 +33,33 @@ export class TrabMaquinasComponent implements OnInit {
   etapas       : any                  = {};
 
 
+<<<<<<< HEAD
   constructor(private fb          : UntypedFormBuilder,
+=======
+  constructor(private fb          : FormBuilder,
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               private servicio    : UsersService,
               private rest        : RestService,
               private modal       : NgbModal,
               private excel       : ExcelService,
               private servicioaler: AlertasService,
+<<<<<<< HEAD
               private serviLoad   : LoadingService,
               private serLog      : LogSysService) {
+=======
+              private serviLoad   : LoadingService) {
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
       this.token     = servicio.getToken();
       this.maquina  = new Maquinas(0,'','',0,'' , '' , '');
       this.serviLoad.sumar.emit(1);
+<<<<<<< HEAD
     
+=======
+      this.rest.get('etapasProd' , this.token, this.parametros).subscribe(data => {
+            this.etapas   = data;
+       });
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     }
 
   ngOnInit(): void {
@@ -118,9 +132,12 @@ public delEtapas(maquina : any){
    this.rest.post(url ,this.token, maquina).subscribe(resp => {
        resp.forEach((elementx : any)  => {
          if(elementx.error == '0'){
+<<<<<<< HEAD
           let des        = 'Maquina eliminada ' + maquina.maqCod ;
           let log        = new LogSys(2, '' , 41 , 'ELIMINAR MAQUINA' , des);
           this.serLog.insLog(log);
+=======
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
           this.serviLoad.sumar.emit(1);
            this.modal.dismissAll();
            setTimeout(()=>{

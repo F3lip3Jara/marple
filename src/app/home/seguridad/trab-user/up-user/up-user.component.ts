@@ -25,7 +25,11 @@ export class UpUserComponent implements OnInit {
 
   constructor(private servicioUser : UsersService ,
               private  rest        : RestService,
+<<<<<<< HEAD
               fgUpdUser            : UntypedFormBuilder,
+=======
+              fgUpdUser            : FormBuilder,
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               private servicioAler : AlertasService,
               private serLog        : LogSysService) {
 

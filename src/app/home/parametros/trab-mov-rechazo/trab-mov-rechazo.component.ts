@@ -4,13 +4,20 @@ import { AlertasService } from './../../../servicios/alertas.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RestService } from './../../../servicios/rest.service';
 import { UsersService } from './../../../servicios/users.service';
+<<<<<<< HEAD
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+=======
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 import { Moneda } from './../../../model/moneda.model';
 import { DataTableDirective } from 'angular-datatables';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Motivo } from 'src/app/model/motivo.model';
+<<<<<<< HEAD
 import { LogSysService } from 'src/app/servicios/log-sys.service';
 import { LogSys } from 'src/app/model/logSys.model';
+=======
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
 @Component({
   selector: 'app-trab-mov-rechazo',
@@ -32,26 +39,43 @@ export class TrabMovRechazoComponent implements OnInit {
   validCod     : boolean              = false;
   dato         : number               = 0;
   motivo       : Motivo;
+<<<<<<< HEAD
   insMot       : UntypedFormGroup;
   upMot        : UntypedFormGroup;
   val          : boolean              = false;
 
   constructor(private fb          : UntypedFormBuilder,
+=======
+  insMot       : FormGroup;
+  upMot        : FormGroup;
+  val          : boolean              = false;
+
+  constructor(private fb          : FormBuilder,
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               private servicio    : UsersService,
               private rest        : RestService,
               private modal       : NgbModal,
               private servicioaler: AlertasService,
               private excel       : ExcelService,
+<<<<<<< HEAD
               private serviLoad   : LoadingService,
               private serLog      : LogSysService) {
+=======
+              private serviLoad   : LoadingService) {
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
       this.token    = this.servicio.getToken();
       this.motivo   = new Motivo(0,'');
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
       this.insMot = fb.group({
         motDes : ['' , Validators.compose([
           Validators.required,
          ])]
+<<<<<<< HEAD
       });
 
       this.upMot = fb.group({
@@ -59,6 +83,19 @@ export class TrabMovRechazoComponent implements OnInit {
           Validators.required,
          ])],
       });
+=======
+
+      });
+
+      this.upMot = fb.group({
+
+        motDes : ['' , Validators.compose([
+          Validators.required,
+         ])],
+
+      });
+
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     }
 
   ngOnInit(): void {
@@ -84,6 +121,11 @@ export class TrabMovRechazoComponent implements OnInit {
       }}
 
     this.tblData();
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   }
 
   public tblData(){
@@ -109,17 +151,27 @@ export class TrabMovRechazoComponent implements OnInit {
   this.modal.open(content);
 }
 
+<<<<<<< HEAD
 public del( motivo : any) : boolean{
+=======
+public del( extrusion : any) : boolean{
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   let url      = 'delMotivo';
   this.carga   = 'invisible';
   this.loading = true;
   this.serviLoad.sumar.emit(1);
+<<<<<<< HEAD
    this.rest.post(url ,this.token, motivo).subscribe(resp => {
        resp.forEach((elementx : any)  => {
          if(elementx.error == '0'){
           let des        = 'Grupo eliminado ' + motivo.motDes ;
           let log        = new LogSys(2, '' , 44 , 'ELIMINAR MOTIVO' , des);
           this.serLog.insLog(log);
+=======
+   this.rest.post(url ,this.token, extrusion).subscribe(resp => {
+       resp.forEach((elementx : any)  => {
+         if(elementx.error == '0'){
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
           this.serviLoad.sumar.emit(1);
            this.modal.dismissAll();
            setTimeout(()=>{
@@ -151,6 +203,7 @@ public action(motDes : any  , tipo :string ) : boolean{
   this.carga   = 'invisible';
   this.loading = true;
   this.val     = true;
+<<<<<<< HEAD
   let motivo   = new Motivo(this.motivo.idMot, motDes );
   let des      = '';
   let lgName   = '';
@@ -166,13 +219,24 @@ public action(motDes : any  , tipo :string ) : boolean{
     des      = 'Ingreso de motivo ' + motDes;
     lgName   = 'INGRESO MOTIVO';
     idEtaDes = 42;
+=======
+  let motivo  = new Motivo(this.motivo.idMot, motDes );
+
+  if(tipo =='up'){
+     url = 'updMotivo';
+  }else{
+    url = 'insMotivo';
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   }
   this.serviLoad.sumar.emit(1);
  this.rest.post(url, this.token, motivo).subscribe(resp => {
       resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
+<<<<<<< HEAD
         let log        = new LogSys(2, '' , idEtaDes , lgName , des);
         this.serLog.insLog(log);        
+=======
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
         this.serviLoad.sumar.emit(1);
           this.modal.dismissAll();
           setTimeout(()=>{

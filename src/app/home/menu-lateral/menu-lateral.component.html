@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <nav class="mt-2" style="min-height: 700px !important;">      
     <ul   class="nav nav-pills nav-sidebar flex-column nav-child-indent">
         <div class="mx-auto" *ngIf="!modulos.length" >
@@ -13,3 +14,250 @@
         </div>
     </ul>
 </nav>
+=======
+<nav class="mt-2">
+  <ul   class="nav nav-pills nav-sidebar flex-column nav-child-indent">
+    <li   class="nav-item has-treeview">
+    <a  class="nav-link"  (click)="isMenuCollapsed = !isMenuCollapsed">
+      <i class="nav-icon fas fa-shield-alt"></i>
+      <p>
+        Seguridad
+        <i   [ngClass]="(isMenuCollapsed)?' right fas fa-angle-left':' right fas fa-angle-down'"  ></i>
+      </p>
+    </a>
+
+    <div [ngbCollapse]="isMenuCollapsed" class="menu-is-opening menu-open" style="padding-left: 2%;">
+      <ul class="nav nav-treeview" style="display: block;" >
+        <li  class="nav-item">
+          <a  (click)="elinks('users')" class="nav-link" >
+            <i class="far fa-circle nav-icon"></i>
+            <p>Usuario</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a  (click)="elinks('roles')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Roles</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a  (click) = "elinks('etapas')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Etapas</p>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+  </li>
+
+   <li   class="nav-item has-treeview">
+    <a  class="nav-link"  (click)="isMenuCollapsed2 = !isMenuCollapsed2">
+      <i class="nav-icon fas fa-tachometer-alt"></i>
+      <p>
+        Parámetros
+        <i   [ngClass]="(isMenuCollapsed2)?' right fas fa-angle-left':' right fas fa-angle-down'"  ></i>
+      </p>
+    </a>
+
+    <div [ngbCollapse]="isMenuCollapsed2" class="menu-is-opening menu-open" style="padding-left: 2%;">
+      <ul class="nav nav-treeview" style="display: block;">
+        <li class="nav-item">
+          <a  (click)="elinks('binCol')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Correlativo bins.</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a  (click)="elinks('calJul')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Calendario Jul.</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a  (click)="elinks('empresa')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Empresa</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a  (click)="elinks('gerencia')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Gerencia</p>
+          </a>
+        </li>
+        <li class="nav-item has-treeview">
+          <a  class="nav-link"  (click)="isMenuCollapsed3 = !isMenuCollapsed3">
+            <i class="nav-icon far fa-circle nav-icon"></i>
+            <p>
+              Geolocalización
+              <i   [ngClass]="(isMenuCollapsed3)?' right fas fa-angle-left':' right fas fa-angle-down'"  ></i>
+            </p>
+          </a>
+          <div [ngbCollapse]="isMenuCollapsed3" class="menu-is-opening menu-open" style="padding-left: 2%;">
+           <ul  class="nav nav-treeview" style="display: block;">
+            <li class="nav-item">
+              <a  (click)="elinks('pais')" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>País</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a  (click)="elinks('regiones')" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Región</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a  (click)="elinks('ciudad')" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Ciudad</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a  (click)="elinks('comuna')" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Comuna</p>
+              </a>
+            </li>
+           </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a  (click)="elinks('moneda')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Moneda</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a  (click)="elinks('proveedor')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Proveedor</p>
+          </a>
+        </li>
+        <li class="nav-item has-treeview">
+          <a  class="nav-link"  (click)="isMenuCollapsed4 = !isMenuCollapsed4">
+            <i class="nav-icon far fa-circle nav-icon"></i>
+            <p>
+              Material
+              <i   [ngClass]="(isMenuCollapsed4)?' right fas fa-angle-left':' right fas fa-angle-down'"  ></i>
+            </p>
+          </a>
+          <div [ngbCollapse]="isMenuCollapsed4" class="menu-is-opening menu-open" style="padding-left: 2%;">
+           <ul  class="nav nav-treeview" style="display: block;">
+            <li class="nav-item">
+              <a  (click)="elinks('color')" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Color</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a  (click)="elinks('grupo')" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Grupo</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a  (click)="elinks('subgrupo')" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Sub Grupo</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a  (click)="elinks('productos')" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Productos</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a  (click)="elinks('unidad')" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Unidad Medida</p>
+              </a>
+            </li>
+
+           </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a  (click)="elinks('maquinas')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Maquina</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a  (click)="elinks('motivo')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Motivo</p>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </li>
+
+  <li   class="nav-item has-treeview">
+    <a  class="nav-link"  (click)="isMenuCollapsed5 = !isMenuCollapsed5">
+      <i class="nav-icon  fas fa-industry"></i>
+
+
+      <p>
+        Producción
+        <i   [ngClass]="(isMenuCollapsed5)?' right fas fa-angle-left':' right fas fa-angle-down'"  ></i>
+      </p>
+    </a>
+
+    <div [ngbCollapse]="isMenuCollapsed5" class="menu-is-opening menu-open" style="padding-left: 2%;">
+      <ul class="nav nav-treeview" style="display: block;">
+        <li class="nav-item">
+          <a  (click)="elinks('mezcla')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Mezcla</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a  (click)="elinks('extrusion')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Extrusión</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a  (click)="elinks('op')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>OP</p>
+          </a>
+        </li>
+
+        <li class="nav-item has-treeview">
+          <a  class="nav-link"  (click)="isMenuCollapsed3 = !isMenuCollapsed3">
+            <i class="nav-icon far fa-circle nav-icon"></i>
+            <p>
+              OT
+              <i   [ngClass]="(isMenuCollapsed3)?' right fas fa-angle-left':' right fas fa-angle-down'"  ></i>
+            </p>
+          </a>
+          <div [ngbCollapse]="isMenuCollapsed3" class="menu-is-opening menu-open" style="padding-left: 2%;">
+           <ul  class="nav nav-treeview" style="display: block;">
+            <li class="nav-item">
+              <a  (click)="elinks('Ot_Ter')" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>OT - Termoformado</p>
+              </a>
+            </li>
+
+           </ul>
+          </div>
+        </li>
+       <!-- <li class="nav-item">
+          <a  (click)="elinks('ot')" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>OT</p>
+          </a>
+        </li>-->
+      </ul>
+    </div>
+  </li>
+
+
+</ul>
+</nav>
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd

@@ -43,7 +43,11 @@ export class TrabUserComponent implements OnInit {
     private excel           : ExcelService,
     private modal           : NgbModal,
     private alertas         : AlertasService,
+<<<<<<< HEAD
     fgUpUser                : UntypedFormBuilder,
+=======
+    fgUpUser                : FormBuilder,
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     private serLog          : LogSysService,
     private serviLoad       : LoadingService
     ) {
@@ -69,7 +73,11 @@ export class TrabUserComponent implements OnInit {
 
   ngOnInit(): void {
     this.serviLoad.sumar.emit(3);
+<<<<<<< HEAD
     this.tblData();
+=======
+
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
     this.rest.get('trabRoles', this.token , this.parametros).subscribe(data => {
       this.rol = data;
@@ -80,6 +88,12 @@ export class TrabUserComponent implements OnInit {
   });
 
 
+<<<<<<< HEAD
+=======
+    this.tblData();
+
+
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
     this.dtOptions = {
       pagingType: 'full_numbers',

@@ -47,7 +47,11 @@ export class TrabProductosComponent implements OnInit {
   constructor(private servicio     : UsersService ,
               private servicioget  : RestService,
               private modal        : NgbModal,
+<<<<<<< HEAD
               private fb           : UntypedFormBuilder,
+=======
+              private fb           : FormBuilder,
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               private excel        : ExcelService,
               private servicioLink : LinksService,
               private servicioAlert: AlertasService,

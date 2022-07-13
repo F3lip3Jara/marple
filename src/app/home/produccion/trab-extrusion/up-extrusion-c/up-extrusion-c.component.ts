@@ -6,7 +6,11 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { LinksService } from 'src/app/servicios/links.service';
+<<<<<<< HEAD
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+=======
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -26,7 +30,11 @@ export class UpExtrusionCComponent implements OnInit {
   val          : boolean              = false;
   fechaS       : string               = '';
   config       :any                   = {};
+<<<<<<< HEAD
   insdExt      : UntypedFormGroup;
+=======
+  insdExt      : FormGroup;
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   extrusion    : any;
   extrusionx   : any                  = {};
   extrusionDet : any[]                = [];
@@ -45,7 +53,11 @@ export class UpExtrusionCComponent implements OnInit {
                private serviRest    : RestService,
                private servicio     : UsersService,
                private modal        : NgbModal,
+<<<<<<< HEAD
                private fg           : UntypedFormBuilder,
+=======
+               private fg           : FormBuilder,
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
                private servicioAlert: AlertasService,
                private serviLoad    : LoadingService,
                private serviExtru   : ExtrusionService
@@ -83,13 +95,25 @@ export class UpExtrusionCComponent implements OnInit {
    }
 
   ngOnInit(): void {
+<<<<<<< HEAD
     let parm : any[]  = [{key :'idExt' ,value: this.extrusionx.id} ];
+=======
+
+    let parm : any[]  = [{key :'idExt' ,value: this.extrusionx.id} ];
+
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     this.serviRest.get('indexFil', this.token, parm).subscribe((data: any)=>{
       this.loading      = false;
       this.carga        = "visible";
       this.extrusionDet = data.extrusionDet;
     });
+<<<<<<< HEAD
   this.serviLoad.sumar.emit(1);
+=======
+
+  this.serviLoad.sumar.emit(1);
+
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   }
 
   selProducto (event : any){
@@ -154,9 +178,17 @@ export class UpExtrusionCComponent implements OnInit {
             if(elementx.error == '0'){
               this.servicioAlert.setAlert('Extrusión caragada manera correcta', 'success');
               this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
+<<<<<<< HEAD
               this.servicioLink.disparador.emit('extrusion');
               this.modal.dismissAll();  
               this.val= false;
+=======
+              setTimeout(()=> {
+                this.val= false;
+                this.modal.dismissAll();
+                this.servicioLink.disparador.emit('extrusion');
+                },1000 );
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
             }else{
               this.carga    = 'visible';
               this.loading  = false;

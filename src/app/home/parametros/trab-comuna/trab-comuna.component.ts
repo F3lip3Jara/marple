@@ -39,7 +39,11 @@ export class TrabComunaComponent implements OnInit {
   validCod     : boolean              = false;
   ciudades     : any;
 
+<<<<<<< HEAD
   constructor(private fb            : UntypedFormBuilder,
+=======
+  constructor(private fb            : FormBuilder,
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               private servicio      : UsersService,
               private rest          : RestService,
               private modal         : NgbModal,

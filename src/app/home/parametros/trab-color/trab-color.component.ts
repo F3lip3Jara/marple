@@ -37,14 +37,22 @@ export class TrabColorComponent implements OnInit {
   upCol        : UntypedFormGroup;
   val          : boolean              = false;
 
+<<<<<<< HEAD
   constructor(private fb          : UntypedFormBuilder,
+=======
+  constructor(private fb          : FormBuilder,
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               private servicio    : UsersService,
               private rest        : RestService,
               private modal       : NgbModal,
               private servicioaler: AlertasService,
               private excel       : ExcelService,
+<<<<<<< HEAD
               private serviLoad   : LoadingService,
               private serLog      : LogSysService) {
+=======
+              private serviLoad   : LoadingService) {
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
       this.token     = this.servicio.getToken();
       this.color     = new Color(0, '' , '');
@@ -134,9 +142,12 @@ public del( color : any) : boolean{
          if(elementx.error == '0'){
            this.modal.dismissAll();
            this.serviLoad.sumar.emit(1);
+<<<<<<< HEAD
            let des        = 'Color eliminado ' + color.colCod ;
            let log        = new LogSys(2, '' , 27 , 'ELIMINAR COLOR' , des);
            this.serLog.insLog(log);
+=======
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
            setTimeout(()=>{
              this.tblColor = {};
              this.rest.get('trabColor' , this.token, this.parametros).subscribe(data => {
@@ -184,12 +195,19 @@ public action(xcolDes : any , xcolCod : any , tipo :string ) : boolean{
     idEtaDes = 25;
   }
   this.serviLoad.sumar.emit(1);
+<<<<<<< HEAD
  this.rest.post(url, this.token, colorx).subscribe(resp => {
       resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
         this.serviLoad.sumar.emit(1);
         let log        = new LogSys(2, '' , idEtaDes , lgName , des);
         this.serLog.insLog(log);        
+=======
+ this.rest.post(url, this.token, monedax).subscribe(resp => {
+      resp.forEach((elementx : any)  => {
+      if(elementx.error == '0'){
+        this.serviLoad.sumar.emit(1);
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
           this.modal.dismissAll();
           setTimeout(()=>{
             this.tblColor = {};

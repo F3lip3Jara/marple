@@ -33,13 +33,21 @@ export class InsProductosComponent implements OnInit {
   mensaje      : string               = '';
 
 
+<<<<<<< HEAD
   constructor(private fg            : UntypedFormBuilder,
+=======
+  constructor(private fg            : FormBuilder,
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               private servicio      : UsersService,
               private rest          : RestService,
               private servicioaler  : AlertasService,
               private servicioLink  : LinksService,
+<<<<<<< HEAD
               private serviLoad     : LoadingService,
               private serLog        : LogSysService
+=======
+              private serviLoad     : LoadingService
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               ) {
 
       this.medidas       = {};

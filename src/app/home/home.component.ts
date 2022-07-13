@@ -30,7 +30,10 @@ export class HomeComponent implements OnInit , AfterViewInit {
   loadx                         = new Loading(0);
   progreso            :number   = 0;
   valor                         = '';
+<<<<<<< HEAD
   modulos             : any     = [];
+=======
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
   time  = new Observable(observer => {
     setInterval(()=> observer.next(new Date().toString() ), 1000);
@@ -49,20 +52,36 @@ export class HomeComponent implements OnInit , AfterViewInit {
           this.token           = this.servicioUser.getToken();
           config.striped       = true;
           config.animated      = true;
-   }
+<<<<<<< HEAD
+=======
 
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
+   }
 ngAfterViewInit(): void {
     this.serviLoad.sumar.subscribe(data=>{
       this.load.setTotal(data*2);
       this.loadx.setTotal(data*2);
     });
 
+<<<<<<< HEAD
+ngAfterViewInit(): void {
+    this.serviLoad.sumar.subscribe(data=>{
+      this.load.setTotal(data*2);
+      this.loadx.setTotal(data*2);
+    });
+
+=======
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   this.serviLoad.restar.subscribe(data=>{
     let total      = this.load.total;
     let diferencia = this.loadx.total;
 
     if(total > 0){
       diferencia     = diferencia - data;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
       this.loadx.setTotal(diferencia);
       if(diferencia > 0){
           this.progreso = (diferencia*100)/total;
@@ -85,9 +104,14 @@ ngAfterViewInit(): void {
         this.links(data);        
     });
 
+<<<<<<< HEAD
     this.rest.get('usuarioMenu', this.token,this.parametros).subscribe(respuesta =>{
       this.modulos = respuesta;
     });
+=======
+
+
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   }
 
   public links(link: any){

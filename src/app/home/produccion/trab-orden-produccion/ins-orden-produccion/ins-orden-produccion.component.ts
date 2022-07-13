@@ -160,7 +160,7 @@ export class InsOrdenProduccionComponent implements OnInit {
     this.valcod    = false;
     this.productos = [];
     this.valproddet= false;
-    this.modal.open(content, {size:'xl'});
+    this.modal.open(content , {size:'xl'});
     this.tblData();
   }
 

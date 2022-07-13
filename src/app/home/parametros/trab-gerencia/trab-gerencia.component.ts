@@ -30,14 +30,22 @@ export class TrabGerenciaComponent implements OnInit {
   carga        : string               = "invisible";
   gerencia     : Gerencia;
 
+<<<<<<< HEAD
   constructor(private fb          : UntypedFormBuilder,
+=======
+  constructor(private fb          : FormBuilder,
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               private servicio    : UsersService,
               private rest        : RestService,
               private modal       : NgbModal,
               private servicioaler: AlertasService,
               private excel       : ExcelService,
+<<<<<<< HEAD
               private serviLoad   : LoadingService,
               private serLog      : LogSysService) {
+=======
+              private serviLoad   : LoadingService) {
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
       this.token    = this.servicio.getToken();
       this.gerencia = new Gerencia(0, '');

@@ -229,6 +229,10 @@
             <div *ngIf = "valprod">
               <span class="text-danger">Producto no existe!</span>
             </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
             <div  *ngIf=" !cProductos.length ">
               <div class="spinner-border spinner-border-sm" role="status">
                 <span class="sr-only">Loading...</span>
@@ -240,7 +244,11 @@
             <input *ngIf="cProductos.length > 0" type="text" class="form-control" name = "prdCod" id="prdCod" placeholder="" value="" formControlName = 'prdCod' oninput="this.value = this.value.toUpperCase()" autocomplete="off"  >
             <ul *ngIf="productos.length > 0 "[ngClass]="(productos.length > 0) ? 'ulOrd': ''" >
               <li *ngFor="let producto of productos">
+<<<<<<< HEAD
                 <a  class="" placeholder="actualizar" (click)="selectorPrd(producto)"><span class="select2-selection__rendered">{{producto.prdCod }} , [{{producto.prdDes}}]</span></a>
+=======
+                <a  class="" placeholder="actualizar" (click)="selectorPrd(producto)"><span class="select2-selection__rendered">{{producto.prdCod}}</span></a>
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               </li>
             </ul>
           </div>

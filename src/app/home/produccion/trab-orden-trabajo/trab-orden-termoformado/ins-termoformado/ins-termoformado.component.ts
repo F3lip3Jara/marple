@@ -5,7 +5,11 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from './../../../../../servicios/rest.service';
 import { LinksService } from './../../../../../servicios/links.service';
+<<<<<<< HEAD
 import { FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+=======
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
@@ -20,6 +24,11 @@ export class InsTermoformadoComponent implements OnInit {
   spinners                            = false;
   loading      : boolean              = true;
   carga        : string               = "invisible";
+<<<<<<< HEAD
+=======
+  //insTerm      : FormGroup;
+  //inseTerm     : FormGroup;
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   token        : string               = '';
   sacas        : any ;
   parametros   : any []               = [];
@@ -27,6 +36,12 @@ export class InsTermoformadoComponent implements OnInit {
   val          : boolean              = false;
   fechaS       : string               = '';
   config       :any                   = {};
+<<<<<<< HEAD
+=======
+  //insdExt      : FormGroup;
+  extursion    : any                  = {};
+  extrusionDet : any[]                = [];
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   maquinas     : any ;
   valGuar      : boolean              = false;
   diaJul       : any;
@@ -40,24 +55,38 @@ export class InsTermoformadoComponent implements OnInit {
   todayWithPipe: any;
   insumos      : any;
   orden_trabajo: any;
+<<<<<<< HEAD
   peso         : string               = '';
   ancho        : string               = '';
   espesor      : string               = '';
+=======
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
   constructor( private servicioLink : LinksService,
                private serviRest    : RestService,
                private servicio     : UsersService,
                private modal        : NgbModal,
+<<<<<<< HEAD
                private fg           : UntypedFormBuilder,
+=======
+               private fg           : FormBuilder,
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
                private servicioAlert: AlertasService,
                private serviLoad    : LoadingService,
                private serTareas    : TareasService
 
                ) {
+<<<<<<< HEAD
                 this.sacas         = {};
                 this.insumos       = {};
                 this.maquinas      = {};
                 this.token         = this.servicio.getToken();
+=======
+                this.sacas        = {};
+                this.insumos      = {};
+                this.maquinas     = {};
+                this.token        = this.servicio.getToken();
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
                 this.orden_trabajo = this.serTareas.getExtrusion();
 
    }
@@ -96,6 +125,10 @@ export class InsTermoformadoComponent implements OnInit {
   }
 
   selProducto (event : any){
+<<<<<<< HEAD
+=======
+    console.log(event);
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     this.producto = event;
   }
 
@@ -107,18 +140,25 @@ export class InsTermoformadoComponent implements OnInit {
 
   insCtlProd(modalInsCtl : any){
     this.modal.open(modalInsCtl , {size:'lg'});
+<<<<<<< HEAD
     this.peso    = '';
     this.ancho   = '';
     this.espesor = '';
 
+=======
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   }
 
   selExtrusion(extrusion : any){
     console.log(extrusion);
+<<<<<<< HEAD
     
     this.peso    = extrusion.extKilApr;
     this.ancho   = extrusion.extAnbob ;
     this.espesor = extrusion.extFor;
+=======
+
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   }
 
 

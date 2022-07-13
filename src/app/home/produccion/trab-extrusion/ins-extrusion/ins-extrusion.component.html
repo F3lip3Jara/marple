@@ -101,8 +101,12 @@
               <form  [formGroup] = "inseExt"
                     (ngSubmit)   = "terminar( inseExt.controls['extAnbob'].value,
                                               inseExt.controls['extFor'].value,
+<<<<<<< HEAD
                                               inseExt.controls['idEta'].value,
                                               modalAutoMez)">
+=======
+                                              inseExt.controls['idEta'].value)">
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
                  <div class="col-md-12" *ngIf="isEnabled">
                   <div class="form-group">
                     <label for="">Ancho Bobina</label>
@@ -298,6 +302,7 @@
   </form>
   </ng-template>
 
+<<<<<<< HEAD
   <ng-template #modalAutoMez let-modal>
     <form [formGroup]="aprobExt" (ngSubmit)="confirmar(aprobExt.controls['extObs'].value,
                                         aprobExt.controls['extKilApr'].value,
@@ -354,3 +359,6 @@
       </div>
     </form>
     </ng-template>
+=======
+
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd

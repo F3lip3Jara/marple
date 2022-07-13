@@ -68,11 +68,19 @@
             <th>{{extrusion.formato}}</th>
             <th>{{extrusion.etapa}}</th>
             <th>
+<<<<<<< HEAD
                <a style= "margin : 1px ;" class="btn btn-warning btn-xs"   (click)="upExtrusion(extrusion , 'O')"    ngbTooltip="Actualizar Operador"><i class="fa fa-edit" aria-hidden="true"></i></a>
                <a style= "margin : 1px ;"  class="btn btn-warning btn-xs"  (click)="upExtrusion(extrusion , 'C')" ngbTooltip="Actualizar Calidad"><i class="fa fa-edit" aria-hidden="true"></i></a>
                <a style= "margin : 1px ;" class="btn btn-success btn-xs"   (click)="autorizar(modalAutoMez , extrusion , 'A')"  ngbTooltip="Autorizar" ><i class="fas fa-check-double"></i></a>
                <a style= "margin : 1px ;" class="btn btn-danger btn-xs"    (click)="rechazar(modalRechazarExt , extrusion)"  ngbTooltip="Rechazar" ><i class="fas fa-ban"></i></a>
                <a style= "margin : 1px ;" class="btn btn-primary btn-xs"   (click)="autorizar(modalAutoMez , extrusion , 'V')"  ngbTooltip="Ver" ><i class="fas fa-eye"></i></a>
+=======
+              <a style= "margin : 1px ;" (click)="upExtrusion(extrusion , 'O')" class="btn btn-warning btn-xs"   ngbTooltip="Actualizar Operador"><i class="fa fa-edit" aria-hidden="true"></i></a>
+              <a style= "margin : 1px ;" (click)="upExtrusion(extrusion , 'C')" class="btn btn-warning btn-xs"   ngbTooltip="Actualizar Calidad"><i class="fa fa-edit" aria-hidden="true"></i></a>
+               <a style= "margin : 1px ;" class="btn btn-warning btn-xs" (click)="autorizar(modalAutoMez , extrusion , 'A')"  ngbTooltip="Autorizar" ><i class="fas fa-check-double"></i></a>
+               <a style= "margin : 1px ;" class="btn btn-warning btn-xs"   (click)="rechazar(modalRechazarExt , extrusion)"  ngbTooltip="Rechazar" ><i class="fas fa-ban"></i></a>
+               <a style= "margin : 1px ;" class="btn btn-warning btn-xs" (click)="autorizar(modalAutoMez , extrusion , 'V')"  ngbTooltip="Ver" ><i class="fas fa-eye"></i></a>
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
             </th>
         </tbody>
       </table>
@@ -93,7 +101,14 @@
 <ng-template #modalAutoMez let-modal>
   <form  [formGroup] = "aprobExt"
          (ngSubmit)  = "confirmar(extrusion,
+<<<<<<< HEAD
                                   aprobExt.controls['extObs'].value)"  >
+=======
+                                  aprobExt.controls['extObs'].value,
+                                  aprobExt.controls['extKilApr'].value,
+                                  aprobExt.controls['extKilR'].value)"
+  >
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   <div class="modal-header">
     <h5 class="modal-title">Modal de confirmación Extrusión</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
@@ -148,17 +163,46 @@
       </div>
       <div class="form-group col-md-5">
         <label for="">Kilos</label>
+<<<<<<< HEAD
         <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.kilos}}"  disabled>   
     </div>
       <div class="form-group col-md-5">
         <label for="">Kilos Re Proceso</label>
         <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.kilos_repro}}"  disabled>   
+=======
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value=""   formControlName ='extKilApr' [readonly]="isEnabled">
+      <div *ngIf = "aprobExt.controls['extKilApr'].hasError('required')  && isEnabled == false">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+      <div *ngIf = "aprobExt.controls['extKilApr'].hasError('pattern')  && isEnabled == false">
+        <span class="text-danger">formato incorrecto!</span>
+      </div>
+    </div>
+
+      <div class="form-group col-md-5">
+        <label for="">Kilos Re Proceso</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" value=""  formControlName ='extKilR'  [readonly]="isEnabled">
+      <div *ngIf = "aprobExt.controls['extKilR'].hasError('required')  && isEnabled == false">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+      <div *ngIf = "aprobExt.controls['extKilR'].hasError('pattern')  && isEnabled == false">
+        <span class="text-danger">formato incorrecto!</span>
+      </div>
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     </div>
       <div class="form-group col-md-12">
           <label>Obs</label>
           <textarea class="form-control" rows="2" placeholder=""  formControlName ='extObs' [readonly]="isEnabled" ></textarea>
       </div>
+<<<<<<< HEAD
     </div>
+=======
+      <div *ngIf = "aprobExt.controls['extObs'].hasError('required')  && isEnabled == false">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+    </div>
+
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
    <hr>
     <h6>Detalles</h6>
     <br>
@@ -246,9 +290,18 @@
     <form
     [formGroup] = "rechExt"
     (ngSubmit)  = "rechExtrusion( rechExt.controls['idMot'].value,
+<<<<<<< HEAD
                                   rechExt.controls['extObs'].value                                
                              )"
     >
+=======
+                                  rechExt.controls['extObs'].value,
+                                  rechExt.controls['extKilR'].value,
+                                  rechExt.controls['extKilApr'].value
+                             )"
+    >
+
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     <div class="row">
       <div class="form-group col-md-4">
         <label for="">Lote Salida</label>
@@ -290,6 +343,7 @@
         <label for="">Estado Control</label>
         <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusion.estado_control}}"   disabled>
       </div>
+<<<<<<< HEAD
     
     <div class="form-group col-md-4">
       <label for="">Kilos</label>
@@ -323,6 +377,57 @@
         </div>
     </div>
      
+=======
+      <div class="form-group col-md-6">
+        <label for="">Motivo</label>
+        <div  *ngIf="!rechazo.length">
+          <div class="spinner-border spinner-border-sm" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow spinner-grow-sm" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+        <div class="input-group input-group-sm" *ngIf="rechazo.length > 0">
+        <select  id="idMot" name= "idMot" class="custom-select rounded-0 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true"  formControlName ='idMot'>
+          <option  value="">Seleccione</option>
+          <option  *ngFor = "let rechazo of rechazo"  value="{{rechazo.idMot}}">{{rechazo.motDes}}</option>
+        </select>
+        <div *ngIf = "rechExt.controls['idMot'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-md-5">
+      <label for="">Kilos</label>
+      <input type="text" class="form-control form-control-sm" id="" placeholder="" value=""   formControlName ='extKilApr' >
+    <div *ngIf = "rechExt.controls['extKilApr'].hasError('required')">
+      <span class="text-danger">Campo obligatorio!</span>
+    </div>
+    <div *ngIf = "rechExt.controls['extKilApr'].hasError('pattern')">
+      <span class="text-danger">formato incorrecto!</span>
+    </div>
+  </div>
+
+    <div class="form-group col-md-5">
+      <label for="">Kilos Re Proceso</label>
+      <input type="text" class="form-control form-control-sm" id="" placeholder="" value=""  formControlName ='extKilR'>
+      <div *ngIf = "rechExt.controls['extKilR'].hasError('required')">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+      <div *ngIf = "rechExt.controls['extKilR'].hasError('pattern')">
+        <span class="text-danger">formato incorrecto!</span>
+      </div>
+  </div>
+
+      <div class="form-group col-md-12">
+        <label for="">Obs</label>
+        <textarea class="form-control" rows="2" placeholder="Enter ..." formControlName ='extObs'></textarea>
+        <div *ngIf = "rechExt.controls['extObs'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+      </div>
+>>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
    <hr>
     <h6>Detalles</h6>
     <br>
