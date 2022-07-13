@@ -1,6 +1,7 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormControl } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -29,19 +30,20 @@ export class TrabRegionComponent implements OnInit {
   parametros   : any []               = [];
   carga        : string               = "invisible";
   region       : Region;
-  paises       : any;
-  insRegion    : FormGroup;
-  upRegion     : FormGroup;
+  paises       : any                  ={};
+  insRegion    : UntypedFormGroup;
+  upRegion     : UntypedFormGroup;
   val          : boolean              = false;
   dato         : number               = 0;
   validCod     : boolean              = false;
 
-  constructor(private fb: FormBuilder,
-    private servicio : UsersService,
-    private rest : RestService,
-    private modal : NgbModal,
-    private servicioaler: AlertasService,
-    private excel: ExcelService) {
+  constructor(private fb          : UntypedFormBuilder,
+              private servicio    : UsersService,
+              private rest        : RestService,
+              private modal       : NgbModal,
+              private servicioaler: AlertasService,
+              private excel       : ExcelService,
+              private serviLoad   : LoadingService) {
 
       this.token    = this.servicio.getToken();
       this.region   = new Region(0,'','', 0, '', '');
@@ -63,7 +65,6 @@ export class TrabRegionComponent implements OnInit {
           Validators.required,
          ])],
       });
-
 
     }
 
@@ -88,7 +89,7 @@ export class TrabRegionComponent implements OnInit {
           previous: 'Ant.'
         }
       }}
-
+      this.serviLoad.sumar.emit(1);
       this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
         this.paises = data;
         });
@@ -104,6 +105,7 @@ export class TrabRegionComponent implements OnInit {
   }
 
   public tblData(){
+    this.serviLoad.sumar.emit(1);
     this.tblRegion = {};
     this.rest.get('trabRegion' , this.token, this.parametros).subscribe(data => {
         this.tblRegion = data;
@@ -133,10 +135,11 @@ public delRegion (region : any) : boolean{
   let url      = 'delRegion';
   this.carga   = 'invisible';
   this.loading = true;
-
+  this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, region ).subscribe(resp => {
        resp.forEach((elementx : any)  => {
          if(elementx.error == '0'){
+          this.serviLoad.sumar.emit(1);
            this.modal.dismissAll();
            setTimeout(()=>{
              this.tblRegion = {};
@@ -174,10 +177,11 @@ public action(xidPai : any , xregDes: any , xregCod : any ,  tipo :string ) : bo
   }else{
     url = 'insRegion';
   }
-
+  this.serviLoad.sumar.emit(1);
  this.rest.post(url, this.token, paisx).subscribe(resp => {
       resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
+        this.serviLoad.sumar.emit(1);
           this.modal.dismissAll();
           setTimeout(()=>{
             this.tblRegion = {};

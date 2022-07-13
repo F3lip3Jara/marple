@@ -1,7 +1,8 @@
+import { LoadingService } from './../../../../servicios/loading.service';
 import { AlertasService } from './../../../../servicios/alertas.service';
 import { Mezcla } from './../../../../model/mezcla.model';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
@@ -30,13 +31,13 @@ export class InsMezclaComponent implements OnInit {
   valPor       : boolean              = false;
   productos    : any ;
   valcod       : boolean              = false;
-  valMezBase   : boolean              = true;
+  valMezBase   : boolean              = false;
   valSelMezBase: boolean              = false;
   maquinas     : any ;
   materiaP     : any;
-  insProd      : FormGroup;
-  insPMez      : FormGroup;
-  insMez       : FormGroup;
+  insProd      : UntypedFormGroup;
+  insPMez      : UntypedFormGroup;
+  insMez       : UntypedFormGroup;
   calJul       : any;
   valJul       : boolean              = false;
   mezProd      : any []               = [];
@@ -48,8 +49,9 @@ export class InsMezclaComponent implements OnInit {
               private serviRest    : RestService,
               private servicio     : UsersService,
               private modal        : NgbModal,
-              private fg           : FormBuilder ,
+              private fg           : UntypedFormBuilder ,
               private servicioAlert: AlertasService,
+              private serviLoad    : LoadingService
             ) {
 
               this.etapas       = {};
@@ -69,10 +71,15 @@ export class InsMezclaComponent implements OnInit {
                   Validators.required,
               ])],
                 mezdUso   : ['', Validators.compose([
+                Validators.required,
                  Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$'),
                  Validators.max(100),
-                 Validators.maxLength(4) ])]
+                 Validators.maxLength(4) ])],
+
+               mezdManual   : [false, Validators.compose([
+                  ])],
               });
+
 
               this.insPMez = fg.group({
                mezTurn    : ['', Validators.compose([
@@ -100,6 +107,8 @@ export class InsMezclaComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.serviLoad.sumar.emit(5);
+
     this.serviRest.get('diaJul', this.token , this.parametros).subscribe(data =>{
      this.calJul = data;
 
@@ -110,17 +119,7 @@ export class InsMezclaComponent implements OnInit {
         this.carga   = 'visible';
       }
     });
-/*    this.serviRest.get('diaJul' , this.token , this.parametros).subscribe(data=> {
-    if(this.calJul =='0'){
-        this.valJul = true;
-      }else{
-        this.loading = false;
-        this.carga   = 'visible';
-      }
-      console.log(data);
 
-    });
-*/
     this.parametros = [{key:'idEta' , value : 3}];
 
     this.serviRest.get('filEta', this.token , this.parametros).subscribe(data => {
@@ -136,55 +135,74 @@ export class InsMezclaComponent implements OnInit {
     });
 
     this.insProd.controls['idPrd'].valueChanges.subscribe(field => {
-      let id = field;
-      this.insProd.controls['mezdKil'].setValue('');
+      let manual          = this.insProd.controls['mezdManual'].value;
+      let  valBase        = 0;
+
       this.insProd.controls['mezLotIng'].setValue('');
       this.insProd.controls['mezdUso'].setValue('');
-      if(this.materiaP.length > 0){
-        this.materiaP.forEach((element:any) => {
-          if(element.idPrd == id){
-            if(element.prdTip == 'Z'){
-              this.isEnabled = true;
-              this.insProd.controls['mezdKil'].setValue('0');
-              }else{
-                this.insProd.controls['mezdKil'].setValue('');
-                this.isEnabled     = false;
-                this.valMezBase    = false;
-                this.valSelMezBase = false;
-              }
-          }
-      });
+      this.insProd.controls['mezdKil'].setValue('0');
 
+      if(manual == true){
+         this.isEnabled     = false;
+         valBase            = 0;
+         this.valSelMezBase = false;
+      }else{
+        let producto : any  =  this.insProd.controls['idPrd'].value;
+         if(producto.prdTip =='B'){
+          valBase            = 0;
+          this.isEnabled     = false;
+          this.valSelMezBase = false;
+        }else{
+          this.isEnabled     = true;
+          valBase            = 1;
+
+          this.mezProd.forEach((element : any) => {
+                if(element.prdTip =='B'){
+                  valBase = 0;
+                }
+         });
+
+         if(valBase == 1){
+           this.valSelMezBase   = true;//se debe ingresar material base
+         }else{
+           this.valSelMezBase   = false;
+         }
+
+       }
       }
-
     });
 
-    this.insProd.controls['mezdUso'].valueChanges.pipe(
-      filter(text => text != null),
-      debounceTime(200),
-      distinctUntilChanged()
-    ).subscribe(field => {
-      let usoTot = 0.0;
 
-      this.mezProd.forEach(element => {
-        if(element.prdTip != 'Z'){
-          usoTot  = usoTot  +   parseFloat(element.mezdUso);
-         }
-      });
+    this.insProd.controls['mezdManual'].valueChanges.subscribe(field => {
+      this.insProd.controls['mezLotIng'].setValue('');
+      this.insProd.controls['mezdUso'].setValue('');
+      this.insProd.controls['mezdKil'].setValue('0');
+      this.valSelMezBase = false;
+      let producto         = this.insProd.controls['idPrd'].value;
+      let  valBase         = 0;
+      if(field == true){
+          this.isEnabled     = false;
+          this.valSelMezBase = false;
+      }else{
+        if(producto.prdTip !='B'){
+            valBase        = 1;
 
-      let id = this.insProd.controls['idPrd'].value;
-      this.parametros = [{key :'idPrd' ,value: id }];
-      let tipo = '';
+            this.mezProd.forEach(element => {
+                if(element.prdTip =='B'){
+                  valBase        = 0;
+                }
+            });
+            console.log(valBase);
+            if(valBase == 1){
+              this.valSelMezBase   = true;//se debe ingresar material base
+            }else{
+              this.valSelMezBase   = false;
+            }
+           }
+        }
+    });
 
-      this.serviRest.get('datPrd',this.token, this.parametros).subscribe((data : any)=>{
-               data.forEach((element :any) => {
-                  tipo = element.prdTip
-               });
-               if(tipo == 'Z' && usoTot == 0){
-                this.valSelMezBase = true;
-              }
-        });
-      });
+
   }
 
   volver(){
@@ -194,6 +212,7 @@ export class InsMezclaComponent implements OnInit {
   }
 
   selPrd(modal : any){
+
     this.modal.open(modal);
   }
 
@@ -201,98 +220,130 @@ export class InsMezclaComponent implements OnInit {
     this.producto = event;
   }
 
-  agregar(idPrd : any , mezLotIng : any ,  mezdKil:any ,  mezdUso: any  ){
-    let prdCod : any;
-    let prdDes : any;
-    let prdTip : any;
+  agregar(idPrd : any , mezLotIng : any ,  mezdKil:any ,  mezdUso: any  , mezdManual:any ){
+      let prdCod         = idPrd.prdCod;
+      let prdDes         = idPrd.prdDes;
+      let prdTip         = idPrd.prdTip;
+      let mezdManualx    = '';
+      let mezdKilx: any  = 0.0 ;
 
-    this.parametros = [{key :'idPrd' ,value: idPrd }];
+      if(mezdManual == false){
+        mezdManualx = 'N';
+      }else{
+        mezdManualx = 'S';
+      }
+      console.log(prdTip);
+      console.log(mezdManual);
 
-    this.serviRest.get('datPrd',this.token, this.parametros).subscribe((data : any)=>{
-        data.forEach((element :any) => {
-           prdCod = element.prdCod;
-           prdDes = element.prdDes;
-           prdTip = element.prdTip;
-        });
-
-        if(prdTip =='Z'){
-          let usoTot : any  = 0.0 ;
-          let kilotot: any  = 0.0 ;
-          let mezdKilx: any = 0.0 ;
-
-          this.mezProd.forEach(element => {
-              usoTot  = usoTot  + parseFloat(element.mezdUso);
-              kilotot = kilotot + parseFloat(element.mezdKil);
-          });
-          try{
-            mezdKilx =(kilotot * mezdUso)/ usoTot;
-            mezdKilx =  Math.round(mezdKilx*100)/100;
-          }catch(error){
-            mezdKilx = 0;
-          }
-
-
-           this.mezProd.push({
-            'idPrd'      : idPrd,
-            'prdCod'     : prdCod,
-            'prdDes'     : prdDes,
-            'mezLotIng'  : mezLotIng,
-            'mezdKil'    : mezdKilx,
-            'mezdUso'    : mezdUso,
-            'prdTip'     : prdTip
-            });
-
-        }else{
-          let mezdKilx = Math.round(mezdKil*100)/100;
-          this.mezProd.push({
-            'idPrd'      : idPrd,
-            'prdCod'     : prdCod,
-            'prdDes'     : prdDes,
-            'mezLotIng'  : mezLotIng,
-            'mezdKil'    : mezdKilx,
-            'mezdUso'    : mezdUso,
-            'prdTip'     : prdTip
-            });
-        }
-
-        let totUso  : any = 0.0;
+      if(prdTip !='B' && mezdManual == false){
+        let usoTot  : any  = 0.0 ;
+        let kilotot : any  = 0.0 ;
 
         this.mezProd.forEach(element => {
-            totUso  = totUso  +   parseFloat(element.mezdUso);
-            if(element.prdTip  != 'Z'){
-              this.valMezBase = false;
-            }
+          console.log(element);
+
+          if(element.mezdManual == 'N'){
+            usoTot  = usoTot  + parseFloat(element.mezdUso);
+            kilotot = kilotot + parseFloat(element.mezdKil);
+          }
         });
 
-        if(totUso > 100){
-            this.valPor = true;
-        }else{
-          this.valPor = false;
-        }
-    });
+        try{
+          mezdKilx =(kilotot * mezdUso)/ usoTot;
+          mezdKilx =  Math.round(mezdKilx*100)/100;
+          console.log(kilotot);
+          console.log(mezdUso);
+          console.log(usoTot);
+          console.log(mezdKilx);
 
-    this.modal.dismissAll();
-    this.insProd.controls['idPrd'].setValue('');
-    this.insProd.controls['mezdKil'].setValue('');
-    this.insProd.controls['mezLotIng'].setValue('');
-    this.insProd.controls['mezdUso'].setValue('');
+        }catch(error){
+          mezdKilx = 0;
+        }
+
+         this.mezProd.push({
+          'idPrd'      : idPrd,
+          'prdCod'     : prdCod,
+          'prdDes'     : prdDes,
+          'mezLotIng'  : mezLotIng,
+          'mezdKil'    : mezdKilx,
+          'mezdUso'    : mezdUso,
+          'prdTip'     : prdTip,
+          'mezdManual' : mezdManualx
+          });
+
+      }else{
+
+        mezdKilx = Math.round(mezdKil*100)/100;
+        this.mezProd.push({
+          'idPrd'      : idPrd,
+          'prdCod'     : prdCod,
+          'prdDes'     : prdDes,
+          'mezLotIng'  : mezLotIng,
+          'mezdKil'    : mezdKilx,
+          'mezdUso'    : mezdUso,
+          'prdTip'     : prdTip,
+          'mezdManual' : mezdManualx
+          });
+      }
+      let totUso        = 0.0;
+      let materia_b     = 'N';
+      let manual        = 'N';
+
+      this.mezProd.forEach(element => {
+          totUso  = totUso  +   parseFloat(element.mezdUso);
+          if(element.prdTip  == 'B'){
+              materia_b = 'S';
+          }
+          if(element.mezdManual == 'S'){
+              manual        = 'S';
+          }
+      });
+
+
+      if(materia_b == 'N' && manual == 'N'){
+        this.valMezBase = true;
+      }else{
+        this.valMezBase = false;
+      }
+
+      if(totUso > 100){
+          this.valPor = true;
+      }else{
+        this.valPor = false;
+      }
+      this.modal.dismissAll();
+      this.insProd.controls['idPrd'].setValue('');
+      this.insProd.controls['mezdKil'].setValue('');
+      this.insProd.controls['mezLotIng'].setValue('');
+      this.insProd.controls['mezdUso'].setValue('');
+      this.insProd.controls['mezdManual'].setValue(false);
+
+
   }
 
   delPrd(index:any){
     this.mezProd.splice(index , 1);
     let totUso  : any = 0.0;
+    let materia_b     = 'N';
+    let manual        = 'N';
+    this.valMezBase   = true;
 
     this.mezProd.forEach(element => {
         totUso  = totUso  +   parseFloat(element.mezdUso);
-        if(element.prdTip  != 'Z'){
-          this.valMezBase = false;
-        }else{
-          this.valMezBase = true;
+        if(element.prdTip  == 'B'){
+            materia_b = 'S';
+        }
+        if(element.mezdManual == 'S'){
+            manual        = 'S';
         }
     });
 
-    if(this.valMezBase){
+
+    if(materia_b == 'N' && manual == 'N'){
+      this.valMezBase = true;
       this.mezProd    = [];
+    }else{
+      this.valMezBase = false;
     }
 
     if(totUso > 100){
@@ -300,25 +351,24 @@ export class InsMezclaComponent implements OnInit {
     }else{
       this.valPor = false;
     }
+
   }
 
   modConfirmar(mezTurn : any , mezMaq : any , mezTip : any, modal: any){
-    this.modal.open(modal);
-
+    this.modal.open(modal);    
     if(mezTip == 'S'){
       this.mezLotSal = mezMaq + '0' + mezTurn + this.calJul;
-    }
-
+    }    
     this.mezcla = new Mezcla(mezTurn , mezMaq , mezTip , this.mezProd, this.mezLotSal , [] , 0 , '');
     this.mezcla.setProducto(this.producto);
   }
 
   confirmar(etapa : any , mezKil : any){
+    this.val = true;
 
     this.mezcla?.setEta(etapa);
     this.mezcla?.setmezdKil(mezKil);
     this.serviRest.post('insMezcla', this.token, this.mezcla).subscribe(resp=>{
-        this.val = true;
         resp.forEach((elementx : any)  => {
           if(elementx.error == '0'){
              this.servicioAlert.setAlert('Mezcla caragada manera correcta', 'success');
@@ -335,7 +385,7 @@ export class InsMezclaComponent implements OnInit {
           }
         });
     });
-
+    this.serviLoad.sumar.emit(1);
   }
 
 }

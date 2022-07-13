@@ -1,8 +1,9 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RestService } from './../../../servicios/rest.service';
 import { UsersService } from './../../../servicios/users.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { DataTableDirective } from 'angular-datatables';
 import { AlertasService } from 'src/app/servicios/alertas.service';
@@ -26,12 +27,13 @@ export class TrabEmpresaComponent implements OnInit {
   carga        : string               = "invisible";
 
 
-  constructor(private fb: FormBuilder,
-    private servicio : UsersService,
-    private rest : RestService,
-    private modal : NgbModal,
-    private excel: ExcelService,
-    private servicioaler : AlertasService
+  constructor(private fb           : UntypedFormBuilder,
+              private servicio     : UsersService,
+              private rest         : RestService,
+              private modal        : NgbModal,
+              private excel        : ExcelService,
+              private servicioaler : AlertasService,
+              private serviLoad    : LoadingService
     ) {
             this.token = this.servicio.getToken();
     }
@@ -61,6 +63,7 @@ export class TrabEmpresaComponent implements OnInit {
   }
 
   public tblData(){
+    this.serviLoad.sumar.emit(1);
     this.tblEmpresa = {};
     this.rest.get('trabEmpresa' , this.token, this.parametros).subscribe(data => {
         this.tblEmpresa = data;

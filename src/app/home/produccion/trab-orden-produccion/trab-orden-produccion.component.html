@@ -1,12 +1,10 @@
 <div class="card">
   <div class="card-header">
     <h3 class="card-title">Orden Producción</h3>
-
     <div class="card-tools">
       <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
         <i class="fas fa-minus"></i></button>
     </div>
-
   </div>
   <div class="card-body">
       <h3 class="card-title">Filtros</h3>
@@ -99,8 +97,7 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form
-                         >
+  <form>
   <div class="modal-body">
       <div class="card-body">
         <div class="form-group">
@@ -140,6 +137,15 @@
       <div *ngIf ="ot.length == 0">
         <span class="text-danger">Debe seleccionar un producto!</span>
       </div>
+      <div  *ngIf=" !xorddet.length">
+        <div class="spinner-border spinner-border-sm" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+        <div class="spinner-grow spinner-grow-sm" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+
       <div class="table-responsive" *ngIf="xorddet.length > 0">
         <table class="table table-hover text-nowrap">
           <thead>
@@ -156,7 +162,6 @@
                     <td>
                         <input type="checkbox" ng-true-value="S" ng-false-value="N"  (change)="argrerDet(ord , $event.target  )"  >
                    </td>
-
                    <td>
                       <span>{{ord.orpdPrdCod}}</span>
                   </td>

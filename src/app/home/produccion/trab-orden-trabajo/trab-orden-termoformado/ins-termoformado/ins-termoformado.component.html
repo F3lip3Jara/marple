@@ -1,0 +1,278 @@
+<div class="row" >
+  <div class="col-md-8">
+    <div class="col-md-12">
+      <div class="card card-outline card-primary">
+        <div class="card-header">
+          <h3 class="card-title">Ingreso de Termoformado - Operador</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+          <!-- /.card-tools -->
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+          <div class="modal-body">
+            <div class="loading" *ngIf= "loading" >
+              <img src = "../../../assets/Circles-menu-3.gif">
+             </div>
+            <div class="row"  class="{{carga}}">
+             <div *ngIf = "valJul">
+               <span class="text-danger">Debe cargar calendario Juliano!</span>
+              </div>
+              <form
+
+              >
+              <div class="form-group">
+                <label for="">Fecha</label>
+                <input type="text" class="form-control" placeholder="" value="{{todayWithPipe}}" disabled>
+              </div>
+
+              <div class="form-group">
+                <label for="">Tipo de Caja</label>
+                    <input type="text" class="form-control" placeholder="" value="" oninput="this.value = this.value.toUpperCase()" formControlName = 'extFor'>
+              </div>
+              <div class="form-group">
+                <label for="">Lotes Caja</label>
+                <div  *ngIf=" !insumos.length ">
+                  <div class="spinner-border spinner-border-sm" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <div class="spinner-grow spinner-grow-sm" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+                <div class="input-group input-group-sm" *ngIf="insumos.length > 0">
+                <select  id="extMaq" name= "extMaq" class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true"  [attr.disabled]="isEnabled ? '': null">
+                  <option  value="">Seleccione</option>
+                  <option  *ngFor = "let caja of insumos"  value="{{caja.idPrd}}">{{caja.prdDes}}</option>
+                </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="">Lote Bolsa</label>
+                <div  *ngIf=" !insumos.length ">
+                  <div class="spinner-border spinner-border-sm" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <div class="spinner-grow spinner-grow-sm" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+                <div class="input-group input-group-sm" *ngIf="insumos.length > 0">
+                <select  id="extMaq" name= "extMaq" class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true"   [attr.disabled]="isEnabled ? '': null">
+                  <option  value="">Seleccione</option>
+                  <option  *ngFor = "let bolsa of insumos"  value="{{bolsa.idPrd}}">{{bolsa.prdDes}}</option>
+                </select>
+                </div>
+              </div>
+             <div class="form-group">
+              <label for="">Turno</label>
+              <div class="input-group input-group-sm">
+                <select  class="custom-select rounded-0 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true"  [attr.disabled]="isEnabled ? '': null">
+                  <option  value="">Seleccione</option>
+                  <option value="1">Turno 1</option>
+                  <option value="2">Turno 2</option>
+                </select>
+              </div>
+               </div>
+              <div class="form-group">
+                <label for="">Maquina</label>
+                <div  *ngIf=" !maquinas.length ">
+                  <div class="spinner-border spinner-border-sm" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <div class="spinner-grow spinner-grow-sm" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+                <div class="input-group input-group-sm" *ngIf="maquinas.length > 0">
+                <select  id="extMaq" name= "extMaq" class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true"   [attr.disabled]="isEnabled ? '': null">
+                  <option  value="">Seleccione</option>
+                  <option  *ngFor = "let maquina of maquinas"  value="{{maquina.maqCod}}">{{maquina.maqDes}}</option>
+                </select>
+                </div>
+              </div>
+              <h6>Detalles</h6>
+                <div class="col-md-3">
+                  <button type="button" (click)="insCtlProd(modalInsCtl)" class="btn btn-danger btn-sm"><i class="fas fa-plus-circle"></i></button>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <div class="table-responsive" >
+                  <table class="table table-hover text-nowrap">
+                    <thead>
+                        <tr>
+                            <td>Hora Inicio</td>
+                            <td>Lote</td>
+                            <td>Peso </td>
+                            <td>Ancho(Etiqueta)</td>
+                            <td>Espesor Izq</td>
+                            <td>Espesor Centro</td>
+                            <td>Espesor Der</td>
+                            <td>Peso1</td>
+                            <td>Peso2</td>
+                            <td>Peso3</td>
+                            <td>Acciones</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                    </table>
+                </div>
+
+
+              <button type="submit" class="btn btn-primary btn-block"  [disabled]="val">
+                <div *ngIf= "val">
+                  Guardando..
+                  <span class="spinner-border spinner-border-sm mr-2"></span>
+                </div>
+                <div *ngIf= "!val">
+                  Guardar
+                </div>
+              </button>
+            </form>
+            </div>
+          </div>
+           <!-- /.card-body -->
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="col-md-4">
+  <div class="col-md-12">
+    <div class="card card-outline card-primary">
+      <div class="card-header">
+        <h3 class="card-title">Orden de Trabajo</h3>
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-card-widget="collapse">
+            <i class="fas fa-minus"></i>
+          </button>
+        </div>
+        <!-- /.card-tools -->
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <div class="modal-body">
+          <div class="loading" *ngIf= "loading" >
+            <img src = "../../../assets/Circles-menu-3.gif">
+           </div>
+           <div class="row"  class="{{carga}}">
+           <div class="form-group ">
+            <label for="">Orden Producción</label>
+            <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{orden_trabajo.orden_produccion}}"   disabled>
+          </div>
+          <div class="form-group">
+            <label for="">Orden Trabajo</label>
+            <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{orden_trabajo.id }}"   disabled>
+          </div>
+          <div class="form-group">
+            <label for="">Producto</label>
+            <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{orden_trabajo.producto }}"   disabled>
+          </div>
+          <div class="form-group">
+            <label for="">Cantidad</label>
+            <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{orden_trabajo.cantidad_sol }}"   disabled>
+          </div>
+
+
+        </div>
+          </div>
+        </div>
+         <!-- /.card-body -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #modalInsCtl let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal ingreso Extrusión</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form
+
+  >
+  <div class="modal-body" >
+    <div class="row">
+    <div class="col-md-12">
+    <div class="form-group">
+      <label>Hora Inicio</label>
+      <div class="input-group input-group-sm">
+      <ngb-timepicker  [spinners]="spinners" formControlName="extdHorIni"></ngb-timepicker>
+      </div>
+      <div *ngIf = "">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+   </div>
+   <app-sel-extrusion (onItemAdded) = 'selExtrusion($event)'></app-sel-extrusion>
+  <div class="form-group">
+    <label for="">Peso</label>
+    <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{peso}}" disabled >
+
+  </div>
+  <div class="form-group">
+    <label for="">Ancho(Etiqueta)</label>
+    <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{ancho}}" disabled>
+
+  </div>
+  <div class="form-group">
+    <label for="">Espesor(Micra Etiq)</label>
+    <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{espesor}}" disabled>
+
+  </div>
+ </div>
+    <label for="">Peso Termoformado</label>
+    <div class="form-group col-md-4">
+      <label for=""></label>
+      <input type="text" class="form-control form-control-sm" id="" placeholder="" value="" formControlName="extdEsIzq"  >
+      <div *ngIf = "">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+    </div>
+    <div class="form-group col-md-4">
+      <label for=""></label>
+      <input type="text" class="form-control form-control-sm" id="" placeholder="" value=""  formControlName="extdEsCen" >
+      <div *ngIf = "">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+    </div>
+    <div class="form-group col-md-4">
+      <label for=""></label>
+      <input type="text" class="form-control form-control-sm" id="" placeholder="" value=""  formControlName="extdEsDer" >
+      <div *ngIf = "">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+    </div>
+
+  </div>
+  <div class="form-group col-md-12">
+    <label>Obs</label>
+    <textarea class="form-control" rows="2" placeholder="Observaciones" formControlName="extdObs"></textarea>
+  </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary btn-block" *ngIf="" [disabled]="val" >
+      <div *ngIf= "val">
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!val">
+        Guardar
+      </div>
+  </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+</ng-template>
+
+
+

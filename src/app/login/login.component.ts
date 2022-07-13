@@ -1,11 +1,11 @@
-
-import { LogServiciosService } from 'src/app/servicios/log-servicios.service';
+import { LogSys } from './../model/logSys.model';
+import { LogSysService } from './../servicios/log-sys.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup , Validators  } from '@angular/forms';
-import { Router  } from '@angular/router';
-import {Usuario} from '../model/usuario.model';
-import {UsersService} from "../servicios/users.service";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Usuario } from '../model/usuario.model';
+import { UsersService } from "../servicios/users.service";
 
 
 @Component({
@@ -15,23 +15,23 @@ import {UsersService} from "../servicios/users.service";
 })
 export class LoginComponent implements OnInit {
 
-  login        : FormGroup;
-  log          : boolean = false;
+  login: UntypedFormGroup;
+  log: boolean = false;
 
 
-  constructor(fb                   : FormBuilder ,
-              private UsersService : UsersService,
-              private router       : Router ,
-              private servicioAler : AlertasService ,
-              private serviLogSys  : LogServiciosService) {
+  constructor(fb          : UntypedFormBuilder,
+    private UsersService  : UsersService,
+    private router        : Router,
+    private servicioAler  : AlertasService,
+    private serLog        : LogSysService) {
 
     this.login = fb.group({
-      email : ['' , Validators.compose([
-       Validators.required
-      ])],
-      password : ['' , Validators.compose([
+      email: ['', Validators.compose([
         Validators.required
-       ])],
+      ])],
+      password: ['', Validators.compose([
+        Validators.required
+      ])],
     });
     this.UsersService.setToken("");
   }
@@ -40,51 +40,37 @@ export class LoginComponent implements OnInit {
 
   }
 
-  guardar(email : string , password:string  ) : boolean {
-    this.log = true;
-    let datx : any [] = [];
+  guardar(email: string, password: string): boolean {
+    this.log    = true;
+    const userx = new Usuario(1, '', password, '', email);
+    this.UsersService.eliminarToken();
 
-    const userx = new Usuario(1,'' , password , '', email);
+    this.UsersService.login(userx).subscribe(data => {
+      if(!data.id) {
+        this.servicioAler.disparador.emit(this.servicioAler.getAlert());
+        setTimeout(() => {
+          this.servicioAler.setAlert('', '');
+        }, 2000);
+        this.log = false;
+      }else{
 
-     this.UsersService.login(userx).subscribe( data => {
-      data.forEach((element:any) => {
-         if(element.error == "1"){
-              this.servicioAler.disparador.emit(this.servicioAler.getAlert());
-              setTimeout(()=>{
-                this.servicioAler.setAlert('','');
-              },2000);
-              this.log = false;
-         }else{
+        let reinicio: string = data.reinicio;
+        let token   : string = data.token;
+        this.UsersService.setToken(token);
 
-              datx = data;
-              let reinicio : string  = '';
-              let token    : string  = '';
-              let name     : string  = '';
+        if (reinicio == 'S') {
+          this.router.navigate(['/changePassword']);
+        } else {
 
-              if(datx){
-                Object.values(datx).forEach(element=>{
-                    token    = element.token;
-                    reinicio = element.reinicio;
-                    name     = element.name;
-                });
-                this.UsersService.setToken(token);
-              }
-
-              if (reinicio == 'S'){
-                this.router.navigate(['/changePassword']);
-              }else{
-               // const serLog  = new LogSys(1, '', 1 , 'LOGEO DE USUARIO' , '');
-                //this.serviLogSys.setLogSys(serLog);
-
-                this.router.navigate(['/home']);
-                this.log = false;
-              }
-          }
-      });
+          let des     = 'El usuario ' + email + ' logeado.'
+          let serLog  = new LogSys(1, email , 1 , 'LOGEO DE USUARIO' , des);
+          this.serLog.insLog(serLog);
+          this.router.navigate(['/home']);
+          this.log = false;
+        }
+      }
     });
-
-
-     return false;
+      return false;
   }
 }
 

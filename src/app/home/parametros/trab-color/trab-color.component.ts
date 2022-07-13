@@ -1,5 +1,6 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Color } from 'src/app/model/color.model';
@@ -9,6 +10,8 @@ import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { Alert } from 'src/app/model/alert.model';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { LogSysService } from 'src/app/servicios/log-sys.service';
+import { LogSys } from 'src/app/model/logSys.model';
 
 @Component({
   selector: 'app-trab-color',
@@ -30,16 +33,18 @@ export class TrabColorComponent implements OnInit {
   color        : Color;
   validCod     : boolean              = false;
   dato         : number               = 0;
-  insCol       : FormGroup;
-  upCol        : FormGroup;
+  insCol       : UntypedFormGroup;
+  upCol        : UntypedFormGroup;
   val          : boolean              = false;
 
-  constructor(private fb: FormBuilder,
-    private servicio    : UsersService,
-    private rest        : RestService,
-    private modal       : NgbModal,
-    private servicioaler: AlertasService,
-    private excel       : ExcelService) {
+  constructor(private fb          : UntypedFormBuilder,
+              private servicio    : UsersService,
+              private rest        : RestService,
+              private modal       : NgbModal,
+              private servicioaler: AlertasService,
+              private excel       : ExcelService,
+              private serviLoad   : LoadingService,
+              private serLog      : LogSysService) {
 
       this.token     = this.servicio.getToken();
       this.color     = new Color(0, '' , '');
@@ -94,6 +99,7 @@ export class TrabColorComponent implements OnInit {
   }
 
   public tblData(){
+    this.serviLoad.sumar.emit(1);
     this.tblColor = {};
     this.rest.get('trabColor' , this.token, this.parametros).subscribe(data => {
         this.tblColor = data;
@@ -122,12 +128,15 @@ public del( color : any) : boolean{
   let url      = 'delColor';
   this.carga   = 'invisible';
   this.loading = true;
-
+  this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, color).subscribe(resp => {
        resp.forEach((elementx : any)  => {
          if(elementx.error == '0'){
            this.modal.dismissAll();
-
+           this.serviLoad.sumar.emit(1);
+           let des        = 'Color eliminado ' + color.colCod ;
+           let log        = new LogSys(2, '' , 27 , 'ELIMINAR COLOR' , des);
+           this.serLog.insLog(log);
            setTimeout(()=>{
              this.tblColor = {};
              this.rest.get('trabColor' , this.token, this.parametros).subscribe(data => {
@@ -157,16 +166,30 @@ public action(xcolDes : any , xcolCod : any , tipo :string ) : boolean{
   this.carga   = 'invisible';
   this.loading = true;
   this.val     = true;
-  let monedax  = new Color(this.color.idCol , xcolDes , xcolCod);
+  let colorx   = new Color(this.color.idCol , xcolDes , xcolCod);
+  let des      = '';
+  let lgName   = '';
+  let idEtaDes = 0;
+
 
   if(tipo =='up'){
-     url = 'updColor';
+     url      = 'updColor';
+     des      = 'Actualizar color ' + xcolCod;
+     lgName   = 'ACTUALIZAR COLOR';
+     idEtaDes = 26;
   }else{
-    url = 'insColor';
+    url      = 'insColor';
+    des      = 'Ingreso color ' + xcolCod;
+    lgName   = 'INGRESO COLOR';
+    idEtaDes = 25;
   }
- this.rest.post(url, this.token, monedax).subscribe(resp => {
+  this.serviLoad.sumar.emit(1);
+ this.rest.post(url, this.token, colorx).subscribe(resp => {
       resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
+        this.serviLoad.sumar.emit(1);
+        let log        = new LogSys(2, '' , idEtaDes , lgName , des);
+        this.serLog.insLog(log);        
           this.modal.dismissAll();
           setTimeout(()=>{
             this.tblColor = {};
@@ -182,6 +205,7 @@ public action(xcolDes : any , xcolCod : any , tipo :string ) : boolean{
             this.val      = false;
             this.limpiar();
           },1500);
+         
 
       }else {
         this.carga    = 'visible';

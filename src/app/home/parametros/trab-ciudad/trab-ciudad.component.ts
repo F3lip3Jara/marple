@@ -1,5 +1,6 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Ciudad } from './../../../model/ciudad.model';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
@@ -32,18 +33,19 @@ export class TrabCiudadComponent implements OnInit {
   paises       : any;
   comunas      : any;
   ciudad       : Ciudad;
-  insCiudad    : FormGroup;
-  updCiudad    : FormGroup;
+  insCiudad    : UntypedFormGroup;
+  updCiudad    : UntypedFormGroup;
   val          : boolean              = false;
   dato         : number               = 0;
   validCod     : boolean              = false;
 
-  constructor(private fb: FormBuilder,
-    private servicio : UsersService,
-    private rest : RestService,
-    private modal : NgbModal,
-    private servicioaler: AlertasService,
-    private excel: ExcelService) {
+  constructor(private fb          : UntypedFormBuilder,
+              private servicio    : UsersService,
+              private rest        : RestService,
+              private modal       : NgbModal,
+              private servicioaler: AlertasService,
+              private excel       : ExcelService,
+              private serviLoad   : LoadingService) {
 
       this.token     = this.servicio.getToken();
 
@@ -98,7 +100,7 @@ export class TrabCiudadComponent implements OnInit {
           previous: 'Ant.'
         }
       }}
-
+      this.serviLoad.sumar.emit(1);
       this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
         this.paises = data;
         });
@@ -151,9 +153,11 @@ public delComuna (ciudad : any) : boolean{
   let url      = 'delCiudad';
   this.carga   = 'invisible';
   this.loading = true;
+  this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, ciudad ).subscribe(resp => {
        resp.forEach((elementx : any)  => {
          if(elementx.error == '0'){
+          this.serviLoad.sumar.emit(1);
            this.modal.dismissAll();
            setTimeout(()=>{
             this.tblCiudad = {};
@@ -174,10 +178,8 @@ public delComuna (ciudad : any) : boolean{
    });
 
    setTimeout(()=>{
-    console.log('disparador');
     this.servicioaler.disparador.emit( this.servicioaler.getAlert());
-
-  },1500);
+    },1500);
 
    return false;
 }
@@ -194,12 +196,12 @@ public action(xidPai : any , xidReg : any ,  xciuCod : any , xciuDes : any , tip
   }else{
     url = 'insCiudad';
   }
-
+  this.serviLoad.sumar.emit(1);
  this.rest.post(url, this.token, xciudad).subscribe(resp => {
       resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
           this.modal.dismissAll();
-
+          this.serviLoad.sumar.emit(1);
           setTimeout(()=>{
             this.tblCiudad = {};
             this.rest.get('trabCiudad' , this.token, this.parametros).subscribe(data => {

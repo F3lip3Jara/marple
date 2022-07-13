@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { ProductosServiceService } from './../../../servicios/productos-service.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { LinksService } from 'src/app/servicios/links.service';
@@ -5,7 +6,7 @@ import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators'
 import { Observable, OperatorFunction, merge } from 'rxjs';
 import { Subject } from 'rxjs';
 import { NgbTypeahead, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -33,24 +34,25 @@ export class TrabProductosComponent implements OnInit {
   loading      : boolean              = true;
   tblProductos : any                  = {};
   producto     : any                  = {};
-  filtroPrd    : FormGroup;
+  filtroPrd    : UntypedFormGroup;
   token        : string               = '';
   parametros   : any []               = [];
   statesx      : any                  ;
   states       : string[]             = [];
-  upPrd        : FormGroup             ;
+  upPrd        : UntypedFormGroup             ;
   carga        : string              = "invisible";
   model        : any;
 
 
-  constructor(private servicio    : UsersService ,
-              private servicioget : RestService,
-              private modal       : NgbModal,
-              private fb          : FormBuilder,
-              private excel       : ExcelService,
-              private servicioLink: LinksService,
+  constructor(private servicio     : UsersService ,
+              private servicioget  : RestService,
+              private modal        : NgbModal,
+              private fb           : UntypedFormBuilder,
+              private excel        : ExcelService,
+              private servicioLink : LinksService,
               private servicioAlert: AlertasService,
-              private servicePrd   : ProductosServiceService
+              private servicePrd   : ProductosServiceService,
+              private serviLoad    : LoadingService
     ) {
 
       this.filtroPrd = fb.group({
@@ -102,7 +104,7 @@ ngOnInit(): void {
         previous: 'Ant.'
       }
     }}
-
+    this.serviLoad.sumar.emit(1);
     this.servicioget.get('prdDes' , this.token, this.parametros).subscribe(data => {
        this.statesx = data;
       this.statesx.forEach((element: { prdDes: string; }) => {
@@ -130,7 +132,7 @@ ngAfterViewInit(): void {
       this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
         dtInstance.destroy().draw();
       });
-
+      this.serviLoad.sumar.emit(1);
       this.servicioget.get('filPrdDes' , this.token, parm).subscribe(respuesta => {
           this.tblProductos = respuesta;
           this.loading      = false;
@@ -145,6 +147,7 @@ ngAfterViewInit(): void {
 
   public tblData(){
     this.tblProductos = {};
+    this.serviLoad.sumar.emit(1);
     this.servicioget.get('trabProducto' , this.token, this.parametros).subscribe(respuesta => {
       this.tblProductos = respuesta;
      });
@@ -164,7 +167,7 @@ ngAfterViewInit(): void {
      this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
       dtInstance.destroy().draw();
     });
-
+    this.serviLoad.sumar.emit(1);
      this.servicioget.get('trabProducto' , this.token, this.parametros).subscribe(respuesta => {
        this.tblProductos = respuesta;
        setTimeout(()=> {

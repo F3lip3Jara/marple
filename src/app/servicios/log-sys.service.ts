@@ -1,25 +1,22 @@
+import { UsersService } from './users.service';
+import { LogSys } from './../model/logSys.model';
+import { RestService } from './rest.service';
 import { Injectable, Output ,EventEmitter} from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LogSysService {
+  token               : string = '';
 
-  @Output() disparador :EventEmitter <any> = new EventEmitter();
-
-  /*alerta : Alert = new Alert('', '');
-
-  getAlert(): Alert {
-     return this.alerta;
+  constructor(private rest          : RestService,
+              private servicioUser  : UsersService){
   }
 
-  setAlert(mensaje : string  , type : string){
-    this.alerta.setMessage(mensaje);
-    this.alerta.setType(type);
-  }*/
-  constructor(){
-
-
+  public insLog(log : LogSys){
+    this.token           = this.servicioUser.getToken();
+    this.rest.post('insLogSys', this.token, log).subscribe(data =>{
+    });
   }
 
 }

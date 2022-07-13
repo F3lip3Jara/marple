@@ -1,11 +1,14 @@
+import { LoadingService } from './../../../../servicios/loading.service';
 import { LinksService } from './../../../../servicios/links.service';
 import { Proveedor } from './../../../../model/proveedor.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { LogSysService } from 'src/app/servicios/log-sys.service';
+import { LogSys } from 'src/app/model/logSys.model';
 
 @Component({
   selector: 'app-ins-proveedores',
@@ -13,7 +16,7 @@ import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
   styleUrls: ['./ins-proveedores.component.css']
 })
 export class InsProveedoresComponent implements OnInit {
-  insProv      : FormGroup;
+  insProv      : UntypedFormGroup;
   regiones     : any;
   comunas      : any;
   paises       : any;
@@ -26,11 +29,13 @@ export class InsProveedoresComponent implements OnInit {
   valRut       : boolean              = false;
   mensaje      : string               = '';
 
-  constructor( private fg: FormBuilder,
-    private servicio : UsersService,
-    private rest : RestService,
-    private servicioaler: AlertasService,
-    private servicioLink : LinksService
+  constructor( private fg                 : UntypedFormBuilder,
+              private servicio            : UsersService,
+              private rest                : RestService,
+              private servicioaler        : AlertasService,
+              private servicioLink        : LinksService,
+              private serviLoad           : LoadingService,
+              private serLog              : LogSysService
   ) {
 
   this.insProv = fg.group({
@@ -94,7 +99,7 @@ export class InsProveedoresComponent implements OnInit {
    }
 
   ngOnInit(): void {
-
+    this.serviLoad.sumar.emit(1);
     this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
       this.paises = data;
       });
@@ -106,7 +111,7 @@ export class InsProveedoresComponent implements OnInit {
         this.insProv.controls['idReg'].setValue('');
         this.insProv.controls['idCom'].setValue('');
         this.insProv.controls['idCiu'].setValue('');
-
+        this.serviLoad.sumar.emit(1);
         this.parametros = [{key :'idPai' ,value: field}];
         this.rest.get('regPai' , this.token, this.parametros).subscribe(data => {
           this.regiones = data;
@@ -120,6 +125,7 @@ export class InsProveedoresComponent implements OnInit {
           this.comunas = {};
           this.insProv.controls['idCom'].setValue('');
           this.insProv.controls['idCiu'].setValue('');
+          this.serviLoad.sumar.emit(1);
           this.parametros = [{key :'idReg' ,value: field} , {key : 'idPai' , value:  this.insProv.controls['idPai'].value}];
           this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
           this.ciudades = data;
@@ -132,6 +138,7 @@ export class InsProveedoresComponent implements OnInit {
         if(field > 0){
           this.comunas = {};
           this.insProv.controls['idCom'].setValue('');
+          this.serviLoad.sumar.emit(1);
           this.parametros = [{key :'idCiu' ,value: field} , {key :'idReg' , value : this.insProv.controls['idReg'].value } , {key : 'idPai' , value:  this.insProv.controls['idPai'].value} ];
           this.rest.get('ciuCom' , this.token, this.parametros).subscribe(data => {
             this.comunas = data;
@@ -190,7 +197,7 @@ export class InsProveedoresComponent implements OnInit {
     }
     let proveedor : Proveedor  = new Proveedor(0,prvRut, prvNom , prvNom2 , prvGiro , prvDir, prvNum, idPai, idReg, idCom , idCiu , prvMail , prvTel , prvCli , prvPrv , true);
     this.val                   = true;
-
+    this.serviLoad.sumar.emit(1);
     this.rest.post('insProveedor', this.token, proveedor).subscribe(resp => {
      resp.forEach((elementx : any)  => {
           if(elementx.error == '0' ){
@@ -200,6 +207,10 @@ export class InsProveedoresComponent implements OnInit {
               this.servicioLink.disparador.emit(d);
               this.servicioaler.setAlert('','');
             },1500);
+            let   des              = 'Proveedor ingresado '+ prvRut;
+            let   log  : LogSys    = new LogSys(2, '' , 20, 'INGRESO PROVEEDOR/CLIENTE'  , des);
+            this.serLog.insLog(log);
+         
           }else{
             this.servicioaler.disparador.emit(this.servicioaler.getAlert());
             setTimeout(()=>{

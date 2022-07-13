@@ -1,0 +1,20 @@
+<a  class="nav-link"  (click)="isMenuCollapsed = !isMenuCollapsed">
+    <i class="nav-icon far fa-circle nav-icon"></i>
+    <p>
+      {{subModule.optDes}}
+      
+    </p>
+    <span  class="float-right"><i   [ngClass]="(isMenuCollapsed)?'  fas fa-angle-left':'fas fa-angle-down'" ></i></span>
+  </a>
+
+
+  <div [ngbCollapse]="isMenuCollapsed" class="menu-is-opening menu-open" style="padding-left: 2%;">
+    <ul  class="nav nav-treeview" style="display: block;">
+      <li *ngFor="let items of subModule.sub" class="nav-item">
+        <a  (click)="elinks(items.optSLink)" class="nav-link">
+          <i class="far fa-circle nav-icon"></i>
+          <p> {{items.optSDes}}</p>
+        </a>
+      </li>               
+     </ul>
+   </div>

@@ -2,7 +2,7 @@ import { Usuario } from './../../model/usuario.model';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
 
@@ -14,14 +14,14 @@ import { RestService } from 'src/app/servicios/rest.service';
 
 export class CambioPasswordComponent implements OnInit {
 
-  changePassword      : FormGroup;
+  changePassword      : UntypedFormGroup;
   val                 : boolean   = false;
   usuario             : string    = '';
   token               : string ;
   parametros          : []        = [];
   valida             : boolean    = false;
 
-  constructor(fb: FormBuilder ,
+  constructor(fb: UntypedFormBuilder ,
     private usersService : UsersService,
     private rest         : RestService,
     private router       : Router ,
@@ -62,7 +62,7 @@ export class CambioPasswordComponent implements OnInit {
 
 
   }
-  nombreValidator(control: FormControl) : { [s : string] : boolean}  | null{
+  nombreValidator(control: UntypedFormControl) : { [s : string] : boolean}  | null{
     const i = control.value.toString().trim().length;
 
     if(i > 0 && i > 6 && i < 8){

@@ -25,7 +25,7 @@
       <!-- Messages Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown"   (click)="isMenuCollapsed = !isMenuCollapsed" aria-expanded="true">
-          <span class="badge badge-danger navbar-badge"> <i class="fas fa-user-cog"></i> Inicio</span>
+          <span class="badge badge-custom navbar-badge"> <i class="fas fa-user-cog"></i> Inicio</span>
         </a>
         <div *ngIf="isMenuCollapsed" class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
           <a  class="dropdown-item">
@@ -47,9 +47,7 @@
           <div class="dropdown-divider"></div>
           <span class=" "> <a (click)="editar()" class="dropdown-item dropdown-footer"> <i class="fas fa-cog"></i>Configuración </a></span>
           <div class="dropdown-divider"></div>
-          <span class=" "> <a (click)="salir()" class="dropdown-item dropdown-footer"> <i class="fas fa-sign-out-alt"></i> Salir </a></span>
-
-        </div>
+          <span class=" "> <a (click)="salir()" class="dropdown-item dropdown-footer"> <i class="fas fa-sign-out-alt"></i> Salir </a></span>        </div>
       </li>
       <li class="nav-item">
         <a class="nav-link" data-widget="fullscreen" href="#/home" role="button">
@@ -60,57 +58,54 @@
     </ul>
   </nav>
   <!-- /.navbar -->
-
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar elevation-4 sidebar-light-danger">
     <!-- Brand Logo -->
-    <p  class="brand-link ">
-      <img src="../../assets/pixlr-bg-result.png"
+    <p  class="brand-link">
+      <img src="../../assets/Logo_MARPLE.png"
            alt="Logo"
-           class="brand-image img-circle elevation-3"
-           style="opacity: .8">
-      <span class="brand-text font-weight-light h6">MARPLE-ERP</span>
+           class="logo"
+           >
+           <br>
+           <br>       
+      <span class="brand-text font-weight-light h6" style="color: #eb7263;font-weight: bold !important;">MARPLE-ERP</span>
     </p>
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user (optional) -->
       <app-info-usuario (onItemAdded) = 'infoUsuario($event)'></app-info-usuario>
-      <app-menu-lateral (onItemAdded) = 'links($event)'></app-menu-lateral>
+      <app-menu-lateral  [modulos]="modulos"></app-menu-lateral>
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
   </aside>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper" id="content-wrapper">
+    <ngb-progressbar type="dark" [value]="progreso" height="10px"></ngb-progressbar>
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <div class="container-fluid">
-        <app-alerts></app-alerts>
+      <div class="container-fluid">      
       </div><!-- /.container-fluid -->
     </section>
     <!-- Main content -->
     <section class="content">
+      <app-alerts></app-alerts>
       <!-- Default box -->
       <ng-template  appReceptor (onItemAdded) = 'links($event)'></ng-template>
     </section>
-
     <!-- /.content -->
   </div>
-
   <!-- /.content-wrapper -->
   <footer class="main-footer  py-4">
-
     <div class="float-right d-none d-sm-block">
       Fecha {{ time | async}}
-      <b>Version</b> 3.0.5
+      <b>Version</b> 3.0.7
     </div>
     <strong>Copyright &copy; 2021 <a href="">AgileTiCL </a>.</strong> Todos los derechos reservados.
-
   </footer>
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-
+     <!-- Control sidebar content goes here -->
   </aside>
   <!-- /.control-sidebar -->
 </div>

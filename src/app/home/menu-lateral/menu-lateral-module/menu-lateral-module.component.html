@@ -1,0 +1,22 @@
+
+<li class="nav-item has-treeview">
+  <a  class="nav-link"  (click)="isMenuCollapsed = !isMenuCollapsed">
+      <i class="{{module.menu.molIcon}}"></i>
+      <p style="font-weight: bold !important;">
+        {{module.menu.molDes}}
+        <i   [ngClass]="(isMenuCollapsed)?' right fas fa-angle-left':' right fas fa-angle-down'"  ></i>
+      </p>
+    </a>
+    <div [ngbCollapse]="isMenuCollapsed" class="menu-is-opening menu-open" style="padding-left: 2%;">
+      <ul class="nav nav-treeview" style="display: block;" >    
+           
+          <li *ngFor="let item of module.opciones" [ngClass]="(item.optSub =='N')?' nav-item':' nav-item has-treeview'">
+            <a *ngIf="item.optSub == 'N'" (click)='elinks(item.optLink)' class="nav-link" >
+              <i class="far fa-circle nav-icon"></i>
+              <p> {{item.optDes}}</p>
+            </a>
+            <app-menu-lateral-submodule *ngIf="item.optSub == 'S'" [subModule]="item"></app-menu-lateral-submodule>
+          </li>   
+      </ul>
+    </div>
+  </li>

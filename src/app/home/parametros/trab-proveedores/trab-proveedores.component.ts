@@ -1,8 +1,9 @@
+import { LoadingService } from './../../../servicios/loading.service';
 
 import { Proveedor } from './../../../model/proveedor.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LinksService } from 'src/app/servicios/links.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -11,6 +12,8 @@ import { ExcelService } from 'src/app/servicios/excel.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { Router } from '@angular/router';
 import { ProveedoresService } from 'src/app/servicios/proveedores.service';
+import { LogSysService } from 'src/app/servicios/log-sys.service';
+import { LogSys } from 'src/app/model/logSys.model';
 
 @Component({
   selector: 'app-trab-proveedores',
@@ -30,7 +33,7 @@ export class TrabProveedoresComponent implements OnInit {
   archivos        : any []               = [];
   rol             : any;
   gerencia        : any;
-  insProv         : FormGroup;
+  insProv         : UntypedFormGroup;
   valGuar         : boolean              = false;
   tblProveedor    : any                  = {};
   regiones        : any;
@@ -47,9 +50,11 @@ export class TrabProveedoresComponent implements OnInit {
     private excel           : ExcelService,
     private modal           : NgbModal,
     private alertas         : AlertasService,
-    private fg              : FormBuilder,
+    private fg              : UntypedFormBuilder,
     private router          : Router,
-    private serProveedor    : ProveedoresService
+    private serProveedor    : ProveedoresService,
+    private serviLoad       : LoadingService,
+    private serLog          : LogSysService
     )
      {
     this.token = this.servicio.getToken();
@@ -113,6 +118,7 @@ export class TrabProveedoresComponent implements OnInit {
           previous: 'Ant.'
         }
       }}
+      this.serviLoad.sumar.emit(1);
 
       this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
         this.paises = data;
@@ -125,7 +131,7 @@ export class TrabProveedoresComponent implements OnInit {
           this.insProv.controls['idReg'].setValue('');
           this.insProv.controls['idCom'].setValue('');
           this.insProv.controls['idCiu'].setValue('');
-
+          this.serviLoad.sumar.emit(1);
           this.parametros = [{key :'idPai' ,value: field}];
           this.rest.get('regPai' , this.token, this.parametros).subscribe(data => {
             this.regiones = data;
@@ -139,6 +145,7 @@ export class TrabProveedoresComponent implements OnInit {
             this.insProv.controls['idCom'].setValue('');
             this.insProv.controls['idCiu'].setValue('');
             this.parametros = [{key :'idReg' ,value: field} , {key : 'idPai' , value:  this.insProv.controls['idPai'].value}];
+            this.serviLoad.sumar.emit(1);
             this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
               this.ciudades = data;
               });
@@ -150,6 +157,7 @@ export class TrabProveedoresComponent implements OnInit {
             this.comunas = {};
             this.insProv.controls['idCom'].setValue('');
             this.parametros = [{key :'idCiu' ,value: field} , {key :'idReg' , value : this.insProv.controls['idReg'].value } , {key : 'idPai' , value:  this.insProv.controls['idPai'].value} ];
+            this.serviLoad.sumar.emit(1);
             this.rest.get('ciuCom' , this.token, this.parametros).subscribe(data => {
               this.comunas = data;
               });
@@ -163,6 +171,7 @@ export class TrabProveedoresComponent implements OnInit {
 
   public tblData(){
     this.tblProveedor = {};
+    this.serviLoad.sumar.emit(1);
     this.rest.get('trabProveedor' , this.token, this.parametros).subscribe(data => {
       this.tblProveedor = data;
     });
@@ -193,11 +202,14 @@ export class TrabProveedoresComponent implements OnInit {
  public insDir(idPrv : any , prvDir : any , prvNum : any , idPai : any , idReg : any , idCom : any , idCiu: any){
 
   let proveedorx : Proveedor = new Proveedor(idPrv, '' , '' , '','',prvDir, prvNum , idPai , idReg , idCom , idReg , '' , '' ,'','', true);
-
+  this.serviLoad.sumar.emit(1);
   this.rest.post('insPrvDes', this.token , proveedorx).subscribe(
     resp => {
       resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
+          let   des              = 'Ingreso de dirección proveedor id: '+ idPrv;
+          let   log  : LogSys    = new LogSys(2, '' , 23, '	INGRESO DIR PROVEEDOR/CLIENTE'  , des);
+          this.serLog.insLog(log);  
           this.modal.dismissAll();
           setTimeout(()=>{
             this.insProv.controls['prvDir'].setValue('');
@@ -216,6 +228,7 @@ export class TrabProveedoresComponent implements OnInit {
       const proveedor = proveedorx;
       this.serProveedor.setProveedor(proveedor);
       this.parametros = [{key :'idPrv' ,value: proveedorx.id}];
+      this.serviLoad.sumar.emit(1);
       this.rest.get('datPrv' , this.token, this.parametros).subscribe(data => {
         this.serProveedor.setDatPrv(data);
         setTimeout(()=>{

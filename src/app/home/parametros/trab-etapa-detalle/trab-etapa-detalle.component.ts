@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { Etapas } from 'src/app/model/etapas.model';
 import { Etapasdet } from './../../../model/etapasdet.model';
 import { LinksService } from 'src/app/servicios/links.service';
@@ -7,7 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { ExcelService } from 'src/app/servicios/excel.service';
 
@@ -34,14 +35,15 @@ export class TrabEtapaDetalleComponent implements OnInit {
 
 
 
-  constructor(private fb: FormBuilder,
-    private servicio : UsersService,
-    private rest : RestService,
-    private modal : NgbModal,
-    private excel: ExcelService,
-    private servicioaler : AlertasService,
-    private etapasser : EtapasdetService,
-    private servicioLink     : LinksService) {
+  constructor(private fb           : UntypedFormBuilder,
+              private servicio     : UsersService,
+              private rest         : RestService,
+              private modal        : NgbModal,
+              private excel        : ExcelService,
+              private servicioaler : AlertasService,
+              private etapasser    : EtapasdetService,
+              private servicioLink : LinksService,
+              private serviLoad    : LoadingService) {
       this.token     = servicio.getToken();
       this.etapas    = this.etapasser.getEtapa();
       this.etapasDet = new Etapasdet(this.etapas.idEta , this.etapas.etaDes , this.etapas.etaProd, 0 , '' );
@@ -72,6 +74,7 @@ export class TrabEtapaDetalleComponent implements OnInit {
   }
 
   public tblData(){
+    this.serviLoad.sumar.emit(1);
     this.tblEtapas = {};
     this.parametros = [{key :'idEta' ,value: this.etapas.idEta} ];
     this.rest.get('trabEtapasDet' , this.token, this.parametros).subscribe(data => {
@@ -104,11 +107,12 @@ public delEtapas(etapas : any){
   let url      = 'delEtapasDet';
   this.carga   = 'invisible';
   this.loading = true;
-
+  this.serviLoad.sumar.emit(1);
   if(etapas.etaDesDel =='S'){
    this.rest.post(url ,this.token, etapas).subscribe(resp => {
        resp.forEach((elementx : any)  => {
          if(elementx.error == '0'){
+          this.serviLoad.sumar.emit(1);
            this.modal.dismissAll();
            setTimeout(()=>{
              this.servicioaler.setAlert('','');
@@ -148,10 +152,11 @@ public actionEtapaDet( etaDesDes: any  ,tipo :string ){
   }else{
     url = 'insEtapasDet';
   }
-
+  this.serviLoad.sumar.emit(1);
   this.rest.post(url, this.token, etapasx).subscribe((resp:any) => {
     resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
+        this.serviLoad.sumar.emit(1);
         this.modal.dismissAll();
         setTimeout(()=>{
           this.tblEtapas = {};

@@ -6,6 +6,8 @@ import { ProveedoresService } from 'src/app/servicios/proveedores.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { DataTableDirective } from 'angular-datatables';
 import { ExcelService } from 'src/app/servicios/excel.service';
+import { LogSysService } from 'src/app/servicios/log-sys.service';
+import { LogSys } from 'src/app/model/logSys.model';
 
 @Component({
   selector: 'app-up-des-proveeedor',
@@ -32,7 +34,8 @@ export class UpDesProveeedorComponent implements OnInit {
     private servicioaler : AlertasService,
     private servicio     : UsersService,
     private servicioLink : LinksService,
-    private excel        : ExcelService) {
+    private excel        : ExcelService,
+    private serLog       : LogSysService) {
 
        this.proveedor = this.serProveedor.getProveedor();
        this.token     = this.servicio.getToken();
@@ -68,16 +71,17 @@ export class UpDesProveeedorComponent implements OnInit {
      this.rest.post(url ,this.token, proveedor ).subscribe(resp => {
          resp.forEach((elementx : any)  => {
            if(elementx.error == '0'){
-
+            let   des              = 'Eliminar de dirección proveedor id: '+ proveedor.id;
+            let   log  : LogSys    = new LogSys(2, '' , 24, 'ELIMINAR DIR PROVEEDOR/CLIENTE'  , des);
+            this.serLog.insLog(log);
+             
              this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-
              setTimeout(()=>{
                this.servicioaler.setAlert('','');
                this.tblProveedor = {};
                this.rest.get('trabPrvDir' , this.token, this.parametros).subscribe(data => {
                    this.tblProveedor = data;
                });
-
                this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
                  dtInstance.destroy().draw();
                });

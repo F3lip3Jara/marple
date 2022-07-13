@@ -7,7 +7,7 @@ import { Subject, OperatorFunction } from 'rxjs';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { distinctUntilChanged, debounceTime, filter, map } from 'rxjs/operators';
 
@@ -33,7 +33,7 @@ export class TrabOrdenTrabajoComponent implements OnInit {
   loading      : boolean              = true;
   tblOrdenPrd  : any                  = {};
   producto     : any                  = {};
-  filtroOp     : FormGroup;
+  filtroOp     : UntypedFormGroup;
   token        : string               = '';
   parametros   : any []               = [];
   statesx      : any                  ;
@@ -50,7 +50,7 @@ export class TrabOrdenTrabajoComponent implements OnInit {
 
   constructor(private servicio    : UsersService ,
               private servicioget : RestService,
-              private fb          : FormBuilder,
+              private fb          : UntypedFormBuilder,
               private excel       : ExcelService,
               private servicioLink: LinksService,
               private servicioAlert: AlertasService) {

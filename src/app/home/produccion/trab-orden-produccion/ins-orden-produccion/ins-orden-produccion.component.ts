@@ -3,10 +3,9 @@ import { AlertasService } from './../../../../servicios/alertas.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
-
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
@@ -18,8 +17,8 @@ export class InsOrdenProduccionComponent implements OnInit {
   @ViewChild(DataTableDirective, {static: false})
   datatableElement?: DataTableDirective;
 
-  insPrd       : FormGroup;
-  insOrd       : FormGroup;
+  insPrd       : UntypedFormGroup;
+  insOrd       : UntypedFormGroup;
   token        :string                = '';
   proveedores  : any;
   carga        : string               = "";
@@ -29,61 +28,66 @@ export class InsOrdenProduccionComponent implements OnInit {
   parametros   : any []               = [];
   prvNom       :string                = '';
   idPrv        :number                = 0;
-  productos    : any ;
+  productos    : any [];
+  cProductos   : any ;
   ordenes      : any []               = [];
   valcod       : boolean              = false;
   orpdTotP     : number               = 0;
-  valprod                             = false;
+  valprod                             = true;
   valproddet                          = false;
+  etapas       : any ;
+  valcprod     : boolean              = false;
 
   constructor(
     private servicio     : UsersService,
-    private fb           : FormBuilder,
+    private fb           : UntypedFormBuilder,
     private rest         : RestService,
     private modal        : NgbModal,
     private servicioaler : AlertasService,
     private servicioLink : LinksService) {
 
       this.token    = this.servicio.getToken();
-
-      this.insPrd = fb.group({
-        prdCod : ['' , Validators.compose([
-          Validators.required,
-         ])],
-         orpdCant: ['' , Validators.compose([
-          Validators.required,
-          Validators.pattern('^-?[0-9]\\d*?$')
-         ])],
-         orpdCantDis: ['' , Validators.compose([
-          Validators.required,
-          Validators.pattern('^-?[0-9]\\d*?$')
-         ])],
-         orpdObs: ['' , Validators.compose([
-
-         ])],
-
-      });
+      this.insPrd   = fb.group({
+                                  prdCod : ['' , Validators.compose([
+                                    Validators.required,
+                                  ])],
+                                  orpdCant: ['' , Validators.compose([
+                                    Validators.required,
+                                    Validators.pattern('^-?[0-9]\\d*?$')
+                                  ])],
+                                  orpdCantDis: ['' , Validators.compose([
+                                    Validators.required,
+                                    Validators.pattern('^-?[0-9]\\d*?$')
+                                  ])],
+                                  orpdObs: ['' , Validators.compose([
+                            
+                                  ])]
+                        });
 
       this.insOrd = fb.group({
-        orpFech : ['' , Validators.compose([
-          Validators.required,
-         ])],
-         orpNumOc : ['' , Validators.compose([
-          Validators.required,
-         ])],
+                       orpFech : ['' , Validators.compose([
+                         Validators.required,
+                        ])],
+                        orpNumOc : ['' , Validators.compose([
+                         Validators.required,
+                        ])],
+               
+                        orpObs : ['' , Validators.compose([
+                        ])],
+               
+                        orpNumRea : ['' , Validators.compose([
+                         Validators.required,
+                        ])],
+               
+                        idEta:['', Validators.compose([
+                         Validators.required
+                       ]) ]
+               
+                     });
 
-         orpObs : ['' , Validators.compose([
-
-         ])],
-
-         orpNumRea : ['' , Validators.compose([
-          Validators.required,
-         ])]
-
-        });
-
-
-
+        this.productos = [];
+        this.cProductos= [];
+        this.etapas    = {};
   }
 
   ngOnInit(): void {
@@ -108,66 +112,37 @@ export class InsOrdenProduccionComponent implements OnInit {
         }
       }}
 
+      this.rest.get('prodTerm' , this.token , this.parametros).subscribe(data => {
+        this.cProductos = data;
+      });
 
       this.insPrd.controls['prdCod'].valueChanges.pipe(
-        filter(text => text != null &&  text.length >= 2
+        filter(text => text != null &&  text.length > 1
           ),
         debounceTime(200),
         distinctUntilChanged()
       ).subscribe( field => {
-        this.valproddet   = false;
-        let parm : any[]  = [{key :'prdCod' ,value: field} ];
-        let error ;
-        this.rest.get('valPrdOrd' , this.token, parm).subscribe(data =>{
-             error = data ;
-             if(error == 2){
-                this.rest.get('filPrdCod' , this.token, parm).subscribe(data =>{
-                   this.productos = data;
-                });
-                this.valprod      = true;
-              }else{
-                this.productos = [];
-                this.valprod      = false;
-              }
-            this.ordenes.forEach(element => {
-              if(element.prdCod == field){
-                this.valproddet= true;
-              }else{
-                this.valproddet= false;
-
-              }
-          });
-
-          })
-      });
-
-      this.insPrd.controls['orpdCant'].valueChanges.pipe(
-        filter(text => text != null && text.length >= 0),
-        debounceTime(200),
-        distinctUntilChanged()).subscribe(field => {
-            this.valprod = false;
-            let parm : any[]  = [{key :'prdCod' ,value: this.insPrd.controls['prdCod'].value} ];
-            this.rest.get('valPrdOrd' , this.token, parm).subscribe(data =>{
-                  if(data == 2){
-                      this.valprod = true;
+        console.log(this.valcprod);
+          
+        if(this.valcprod == true){
+            this.valcprod = false;
+        }else{
+          this.productos   = [];          
+          this.cProductos.filter(
+              (producto : any) =>{
+                  if((producto.prdCod.indexOf(field) > -1) == true){
+                    this.productos.push(producto);
+                    this.valprod   = false;
                   }else{
-                    this.valprod = false;
-                    this.rest.get('filPrdCod' , this.token, parm).subscribe((data : any) =>{
-                      let elemprdCod = <HTMLInputElement> document.getElementById('prdCod');
-                      let elemprdDes = <HTMLInputElement> document.getElementById('prdDes');
-                      data.forEach((element: any) => {
-                        elemprdCod.value = element.cod_pareo;
-                        elemprdDes.value = element.descripcion;
-                        console.log(element.cod_pareo);
-                        this.productos   = [];
-                        this.insPrd.controls['prdCod'].setValue( element.cod_pareo);
-                    });
-
-                   });
+                  if((producto.prdDes.indexOf(field) > -1) == true){
+                    this.productos.push(producto);
+                    this.valprod   = false;
                   }
-            });
-
-        });
+                  }
+              });
+        }        
+      });
+     
 
       this.insOrd.controls['orpNumRea'].valueChanges.pipe(
         filter(text => text.length > 1),
@@ -176,15 +151,16 @@ export class InsOrdenProduccionComponent implements OnInit {
           this.validaNumRea(field);
         });
 
-
-
+        this.rest.get('etapasProd' , this.token , this.parametros).subscribe(data =>{
+          this.etapas	= data;
+       });
   }
 
   proveedor(content : any){
     this.valcod    = false;
     this.productos = [];
     this.valproddet= false;
-    this.modal.open(content);
+    this.modal.open(content, {size:'xl'});
     this.tblData();
   }
 
@@ -210,7 +186,7 @@ export class InsOrdenProduccionComponent implements OnInit {
      this.orpdTotP = orpdCant - orpdCantDis;
 
     if(this.orpdTotP <= 0){
-      this.servicioaler.setAlert('Revisar cantidades no se puede producir cantidades en negativo','warning');
+      this.servicioaler.setAlert('Revisar!! no se puede producir cantidades en negativo','warning');
       this.servicioaler.disparador.emit(this.servicioaler.getAlert());
 
       setTimeout(()=>{
@@ -218,19 +194,49 @@ export class InsOrdenProduccionComponent implements OnInit {
       },2000);
 
     }else{
-      this.ordenes.push({
-        'prdCod'      : prdCod,
-        'prdDes'      : prdDes,
-        'orpdCant'    : orpdCant,
-        'orpdCantDis' : orpdCantDis,
-        'orpdTotP'    : this.orpdTotP,
-        'orpdObs'     : orpdObs
-    });
-    this.insPrd.reset();
-    this.modal.dismissAll();
+      this.parametros = [{"key": "prdCod" , "value" : prdCod}];  
+      
+      this.rest.get('valPrdCod', this.token , this.parametros).subscribe(data => {
+
+        console.log(data);
+        
+        if(data == 1){       
+              this.valprod = false;
+              
+              
+        }else{        
+            this.valprod   = true;
+        }
+       });
+     
+       if(this.valprod == true){
+        this.servicioaler.setAlert('Producto no valido','warning');
+        this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+  
+        setTimeout(()=>{
+          this.servicioaler.setAlert('','');
+        },2000);
+
+        let elemprdCod   = <HTMLInputElement> document.getElementById('prdCod');
+        let elemprdDes   = <HTMLInputElement> document.getElementById('prdDes');
+        elemprdCod.value = '';
+        elemprdDes.value = '';
+  
+       }else{
+        
+         this.ordenes.push({
+              'prdCod'      : prdCod,
+              'prdDes'      : prdDes,
+              'orpdCant'    : orpdCant,
+              'orpdCantDis' : orpdCantDis,
+              'orpdTotP'    : this.orpdTotP,
+              'orpdObs'     : orpdObs
+          });
+          this.insPrd.reset();
+          this.modal.dismissAll();
+          this.valcprod     = false;
+       }      
     }
-
-
    }
 
 
@@ -238,21 +244,21 @@ export class InsOrdenProduccionComponent implements OnInit {
       this.modal.open(selprd);
    }
 
-   selectorPrd(xproducto:any){
-     let elemprdCod = <HTMLInputElement> document.getElementById('prdCod');
-     let elemprdDes = <HTMLInputElement> document.getElementById('prdDes');
-
-     elemprdCod.value = xproducto.cod_pareo;
-     elemprdDes.value = xproducto.descripcion;
+ selectorPrd(xproducto:any){
      this.productos   = [];
-     this.insPrd.controls['prdCod'].setValue( xproducto.cod_pareo);
+     let elemprdCod   = <HTMLInputElement> document.getElementById('prdCod');
+     let elemprdDes   = <HTMLInputElement> document.getElementById('prdDes');
+     elemprdCod.value = xproducto.prdCod;
+     elemprdDes.value = xproducto.prdDes;
+     this.insPrd.controls['prdCod'].setValue( xproducto.prdCod);
+     this.valcprod    = true; 
    }
 
    delPrd(index:any){
      this.ordenes.splice(index , 1);
    }
 
-   generaOP(orpFech: any ,orpNumOc : any , orpNumRea: any  , orpObs : any ){
+   generaOP(orpFech: any ,orpNumOc : any , orpNumRea: any  , orpObs : any , idEta: any ){
 
        let ordenPrd : any [] = [];
        this.val              = true;
@@ -262,7 +268,8 @@ export class InsOrdenProduccionComponent implements OnInit {
           'orpNumRea': orpNumRea,
           'orpObs'   : orpObs,
           'idPrv'    : this.idPrv,
-          'ordenes'  : this.ordenes
+          'ordenes'  : this.ordenes,
+          'idEta'    : idEta
       });
 
       this.rest.post('insOrd', this.token, ordenPrd).subscribe(resp => {
@@ -289,7 +296,7 @@ export class InsOrdenProduccionComponent implements OnInit {
 
    }
 
-   public validaNumRea(field : any){
+  public validaNumRea(field : any){
     this.parametros = [{key :'orpNumRea' ,value: field.trim()}];
     this.rest.get('valCodNumRea' , this.token , this.parametros).subscribe((cant : any)=>{
         if(cant != 0){
@@ -298,11 +305,10 @@ export class InsOrdenProduccionComponent implements OnInit {
           this.valcod = false;
         }
     });
-
-   }
+  }
 
   public volver(){
-     const d = 'op';
+    const d = 'op';
     this.servicioLink.disparador.emit(d);
     return false;
   }

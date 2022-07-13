@@ -9,15 +9,11 @@
   <div class="card-body">
       <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel"><i class="fas fa-file-csv"></i>Excel</button>
       <a (click) = "modalIns(modalInsUn)" class="btn  btn-outline-primary btn-sm" ngbTooltip="Nuevo"><i class="fas fa-address-card" ></i>Nuevo</a>
-
-
     <div class="loading" *ngIf= "loading" >
       <img src = "../../../assets/Circles-menu-3.gif">
      </div>
-
  <div>
   <br>
-
   <div class="table-responsive"   *ngIf="tblUnidad?.length > 0" class="{{carga}}">
     <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
       <thead>

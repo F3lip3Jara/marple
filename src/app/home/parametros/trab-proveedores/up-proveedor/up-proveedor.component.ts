@@ -1,4 +1,4 @@
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { LinksService } from 'src/app/servicios/links.service';
 import { Proveedor } from './../../../../model/proveedor.model';
 import { Component, OnInit } from '@angular/core';
@@ -6,6 +6,8 @@ import { ProveedoresService } from 'src/app/servicios/proveedores.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { UsersService } from 'src/app/servicios/users.service';
+import { LogSys } from 'src/app/model/logSys.model';
+import { LogSysService } from 'src/app/servicios/log-sys.service';
 
 @Component({
   selector: 'app-up-proveedor',
@@ -17,7 +19,7 @@ export class UpProveedorComponent implements OnInit {
 
   proveedor        : any;
   datPrv           : any;
-  insProv          : FormGroup;
+  insProv          : UntypedFormGroup;
   regiones         : any;
   comunas          : any;
   paises           : any;
@@ -41,7 +43,8 @@ export class UpProveedorComponent implements OnInit {
               private servicioaler : AlertasService,
               private servicio     : UsersService,
               private servicioLink : LinksService,
-              private fg           : FormBuilder,
+              private fg           : UntypedFormBuilder,
+              private serLog       : LogSysService
     ) {
 
       this.token      = this.servicio.getToken();
@@ -53,11 +56,7 @@ export class UpProveedorComponent implements OnInit {
          this.idReg = element.idReg;
          this.idCiu = element.idCiu;
          this.idCom = element.idCom;
-
-        console.log(this.idCom);
-
-
-
+     
       });
 
 
@@ -217,6 +216,7 @@ export class UpProveedorComponent implements OnInit {
                      prvPrv    : any    ,
                      prvAct    : any    ){
 
+    let xprvAct = true;            
     if(prvCli == true){
         prvCli = 'S';
     }else{
@@ -227,6 +227,7 @@ export class UpProveedorComponent implements OnInit {
       prvAct = 'S';
     }else{
       prvAct = 'N';
+      xprvAct =false;
     }
 
     if(prvPrv == true){
@@ -235,26 +236,37 @@ export class UpProveedorComponent implements OnInit {
         prvPrv = 'N';
     }
 
+    
+ 
+
     let proveedorx : Proveedor  = new Proveedor(this.proveedor.id,this.proveedor.prvRut, prvNom , prvNom2 , prvGiro , prvDir, prvNum, idPai, idReg, idCom , idCiu , prvMail , prvTel , prvCli , prvPrv , prvAct);
-    this.val                   = true;
+    this.val                    = true;
 
-    this.rest.post('updProveedor', this.token, proveedorx).subscribe(resp => {
-      if(resp.error == '0' ){
-        this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-
-        setTimeout(()=>{
-
-          this.servicioaler.setAlert('','');
-        },1500);
-      }else{
-        this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-        setTimeout(()=>{
-          this.servicioaler.setAlert('','');
-        },1500);
-        this.val=false;
-      }
-
-
+    this.rest.post('updProveedor', this.token, proveedorx).subscribe(resp => {  
+      resp.forEach((elementx : any)  => {       
+        if(elementx.error == '0' ){
+          this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+          let  des = 'Proveedor actualizado id: ' + this.proveedor.id;
+          let  log  : LogSys    = new LogSys(2, '' , 21, 'ACTUALIZAR PROVEEDOR/CLIENTE'  , des);
+          this.serLog.insLog(log);   
+          
+          if(xprvAct == false){
+            let  des = 'Proveedor deshabilitado id: ' + this.proveedor.id;
+            let  log  : LogSys    = new LogSys(2, '' , 22, 'DESHABILITAR PROVEEDOR/CLIENTE'  , des);
+            this.serLog.insLog(log);  
+          }
+          setTimeout(()=>{
+            this.servicioaler.setAlert('','');
+          },1500);
+          this.val=false;
+        }else{
+          this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+          setTimeout(()=>{
+            this.servicioaler.setAlert('','');
+          },1500);
+          this.val=false;
+        }
+      });
     });
 
 

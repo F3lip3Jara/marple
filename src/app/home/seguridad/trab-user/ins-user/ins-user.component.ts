@@ -1,10 +1,11 @@
+import { LoadingService } from './../../../../servicios/loading.service';
 import { LogSys } from './../../../../model/logSys.model';
 import { LogSysService } from './../../../../servicios/log-sys.service';
 import { Alert } from 'src/app/model/alert.model';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { Empleado } from './../../../../model/empleado.model';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, FormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { LinksService } from 'src/app/servicios/links.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -18,24 +19,25 @@ import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 })
 export class InsUserComponent implements OnInit {
 
-  insUser         : FormGroup;
+  insUser         : UntypedFormGroup;
   token           : string  = '';
   previsualizador : any  = null ;
-  rol             : any;
+  roles           : any     = {};
   parms           : any     = [];
   val             : boolean = false;
-  gerencia        : any;
+  gerencia        : any     = {};
   validNombre     : boolean = false;
   dato            : number  = 0;
 
 
-  constructor(fgInsUser  : FormBuilder,
+  constructor(fgInsUser  : UntypedFormBuilder,
     private servicio     : UsersService,
     private rest         : RestService,
     private servicioLink : LinksService,
     private alertas      : AlertasService,
-    private serLogSys    : LogSysService ) {
-
+    private serLog       : LogSysService,
+    private serviLoad    : LoadingService
+     ) {
 
       this.insUser = fgInsUser.group({
         empApe : ['' , Validators.compose([
@@ -62,6 +64,7 @@ export class InsUserComponent implements OnInit {
 
 
     public guardar(nombre: string , apellido: string , fecha: string , rol: number , gerId: number , empName : string){
+      this.serviLoad.sumar.emit(1);
       this.val= true;
       let empleado : Empleado = new Empleado(nombre, apellido, this.previsualizador , 1 , fecha , rol , gerId, empName);
       this.rest.post('insUser', this.token , empleado).subscribe(data => {
@@ -72,8 +75,10 @@ export class InsUserComponent implements OnInit {
                   this.servicioLink.disparador.emit(d);
                   this.alertas.setAlert('','');
                 },1500);
-                const serLog : LogSys = new LogSys(1, '' , 2 , 'INGRESO DE USUARIO' , '');
-                this.serLogSys.disparador.emit(serLog);
+                let   des    : string = 'Usuario creado ' + empName;
+                const log    : LogSys = new LogSys(1, '' , 2 , 'INGRESO DE USUARIO' , des);
+                this.serLog.insLog(log);
+
               }else{
                 this.alertas.disparador.emit(this.alertas.getAlert());
                 setTimeout(()=>{
@@ -93,8 +98,10 @@ export class InsUserComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.serviLoad.sumar.emit(2);
+
     this.rest.get('trabRoles', this.token , this.parms).subscribe(data => {
-      this.rol = data;
+      this.roles = data;
    });
 
    this.rest.get('trabGerencia', this.token , this.parms).subscribe(data => {
@@ -133,7 +140,6 @@ export class InsUserComponent implements OnInit {
   public validaNombre(name : string){
 
     this.parms        = [{key :'emploName' ,value: name.trim()}];
-
 
     this.rest.get('valUsuario' , this.token , this.parms).subscribe((cant : any)=>{
         this.dato =  cant;

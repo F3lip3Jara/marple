@@ -1,6 +1,7 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { Moneda } from './../../../model/moneda.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -9,6 +10,8 @@ import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { Alert } from 'src/app/model/alert.model';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { LogSysService } from 'src/app/servicios/log-sys.service';
+import { LogSys } from 'src/app/model/logSys.model';
 
 @Component({
   selector: 'app-trab-monedas',
@@ -30,16 +33,18 @@ export class TrabMonedasComponent implements OnInit {
   moneda       : Moneda;
   validCod     : boolean              = false;
   dato         : number               = 0;
-  insMon       : FormGroup;
-  upMon        : FormGroup;
+  insMon       : UntypedFormGroup;
+  upMon        : UntypedFormGroup;
   val          : boolean              = false;
 
-  constructor(private fb: FormBuilder,
-    private servicio    : UsersService,
-    private rest        : RestService,
-    private modal       : NgbModal,
-    private servicioaler: AlertasService,
-    private excel       : ExcelService) {
+  constructor(private fb          : UntypedFormBuilder,
+              private servicio    : UsersService,
+              private rest        : RestService,
+              private modal       : NgbModal,
+              private servicioaler: AlertasService,
+              private excel       : ExcelService,
+              private serviLoad   : LoadingService,
+              private serLog      : LogSysService) {
 
       this.token    = this.servicio.getToken();
       this.moneda = new Moneda(0, '' , '');
@@ -99,6 +104,7 @@ export class TrabMonedasComponent implements OnInit {
 
   public tblData(){
     this.tblMoneda = {};
+    this.serviLoad.sumar.emit(1);
     this.rest.get('trabMoneda' , this.token, this.parametros).subscribe(data => {
         this.tblMoneda = data;
     });
@@ -108,11 +114,9 @@ export class TrabMonedasComponent implements OnInit {
      },3000 );
    }
 
-   public modalIns(content : any ){
-
+  public modalIns(content : any ){
     this.modal.open(content);
-
- }
+  }
 
  public modelUp(content :any , xmoneda: Moneda ){
   this.moneda.setId(xmoneda.idMon);
@@ -126,11 +130,16 @@ public del( moneda : any) : boolean{
   let url      = 'delMoneda';
   this.carga   = 'invisible';
   this.loading = true;
-
+  this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, moneda).subscribe(resp => {
        resp.forEach((elementx : any)  => {
          if(elementx.error == '0'){
+          this.serviLoad.sumar.emit(1);
            this.modal.dismissAll();
+           let des        = 'Moneda eliminada ' + moneda.monCod ;
+           let log        = new LogSys(2, '' , 19 , 'ELIMINAR MONEDA' , des);
+           this.serLog.insLog(log);
+
            setTimeout(()=>{
              this.tblMoneda = {};
              this.rest.get('trabMoneda' , this.token, this.parametros).subscribe(data => {
@@ -161,15 +170,26 @@ public action(xmonDes : any , xmonCod : any , tipo :string ) : boolean{
   this.loading = true;
   this.val     = true;
   let monedax  = new Moneda(this.moneda.idMon , xmonDes  , xmonCod );
+  let des      = '';
+  let lgName   = '';
+  let idEtaDes = 0;
 
   if(tipo =='up'){
-     url = 'updMoneda';
+     url      = 'updMoneda';
+     des      = 'Actualiza moneda ' + xmonCod;
+     lgName   = 'ACTUALIZAR MONEDA';
+     idEtaDes = 18;
   }else{
-    url = 'insMoneda';
+    url       = 'insMoneda';
+    des       = 'Ingreso de moneda ' + xmonCod;
+     lgName   = 'INGRESO MONEDA';
+     idEtaDes = 17;
   }
+  this.serviLoad.sumar.emit(1);
  this.rest.post(url, this.token, monedax).subscribe(resp => {
       resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
+        this.serviLoad.sumar.emit(1);
           this.modal.dismissAll();
           setTimeout(()=>{
             this.tblMoneda = {};
@@ -179,6 +199,10 @@ public action(xmonDes : any , xmonCod : any , tipo :string ) : boolean{
             this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
               dtInstance.destroy().draw();
             });
+            
+            let log        = new LogSys(2, '' , idEtaDes , lgName , des);
+            this.serLog.insLog(log);
+ 
 
             this.carga    = 'visible';
             this.loading  = false;

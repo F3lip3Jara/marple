@@ -1,0 +1,142 @@
+<div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Roles - Módulo</h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+          <i class="fas fa-minus"></i></button>
+      </div>
+    </div>
+    <div class="card-body">  
+        <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel" ><i class="fas fa-file-csv"></i>Excel</button>
+        <a (click) = "modalIns(modalRolesIns)" class="btn  btn-outline-primary btn-sm" ngbTooltip= "Nuevo"><i class="fas fa-address-card" ></i>Nuevo</a>  
+      <div class="loading" *ngIf= "loading" >
+        <img src = "../../../assets/Circles-menu-3.gif">
+       </div>  
+   <div>
+    <br>
+    <div class="table-responsive"   *ngIf="tblModRol?.length > 0" class="{{carga}}">
+      <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Rol</th>
+            <th>Módulo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let roles of tblModRol">
+            <th>{{roles.idRolMod}}</th>
+            <th>{{roles.rolDes}}</th>
+            <th>{{roles.molDes}}</th>
+            <th>
+              <a style= "margin : 1px ;" (click) = "modelUp(modalRolesUdp , roles)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+              <a style= "margin : 1px ;"  (click) = "delRoles(roles)" class="btn btn-warning btn-xs" ngbTooltip="Eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+  </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+      Marple
+    </div>
+    <!-- /.card-footer-->
+  </div>
+  <ng-template #modalRolesUdp let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Modal actualiza Rol</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>  <!-- /.card-header -->
+    <div class="modal-body">
+      <form >
+        <div class="card-body">
+          <div class="form-group">
+            <label for="">Código</label>
+            <input type="text" class="form-control" id="" placeholder="" value="{{roles.idRol}}"  oninput="this.value = this.value.toUpperCase()"  disabled>
+          </div>
+          <div class="form-group">
+            <label for="">Descripción</label>
+            <input type="text" class="form-control" name = "rolDes" id="rolDes" placeholder=""  oninput="this.value = this.value.toUpperCase()" value="{{roles.rolDes}}" #uprolDes >
+          </div>
+        </div>
+        <!-- /.card-body -->
+      </form>
+  
+      <!-- form start -->
+  
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary"  [disabled]="loading">Guardar</button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+  </ng-template>
+  
+  
+  <ng-template #modalRolesIns let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Modal Roles -Módulo</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form 
+    [formGroup] = "insRolMod"
+    (ngSubmit)  = "action(insRolMod.controls['idRol'].value,
+                          insRolMod.controls['idMol'].value,
+                          'ins')"
+  >
+    <div class="modal-body">
+  
+        <div class="form-group">
+            <label for="nombre">Roles</label>  
+            <div  *ngIf=" !roles.length ">
+              <div class="spinner-border spinner-border-sm" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <div class="spinner-grow spinner-grow-sm" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>  
+            <div class=" input-group-sm" *ngIf="roles.length >0">
+              <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName="idRol" >
+                <option  *ngFor = "let rol of roles"  value="{{rol.idRol}}">{{rol.rolDes}}</option>
+              </select>
+            </div>
+            <div *ngIf = "insRolMod.controls['idRol'].hasError('required')">
+                <span class="text-danger">Campo obligatorio!</span>
+              </div>
+           </div>
+           <div class="form-group">
+            <label for="nombre">Modulos</label>  
+            <div  *ngIf=" !modulos.length ">
+              <div class="spinner-border spinner-border-sm" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <div class="spinner-grow spinner-grow-sm" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>  
+            <div class=" input-group-sm" *ngIf="modulos.length >0">
+              <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName="idMol">
+                <option  *ngFor = "let modulo of modulos"  value="{{modulo.idMol}}">{{modulo.molDes}}</option>
+              </select>
+            </div>
+            <div *ngIf = "insRolMod.controls['idMol'].hasError('required')">
+                <span class="text-danger">Campo obligatorio!</span>
+              </div>
+           </div>
+        <!-- /.card-body -->
+      
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary"  *ngIf ="insRolMod.valid"   [disabled]="loading">Guardar</button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+</form>
+  </ng-template>
+  

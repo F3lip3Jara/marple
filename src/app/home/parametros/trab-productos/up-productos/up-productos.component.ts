@@ -1,12 +1,15 @@
+import { LoadingService } from './../../../../servicios/loading.service';
 import { ProductosServiceService } from './../../../../servicios/productos-service.service';
 import { LinksService } from './../../../../servicios/links.service';
 import { AlertasService } from './../../../../servicios/alertas.service';
 import { RestService } from './../../../../servicios/rest.service';
 import { UsersService } from './../../../../servicios/users.service';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Producto } from 'src/app/model/producto.model';
+import { LogSys } from 'src/app/model/logSys.model';
+import { LogSysService } from 'src/app/servicios/log-sys.service';
 
 @Component({
   selector: 'app-up-productos',
@@ -15,7 +18,7 @@ import { Producto } from 'src/app/model/producto.model';
 })
 export class UpProductosComponent implements OnInit {
 
-  insProd      : FormGroup;
+  insProd      : UntypedFormGroup;
   loading      : boolean              = true;
   medidas      :any;
   monedas      :any;
@@ -31,12 +34,15 @@ export class UpProductosComponent implements OnInit {
   mensaje      : string               = '';
   idPrd        : number               = 0;
 
-  constructor(private fg          : FormBuilder,
+  constructor(private fg          : UntypedFormBuilder,
               private servicio    : UsersService,
               private rest        : RestService,
               private servicioaler: AlertasService,
               private servicioLink: LinksService,
-              private servicioPrd : ProductosServiceService) {
+              private servicioPrd : ProductosServiceService,
+              private serviLoad   : LoadingService,
+              private serLog      : LogSysService
+              ) {
 
       this.medidas       = {};
       this.monedas       = {};
@@ -229,6 +235,8 @@ export class UpProductosComponent implements OnInit {
         });
       }
       });
+
+      this.serviLoad.sumar.emit(4);
   }
 
   public guardar(
@@ -263,6 +271,10 @@ export class UpProductosComponent implements OnInit {
     this.rest.post('updProducto', this.token, producto).subscribe(resp => {
      resp.forEach((elementx : any)  => {
           if(elementx.error == '0' ){
+            let des        = 'Actualizar material/producto ' + prdCod;
+            let log        = new LogSys(2, '' , 35 , 'ACTUALIZAR MATERIAL' , des);
+            this.serLog.insLog(log);    
+
             this.servicioaler.disparador.emit(this.servicioaler.getAlert());
             setTimeout(()=>{
               const d = 'productos';

@@ -1,5 +1,6 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Grupo } from './../../../model/grupo.model';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
@@ -9,6 +10,8 @@ import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { Alert } from 'src/app/model/alert.model';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { LogSysService } from 'src/app/servicios/log-sys.service';
+import { LogSys } from 'src/app/model/logSys.model';
 
 @Component({
   selector: 'app-trab-grupo',
@@ -30,16 +33,18 @@ export class TrabGrupoComponent implements OnInit {
   grupo        : Grupo;
   validCod     : boolean              = false;
   dato         : number               = 0;
-  insGrp       : FormGroup;
-  upGrp        : FormGroup;
+  insGrp       : UntypedFormGroup;
+  upGrp        : UntypedFormGroup;
   val          : boolean              = false;
 
-  constructor(private fb: FormBuilder,
-    private servicio    : UsersService,
-    private rest        : RestService,
-    private modal       : NgbModal,
-    private servicioaler: AlertasService,
-    private excel       : ExcelService) {
+  constructor(private fb          : UntypedFormBuilder,
+              private servicio    : UsersService,
+              private rest        : RestService,
+              private modal       : NgbModal,
+              private servicioaler: AlertasService,
+              private excel       : ExcelService,
+              private serviLoad   : LoadingService,
+              private serLog      : LogSysService) {
 
       this.token    = this.servicio.getToken();
       this.grupo    = new Grupo(0, '' , '');
@@ -100,6 +105,7 @@ export class TrabGrupoComponent implements OnInit {
   }
 
   public tblData(){
+    this.serviLoad.sumar.emit(1);
     this.tblGrupo = {};
     this.rest.get('trabGrupo' , this.token, this.parametros).subscribe(data => {
         this.tblGrupo = data;
@@ -124,14 +130,18 @@ export class TrabGrupoComponent implements OnInit {
   this.modal.open(content);
 }
 
-public del( color : any) : boolean{
+public del( grupo : any) : boolean{
   let url      = 'delGrupo';
   this.carga   = 'invisible';
   this.loading = true;
-
-   this.rest.post(url ,this.token, color).subscribe(resp => {
+  this.serviLoad.sumar.emit(1);
+   this.rest.post(url ,this.token, grupo).subscribe(resp => {
        resp.forEach((elementx : any)  => {
          if(elementx.error == '0'){
+          let des        = 'Grupo eliminado ' + grupo.grpCod ;
+          let log        = new LogSys(2, '' , 30 , 'ELIMINAR GRUPO' , des);
+          this.serLog.insLog(log);
+          this.serviLoad.sumar.emit(1);
            this.modal.dismissAll();
            this.servicioaler.disparador.emit(this.servicioaler.getAlert());
 
@@ -161,20 +171,35 @@ public del( color : any) : boolean{
 }
 
 public action(xgrpDes : any , xgrpCod : any , tipo :string ) : boolean{
-  let url      = '';
-  this.carga   = 'invisible';
-  this.loading = true;
-  this.val     = true;
-  let grupox   = new Grupo(this.grupo.idGrp , xgrpDes , xgrpCod);
+  let url       = '';
+  this.carga    = 'invisible';
+  this.loading  = true;
+  this.val      = true;
+  let grupox    = new Grupo(this.grupo.idGrp , xgrpDes , xgrpCod);
+  let des       = '';
+  let lgName    = '';
+  let idEtaDes  = 0;
+
 
   if(tipo =='up'){
-     url = 'updGrupo';
+     url      = 'updGrupo';
+     des      = 'Actualiza grupo ' + xgrpCod;
+     lgName   = 'ACTUALIZAR GRUPO';
+     idEtaDes = 29;
   }else{
-    url = 'insGrupo';
+    url       = 'insGrupo';
+    des       = 'Ingresa grupo ' + xgrpCod;
+    lgName    = 'INGRESO GRUPO';
+    idEtaDes  = 28;
   }
+  this.serviLoad.sumar.emit(1);
  this.rest.post(url, this.token, grupox).subscribe(resp => {
       resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
+        let log        = new LogSys(2, '' , idEtaDes , lgName , des);
+        this.serLog.insLog(log);
+
+        this.serviLoad.sumar.emit(1);
           this.modal.dismissAll();
           setTimeout(()=>{
             this.tblGrupo = {};

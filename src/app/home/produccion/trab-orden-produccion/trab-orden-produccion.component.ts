@@ -7,7 +7,7 @@ import { Subject, OperatorFunction } from 'rxjs';
 import { NgbTypeahead, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { distinctUntilChanged, debounceTime, filter, map } from 'rxjs/operators';
 
@@ -31,23 +31,24 @@ export class TrabOrdenProduccionComponent implements OnInit {
   loading      : boolean              = true;
   tblOrdenPrd  : any                  = {};
   producto     : any                  = {};
-  filtroOp     : FormGroup;
+  filtroOp     : UntypedFormGroup;
   token        : string               = '';
   parametros   : any []               = [];
   statesx      : any                  ;
   states       : string[]             = [];
  // upPrd        : FormGroup             ;
-  carga        : string              = "invisible";
+  carga        : string               = "invisible";
   model        : any;
   xorden       : any;
   xorddet      : any                  = {};
   ot           : any []               = [];
   val          : boolean              = false;
+  cargad       : boolean              = false;
 
   constructor(private servicio    : UsersService ,
               private servicioget : RestService,
               private modal       : NgbModal,
-              private fb          : FormBuilder,
+              private fb          : UntypedFormBuilder,
               private excel       : ExcelService,
               private servicioLink: LinksService,
               private servicioAlert: AlertasService
@@ -182,11 +183,15 @@ ngAfterViewInit(): void {
    let idOrp         = this.xorden.id ;
    let parm : any[]  = [{key :'idOrp' ,value: idOrp} ];
    this.xorddet      = {};
+   this.cargad       = false;
+
    this.servicioget.get('OrdPDetDta' , this.token, parm).subscribe(respuesta => {
         this.xorddet = respuesta;
+        this.cargad  = true;
     });
+    console.log(this.cargad);
     this.ot          = [];
-   this.modal.open(content , { size: 'xl' });
+    this.modal.open(content , { size: 'xl' });
  }
 
  argrerDet(ord : any  , valor: any){

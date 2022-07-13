@@ -1,8 +1,17 @@
 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+
+  <div class="mx-auto" *ngIf="!usuario.length" >
+    <div class="spinner-border spinner-border-sm" role="status">
+      <span class=" sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow spinner-grow-sm" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
   <div *ngIf="imgName"  class="image">
     <img src="{{imgName}}" class="img-circle elevation-2" alt="User Image">
   </div>
   <div class="info">
-    <p class="d-block">{{usuario}}</p>
+    <p class="d-block" style="font-weight: bold !important">{{usuario}}</p>
   </div>
 </div>

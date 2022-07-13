@@ -58,7 +58,7 @@
     </button>
   </div>  <!-- /.card-header -->
   <form  [formGroup] = "upPais"
-  (ngSubmit)  = "action( upPais.controls['paiDes'].value ,
+         (ngSubmit)  = "action( upPais.controls['paiDes'].value ,
                          upPaicod.value ,
                          'up' )">
   <div class="modal-body">
@@ -107,7 +107,7 @@
     </button>
   </div>
   <form  [formGroup] = "insPais"
-  (ngSubmit)  = "action( insPais.controls['paiDes'].value ,
+         (ngSubmit)  = "action( insPais.controls['paiDes'].value ,
                    insPais.controls['paiCod'].value ,
                   'ins' )">
   <div class="modal-body">

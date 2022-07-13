@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { LogSysService } from './../../../servicios/log-sys.service';
 import { LogSys } from './../../../model/logSys.model';
 import { tblUsuario } from './../../../model/tblUsuario.model';
@@ -6,7 +7,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
 import { Component,  OnInit,  ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
@@ -33,18 +34,18 @@ export class TrabUserComponent implements OnInit {
   fileToUpload?   : File;
   usuario         : tblUsuario           = new tblUsuario (0 , '', '','','','','','','','', '') ;
   valGuar         : boolean              = false;
-  udpUser         : FormGroup;
+  udpUser         : UntypedFormGroup;
 
   constructor(
     private servicio        : UsersService,
     private rest            : RestService,
-
     private servicioLink    : LinksService,
     private excel           : ExcelService,
     private modal           : NgbModal,
     private alertas         : AlertasService,
-    fgUpUser                : FormBuilder,
-    private serLogSys       : LogSysService
+    fgUpUser                : UntypedFormBuilder,
+    private serLog          : LogSysService,
+    private serviLoad       : LoadingService
     ) {
     this.token = this.servicio.getToken();
 
@@ -67,6 +68,8 @@ export class TrabUserComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.serviLoad.sumar.emit(3);
+    this.tblData();
 
     this.rest.get('trabRoles', this.token , this.parametros).subscribe(data => {
       this.rol = data;
@@ -76,7 +79,8 @@ export class TrabUserComponent implements OnInit {
      this.gerencia = data;
   });
 
-    this.tblData();
+
+
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 20,
@@ -102,6 +106,8 @@ export class TrabUserComponent implements OnInit {
   }
 
   public tblData(){
+
+
     this.tblUsuarios = {};
     this.rest.get('trabUsuarios' , this.token, this.parametros).subscribe(data => {
       this.tblUsuarios = data;
@@ -182,7 +188,7 @@ export class TrabUserComponent implements OnInit {
     let xname :string  = '';
     id                 = this.usuario.getId();
     xname              = this.usuario.getName();
-
+    this.serviLoad.sumar.emit(1);
     let tbl_Usuario  :tblUsuario = new tblUsuario(id , xname  , '' , xidRol , xnombre , xapellido, xfecNac, '' , xReinicio , xActivado, xidGer);
      this.rest.post('upUsuario' , this.token , tbl_Usuario).subscribe(data =>{
         data.forEach((element : any) => {
@@ -196,18 +202,18 @@ export class TrabUserComponent implements OnInit {
 
             if(xReinicio == 'S'){
               let des     = 'El usuario ' + xname + ' fue reiniciado.'
-              let serLog  = new LogSys(1, '' , 3 , 'REINICIO DE USUARIO' , des );
-              this.serLogSys.disparador.emit(serLog);
+              let log     = new LogSys(1, '' , 3 , 'REINICIO DE USUARIO' , des );
+              this.serLog.insLog(log);
             }
 
             if(xActivado == 'D'){
               let des     = 'El usuario ' + xname + ' fue deshabilitado.'
-              let serLog  = new LogSys(1, '' , 4 , 'DESHABILITAR USUARIO' , des);
-              this.serLogSys.disparador.emit(serLog);
+              let log     = new LogSys(1, '' , 4 , 'DESHABILITAR USUARIO' , des);
+              this.serLog.insLog(log);
             }else{
-              let des               = 'El usuario ' + xname + ' fue habilitado.';
-              const serLog : LogSys = new LogSys(1, '' , 5 , 'HABILITAR USUARIO' , des);
-              this.serLogSys.disparador.emit(serLog);
+              let des     = 'El usuario ' + xname + ' fue habilitado.';
+              const log   = new LogSys(1, '' , 5 , 'HABILITAR USUARIO' , des);
+              this.serLog.insLog(log);
             }
 
           }else{

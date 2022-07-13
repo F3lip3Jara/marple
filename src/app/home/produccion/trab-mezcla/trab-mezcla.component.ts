@@ -1,4 +1,5 @@
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { LoadingService } from './../../../servicios/loading.service';
+import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { AlertasService } from './../../../servicios/alertas.service';
 import { ExcelService } from './../../../servicios/excel.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -27,7 +28,7 @@ export class TrabMezclaComponent implements OnInit {
   mezcla       : any;
   mezProd      : any                  = {};
   ver          : string               = '';
-  filtro       : FormGroup;
+  filtro       : UntypedFormGroup;
 
   constructor( private linkService  : LinksService,
                private restService  : RestService,
@@ -35,7 +36,8 @@ export class TrabMezclaComponent implements OnInit {
                private modal        : NgbModal,
                private excel        : ExcelService,
                private servicioAlert: AlertasService,
-               private fb           : FormBuilder){
+               private fb           : UntypedFormBuilder,
+               private serviLoad    : LoadingService){
             this.filtro = fb.group({
               lote_salida : ['']
             });
@@ -73,6 +75,7 @@ export class TrabMezclaComponent implements OnInit {
   }
 
   public tblData(){
+    this.serviLoad.sumar.emit(1);
     this.tblMezcla = {};
 
     this.restService.get('trabMezcla', this.token , this.parametros).subscribe(data =>{
@@ -89,27 +92,25 @@ export class TrabMezclaComponent implements OnInit {
   autorizar(content : any, mezcla: any , tipo : string){
     this.mezProd    = {};
     if(mezcla.estado_control == 'PENDIENTE' && tipo == 'A'){
-
+      this.serviLoad.sumar.emit(1);
       this.mezcla     = mezcla;
       this.ver        = tipo;
-      this.parametros = [{key:'idMez' , value: mezcla.id}];
-
+      this.parametros = [{key:'idMez' , value: mezcla.id}];      
       this.modal.open(content , { size: 'lg' });
-
       this.restService.get('mezclaDet' , this.token, this.parametros).subscribe(data=>{
         this.mezProd = data;
       });
-
     }else{
       if(mezcla.estado_control == 'APROBADA' && tipo == 'A'){
         this.servicioAlert.setAlert('Le Mezcla ya fue autorizada', 'danger');
         this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
       }else{
-        if(mezcla.estado_control == "RECHAZADA"){
+        if(mezcla.estado_control == "RECHAZADA" ){
           this.servicioAlert.setAlert('Le Mezcla ya fue rechazada', 'danger');
           this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
         }else{
             if( tipo == 'V'){
+              this.serviLoad.sumar.emit(1);
               this.mezcla     = mezcla;
               this.ver        = tipo;
               this.parametros = [{key:'idMez' , value: mezcla.id}];
@@ -133,7 +134,6 @@ export class TrabMezclaComponent implements OnInit {
       this.val = true;
         data.forEach((elementx : any)  => {
           if(elementx.error == '0'){
-
             this.tblData();
             setTimeout(()=> {
               this.val= false;
@@ -149,7 +149,6 @@ export class TrabMezclaComponent implements OnInit {
 
   buscar(lote_salida : string){
     if (lote_salida){
-
       this.loading      = true;
       let parm : any[]  = [{key :'lote_salida' ,value: lote_salida} ];
       this.tblMezcla    = {};
@@ -188,10 +187,6 @@ export class TrabMezclaComponent implements OnInit {
           });
         }
     }
-
-    console.log(mezcla);
-
-
   }
 
   confRechazar(mezcla: any , obs : any){

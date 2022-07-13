@@ -1,7 +1,8 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { LinksService } from 'src/app/servicios/links.service';
 import { EtapasdetService } from './../../../servicios/etapasdet.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import { Alert } from 'src/app/model/alert.model';
@@ -28,14 +29,15 @@ export class TrabEtapasComponent implements OnInit {
   carga        : string               = "invisible";
   etapas       : Etapas;
 
-  constructor(private fb: FormBuilder,
-    private servicio : UsersService,
-    private rest : RestService,
-    private modal : NgbModal,
-    private excel: ExcelService,
-    private servicioaler : AlertasService,
-    private etapasser : EtapasdetService,
-    private servicioLink     : LinksService) {
+  constructor(private fb           : UntypedFormBuilder,
+              private servicio     : UsersService,
+              private rest         : RestService,
+              private modal        : NgbModal,
+              private excel        : ExcelService,
+              private servicioaler : AlertasService,
+              private etapasser    : EtapasdetService,
+              private servicioLink : LinksService,
+              private serviLoad    : LoadingService) {
 
       this.token = servicio.getToken();
       this.etapas= new Etapas(0, '' , '');
@@ -66,6 +68,7 @@ export class TrabEtapasComponent implements OnInit {
   }
 
   public tblData(){
+    this.serviLoad.sumar.emit(1);
     this.tblEtapas = {};
     this.rest.get('trabEtapas' , this.token, this.parametros).subscribe(data => {
         this.tblEtapas = data;
@@ -96,10 +99,11 @@ export class TrabEtapasComponent implements OnInit {
     let url      = 'delEtapas';
     this.carga   = 'invisible';
     this.loading = true;
-
+    this.serviLoad.sumar.emit(1);
      this.rest.post(url ,this.token, etapas).subscribe(resp => {
          resp.forEach((elementx : any)  => {
            if(elementx.error == '0'){
+            this.serviLoad.sumar.emit(1);
              this.modal.dismissAll();
              setTimeout(()=>{
                this.servicioaler.setAlert('','');
@@ -136,12 +140,11 @@ export class TrabEtapasComponent implements OnInit {
     }else{
       url = 'insEtapas';
     }
-
+    this.serviLoad.sumar.emit(2);
     this.rest.post(url, this.token, etapasx).subscribe((resp:any) => {
       resp.forEach((elementx : any)  => {
         if(elementx.error == '0'){
           this.modal.dismissAll();
-
           setTimeout(()=>{
             this.tblEtapas = {};
             this.rest.get('trabEtapas' , this.token, this.parametros).subscribe(data => {

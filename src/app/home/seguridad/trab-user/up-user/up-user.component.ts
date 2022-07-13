@@ -1,9 +1,11 @@
+import { LogSysService } from './../../../../servicios/log-sys.service';
+import { LogSys } from './../../../../model/logSys.model';
 import { Alert } from 'src/app/model/alert.model';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-up-user',
@@ -17,14 +19,15 @@ export class UpUserComponent implements OnInit {
   rol             : string  = '';
   imgName         : string  = '';
   previsualizador : any     = null;
-  updUser         : FormGroup;
+  updUser         : UntypedFormGroup;
 
   val             : boolean = false;
 
   constructor(private servicioUser : UsersService ,
               private  rest        : RestService,
-              fgUpdUser            : FormBuilder,
-              private servicioAler : AlertasService) {
+              fgUpdUser            : UntypedFormBuilder,
+              private servicioAler : AlertasService,
+              private serLog        : LogSysService) {
 
     this.token           = this.servicioUser.getToken();
 
@@ -64,7 +67,7 @@ export class UpUserComponent implements OnInit {
    }
   }
 
-  nombreValidator(control: FormControl) : { [s : string] : boolean}  | null{
+  nombreValidator(control: UntypedFormControl) : { [s : string] : boolean}  | null{
     const i = control.value.toString().trim().length;
 
     if(i > 0 && i > 6 && i < 8){
@@ -79,9 +82,13 @@ export class UpUserComponent implements OnInit {
     let param = [{'imgName' : this.previsualizador }];
     this.rest.post('upUsuario2', this.token , param).subscribe(data => {
        data.forEach((element : any) => {
-            if(element.error == '0' ){
+            if(element.error == '0'){
               this.val=false;
               window.location.reload();
+            //  let   des    : string = 'Usuario actualizado ' + empName;
+            //  const log    : LogSys = new LogSys(1, '' , 2 , 'INGRESO DE USUARIO' , des);
+             // this.serLog.insLog(log);
+
             }else{
               this.servicioAler.disparador.emit(this.servicioAler.getAlert());
               setTimeout(()=>{

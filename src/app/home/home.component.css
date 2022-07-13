@@ -1,3 +1,57 @@
 .dropdown-menu{
   display: block !important;
 }
+.main-header {
+  border-bottom:none !important;
+}
+.badge-custom{
+  background-color: #151e3f;
+}
+
+.main-sidebar{
+  border: solid 1px #e0e1e2 !important;
+}
+
+.navbar-white {
+  background-color: #e84f3d;
+  color: #1f2d3d;
+}
+
+.nav-link{
+  color: #fff !important;
+}
+.content-header{
+  position: absolute;
+  left: 0;
+  top: 0.5%;
+  right: 0;
+  height: 300px;
+  background: #eb7263 !important;
+  content: '';
+  border-radius: 12%;
+  opacity: .8;
+  
+}
+
+.content{
+  margin-top: 5%;
+}
+
+.logo{
+  max-width: 170px;
+}
+
+
+
+ /*moviles*/
+ @media only screen
+ and (min-device-width : 768px)
+ and (max-device-width : 1024px)
+ and (-webkit-min-device-pixel-ratio: 1)  { 
+   
+  .content-header{
+    top: 0% !important;
+  }
+ 
+ 
+ }

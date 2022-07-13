@@ -1,6 +1,6 @@
+import { LoadingService } from './../../../servicios/loading.service';
 import { CalJulService } from './../../../servicios/cal-jul.service';
 import * as XLSX from 'xlsx';
-
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { LinksService } from 'src/app/servicios/links.service';
 import { RestService } from 'src/app/servicios/rest.service';
@@ -9,8 +9,10 @@ import { Subject, OperatorFunction } from 'rxjs';
 import { NgbTypeahead, NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ExcelService } from 'src/app/servicios/excel.service';
+import { LogSysService } from 'src/app/servicios/log-sys.service';
+import { LogSys } from 'src/app/model/logSys.model';
 
 @Component({
   selector: 'app-trab-calendario-jul',
@@ -30,8 +32,8 @@ export class TrabCalendarioJulComponent implements OnInit {
   loading      : boolean              = true;
   tblCal       : any                  = {};
   producto     : any                  = {};
-  filtro       : FormGroup;
-  insCal       : FormGroup;
+  filtro       : UntypedFormGroup;
+  insCal       : UntypedFormGroup;
   converJson   : any []               = [] ;
   token        : string               = '';
   parametros   : any []               = [];
@@ -42,23 +44,22 @@ export class TrabCalendarioJulComponent implements OnInit {
   val          : boolean              = false;
   ano                                 = ["2022","2023","2024", "2025" , "2026" , "2027" , "2028","2029", "2030"];
   anox         : any;
+  nombreArch   : string               = 'Seleccione archivo';
 
-  constructor(private servicio    : UsersService ,
-    private servicioget  : RestService,
-    private fb           : FormBuilder,
-    private excel        : ExcelService,
-    private modal        : NgbModal,
-    private servicioLink : LinksService,
-    private servicioAlert: AlertasService ,
-    private servicoCal   : CalJulService,
-    private config       : NgbModalConfig ) {
+  constructor(private servicio     : UsersService ,
+              private servicioget  : RestService,
+              private fb           : UntypedFormBuilder,
+              private excel        : ExcelService,
+              private modal        : NgbModal,
+              private servicioLink : LinksService,
+              private servicioAlert: AlertasService,            
+              private config       : NgbModalConfig,
+              private serviLoad    : LoadingService,
+              private servicioCal   : CalJulService,
+              private serLog       : LogSysService) {
 
       config.backdrop = 'static';
       config.keyboard = false;
-
-
-      this.anox = this.servicoCal.getAno();
-      console.log('1' + this.anox);
 
       this.filtro = fb.group({
               flCalAno : ['']
@@ -68,13 +69,11 @@ export class TrabCalendarioJulComponent implements OnInit {
          calAno : ['',  Validators.compose([
           Validators.required])]
       });
+
       this.token = this.servicio.getToken();
     }
 
-
-
-
-  ngOnInit(): void {
+ ngOnInit(): void {
   this.tblData();
   this.dtOptions = {
       pagingType: 'full_numbers',
@@ -96,6 +95,7 @@ export class TrabCalendarioJulComponent implements OnInit {
           previous: 'Ant.'
         }
       }}
+      this.serviLoad.sumar.emit(1);
   }
 
   public buscar(calAno : string ){
@@ -110,6 +110,8 @@ export class TrabCalendarioJulComponent implements OnInit {
           this.tblCal       = respuesta;
           this.loading      = false;
          });
+
+      this.serviLoad.sumar.emit(1);
     }else{
       this.servicioAlert.setAlert('Debe ingresar un filtro', 'warning');
       this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
@@ -121,17 +123,25 @@ export class TrabCalendarioJulComponent implements OnInit {
 
 
   public tblData(){
-    this.tblCal = {};
-   this.parametros = [{key : 'ano' , value : this.anox}];
-      this.servicioget.get('trabCalJul' , this.token, this.parametros).subscribe(respuesta => {
-        this.tblCal = respuesta;
-      });
-      setTimeout(()=> {
-          this.carga = 'visible';
-          this.loading = false;
-      },3000 );
+   this.tblCal = {};
 
+   this.servicioget.get('busUltAno', this.token , this.parametros).subscribe((rest:any) =>{
+    rest.forEach((element: any) => {
+          this.anox = element.calAno;    
+  });
 
+    this.parametros = [{key : 'ano' , value : this.anox}];
+       this.servicioget.get('trabCalJul' , this.token, this.parametros).subscribe(respuesta => {
+          this.tblCal = respuesta;
+
+          setTimeout(()=> {
+            this.carga = 'visible';
+            this.loading = false;
+        },2000 );
+        });   
+    });
+    
+    
   }
 
   public refrescar(){
@@ -139,7 +149,7 @@ export class TrabCalendarioJulComponent implements OnInit {
     this.carga         = 'invisible';
     this.tblCal   = {};
     this.tblData();
-
+    this.serviLoad.sumar.emit(1);
    }
     public Excel(){
         this.excel.exportAsExcelFile(this.tblCal, 'calendario_juliano');
@@ -151,14 +161,15 @@ export class TrabCalendarioJulComponent implements OnInit {
     }
 
     capturarFile(event : any){
+
+      this.nombreArch  = event.target.value;
+      this.nombreArch  = this.nombreArch.substring(12,33);     
       const selectFile = event.target.files[0];
       const fileReader = new FileReader();
       fileReader.readAsBinaryString(selectFile);
       fileReader.onload = (eventx)=>{
-
         let binaryData  = eventx.target?.result;
         let workBook    = XLSX.read(binaryData , {type:'binary'});
-
         workBook.SheetNames.forEach(sheet => {
           const data = XLSX.utils.sheet_to_json(workBook.Sheets[sheet]);
           this.converJson = data;
@@ -169,7 +180,6 @@ export class TrabCalendarioJulComponent implements OnInit {
     public cargarCal(calAno : any , json : any){
       this.val        = true;
       let validaForm  = 0;
-
       json.some((element:any) =>{
         validaForm = element.Dia;
         try {
@@ -183,23 +193,23 @@ export class TrabCalendarioJulComponent implements OnInit {
     if(validaForm > 0){
       let valCal = [{ 'key' : 'ano' ,'value' : calAno}];
       this.servicioget.get('valCal', this.token, valCal).subscribe((data: any) => {
-
           if(data.length == 0){
+            this.serviLoad.sumar.emit(2);
             this.parametros = [{ 'ano' : calAno ,'detalle' : json}];
             this.servicioget.post('insCalJul', this.token, this.parametros).subscribe(resp => {
                 resp.forEach((elementx : any)  => {
-                  if(elementx.error == '0'){
-                    console.log('aqui');
-                    this.servicoCal.actualAno();
-
+                  if(elementx.error == '0'){                   
                     this.servicioAlert.setAlert('Calendario cargado de manera correcta', 'success');
                     this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
                     this.modal.dismissAll();
-                    this.val= false;
-                    this.anox = this.servicoCal.getAno();
-                    console.log(this.anox + '2');
+                    this.servicioCal.actualAno();
+                    this.val        = false;
+                    this.anox       = calAno;                   
                     this.tblData();
-
+                    this.nombreArch = '';
+                    let des        = 'Carga de calendario juliano' + calAno;
+                    let log        = new LogSys(2, '' , 13 , '	CARGAR CALENDARIO JUL' , des);
+                    this.serLog.insLog(log);
                   }else{
                     this.carga    = 'visible';
                     this.loading  = false;
@@ -207,33 +217,39 @@ export class TrabCalendarioJulComponent implements OnInit {
                   }
                 });
             });
-
-
-
             if(this.anox != ' '){
                this.refrescar();
             }
-
           }else{
+
             var opcion = confirm("Esta seguro de volver a carga el calendario. Ya existe calendario cargado para el año seleccionado");
                 if (opcion == true) {
-                  this.parametros = [{ 'ano' : calAno ,'detalle' : json}];
+                  this.serviLoad.sumar.emit(2);
+                  this.parametros = [{ 'ano' : calAno ,'detalle' : json}];                
                   this.servicioget.post('delCalJul' , this.token , this.parametros).subscribe(resp =>{
                     resp.forEach((elementx : any)  => {
                       if(elementx.error == '0'){
+                        let des         = 'Elimnación de calendario juliano' + calAno;
+                        let log         = new LogSys(2, '' , 13 , '	CARGAR CALENDARIO JUL' , des);
+                        this.serLog.insLog(log);                  
+                        
                         this.servicioget.post('insCalJul', this.token, this.parametros).subscribe(resp => {
                           resp.forEach((elementx : any)  => {
                             if(elementx.error == '0'){
                               this.servicioAlert.setAlert('Calendario cargado de manera correcta', 'success');
                               this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
                               this.modal.dismissAll();
-                              this.val= false;
+                              this.val        = false;
                               this.insCal.reset();
+                              this.nombreArch = '';
+                              let des         = 'Carga de calendario juliano' + calAno;
+                              let log         = new LogSys(2, '' , 13 , '	CARGAR CALENDARIO JUL' , des);
+                              this.serLog.insLog(log);
                             }else{
                               this.carga    = 'visible';
                               this.loading  = false;
                               this.val      = false;
-
+                              
                             }
                           });
                          });

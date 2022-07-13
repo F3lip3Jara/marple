@@ -53,9 +53,18 @@
         </div>
           <div class="form-group">
             <label for="nombre">Rol</label>
-            <div class=" input-group-sm">
+            <div  *ngIf="!roles.length">
+              <div class="spinner-border spinner-border-sm" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <div class="spinner-grow spinner-grow-sm" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+            <div class=" input-group-sm" *ngIf="roles.length > 0">
               <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'rol'>
-                <option  *ngFor = "let roles of rol"  value="{{roles.idRol}}">{{roles.rolDes}}</option>
+                <option  value="">Seleccione</option>
+                <option  *ngFor = "let rol of roles"  value="{{rol.idRol}}">{{rol.rolDes}}</option>
               </select>
             </div>
             <div *ngIf = "insUser.controls['rol'].hasError('required')">
@@ -64,8 +73,17 @@
           </div>
           <div class="form-group">
             <label for="nombre">Gerencia</label>
-            <div class="input-group-sm">
+            <div  *ngIf="!gerencia.length">
+              <div class="spinner-border spinner-border-sm" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <div class="spinner-grow spinner-grow-sm" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+            <div class="input-group-sm" *ngIf="gerencia.length > 0">
               <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'gerencia'>
+                <option  value="">Seleccione</option>
                 <option  *ngFor = "let item of gerencia"   value="{{item.gerId}}">{{item.gerDes}}</option>
               </select>
             </div>

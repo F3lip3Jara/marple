@@ -1,11 +1,14 @@
+import { LoadingService } from './../../../../servicios/loading.service';
 import { Producto } from 'src/app/model/producto.model';
 import { LinksService } from 'src/app/servicios/links.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { LogSysService } from 'src/app/servicios/log-sys.service';
+import { LogSys } from 'src/app/model/logSys.model';
 
 @Component({
   selector: 'app-ins-productos',
@@ -14,7 +17,7 @@ import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 })
 export class InsProductosComponent implements OnInit {
 
-  insProd      : FormGroup;
+  insProd      : UntypedFormGroup;
   loading      : boolean              = true;
   medidas      :any;
   monedas      :any;
@@ -30,11 +33,14 @@ export class InsProductosComponent implements OnInit {
   mensaje      : string               = '';
 
 
-  constructor(private fg: FormBuilder,
-    private servicio : UsersService,
-    private rest : RestService,
-    private servicioaler: AlertasService,
-    private servicioLink : LinksService) {
+  constructor(private fg            : UntypedFormBuilder,
+              private servicio      : UsersService,
+              private rest          : RestService,
+              private servicioaler  : AlertasService,
+              private servicioLink  : LinksService,
+              private serviLoad     : LoadingService,
+              private serLog        : LogSysService
+              ) {
 
       this.medidas       = {};
       this.monedas       = {};
@@ -177,6 +183,7 @@ export class InsProductosComponent implements OnInit {
       });
 
     });
+    this.serviLoad.sumar.emit(4);
   }
 
 
@@ -207,9 +214,13 @@ export class InsProductosComponent implements OnInit {
 
     let producto : Producto  = new Producto(0, prdDes , prdCod , prdObs, '', prdEan , prdTip , prdCost , prdNet , prdBrut , prdInv , prdPes , prdMin , idGrp , idSubGrp , idCol , idMon , idUn )
     this.val                 = true;
+    this.serviLoad.sumar.emit(1);
     this.rest.post('insProducto', this.token, producto).subscribe(resp => {
      resp.forEach((elementx : any)  => {
           if(elementx.error == '0' ){
+            let des        = 'Ingreso material/producto ' + prdCod;
+            let log        = new LogSys(2, '' , 34 , 'INGRESO MATERIAL' , des);
+            this.serLog.insLog(log);    
             this.servicioaler.disparador.emit(this.servicioaler.getAlert());
             setTimeout(()=>{
               const d = 'productos';

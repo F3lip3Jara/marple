@@ -1,0 +1,53 @@
+<div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Log de sistema</h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+          <i class="fas fa-minus"></i></button>
+      </div>
+    </div>
+    <div class="card-body">
+       <div class="loading" *ngIf= "loading" >
+        <img src = "../../../assets/Circles-menu-3.gif">
+       </div>
+  
+   <div>
+    <br>
+    <div class="table-responsive">
+      <div    *ngIf="tblLog?.length > 0" class="{{carga}}">
+        <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Acción</th>
+              <th>Usuario</th>
+              <th>Descripción</th>
+              <th>Fecha / Hora</th>
+             </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor = "let log of tblLog">
+              <td> {{log.idLog}} </td>
+              <td> {{log.lgName}} </td>
+              <td> {{log.lgDes}} </td>
+              <td> {{log.lgDes1}} </td>
+              <td> {{log.created_at}} </td>
+              
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    </div>
+  </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+      Marple
+    </div>
+    <!-- /.card-footer-->
+  </div>
+  
+  
+  
+  
+  

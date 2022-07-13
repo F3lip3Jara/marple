@@ -1,6 +1,10 @@
+import { InsTermoformadoComponent } from './../home/produccion/trab-orden-trabajo/trab-orden-termoformado/ins-termoformado/ins-termoformado.component';
+import { TrabOrdenTermoformadoComponent } from './../home/produccion/trab-orden-trabajo/trab-orden-termoformado/trab-orden-termoformado.component';
+import { UpExtrusionCComponent } from './../home/produccion/trab-extrusion/up-extrusion-c/up-extrusion-c.component';
+import { UpExtrusionOComponent } from './../home/produccion/trab-extrusion/up-extrusion-o/up-extrusion-o.component';
+import { TrabExtrusionComponent } from './../home/produccion/trab-extrusion/trab-extrusion.component';
+import { InsExtrusionComponent } from './../home/produccion/trab-extrusion/ins-extrusion/ins-extrusion.component';
 import { TrabBincorComponent } from './../home/parametros/trab-bincor/trab-bincor.component';
-import { InsExtursionComponent } from './../home/produccion/trab-extursion/ins-extursion/ins-extursion.component';
-import { TrabExtursionComponent } from './../home/produccion/trab-extursion/trab-extursion.component';
 import { InsMezclaComponent } from './../home/produccion/trab-mezcla/ins-mezcla/ins-mezcla.component';
 import { TrabMezclaComponent } from './../home/produccion/trab-mezcla/trab-mezcla.component';
 import { TrabCalendarioJulComponent } from './../home/parametros/trab-calendario-jul/trab-calendario-jul.component';
@@ -36,6 +40,13 @@ import { HttpClient , HttpHeaders, HttpParams  } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Usuario } from "../model/usuario.model";
 import {CookieService} from "ngx-cookie-service";
+import { TrabMovRechazoComponent } from '../home/parametros/trab-mov-rechazo/trab-mov-rechazo.component';
+import { TrabLogComponent } from '../home/seguridad/trab-log/trab-log.component';
+import { TrabModulosComponent } from '../home/seguridad/trab-modulos/trab-modulos.component';
+import { TrabOpcionesComponent } from '../home/seguridad/trab-opciones/trab-opciones.component';
+import { TrabRolesModulosComponent } from '../home/seguridad/trab-roles-modulos/trab-roles-modulos.component';
+import { TrabRolesOpcionesComponent } from '../home/seguridad/trab-roles-opciones/trab-roles-opciones.component';
+import { TrabSubopcionesComponent } from '../home/seguridad/trab-subopciones/trab-subopciones.component';
 
 @Injectable({
   providedIn: "root"
@@ -59,17 +70,32 @@ export class UsersService {
 
   eliminarToken () {
     this.cookies.delete("token");
-
   }
-
+  
   getComponent(link : any) : any{
 
     let miComponent : any ;
 
     switch (link) {
+      case 'modulos':
+        miComponent = TrabModulosComponent;
+        break;
+      case 'opt':
+        miComponent = TrabOpcionesComponent;
+        break;
+      case 'rol_mod':
+        miComponent = TrabRolesModulosComponent;
+        break;
+      case 'rol_opt':
+        miComponent = TrabRolesOpcionesComponent;
+        break;
+      case 'sopt':
+        miComponent = TrabSubopcionesComponent;
+        break;
       case 'users':
         miComponent = TrabUserComponent;
         break;
+
       case 'insUsuario':
         miComponent = InsUserComponent;
         break;
@@ -157,15 +183,32 @@ export class UsersService {
       case 'insMezcla':
         miComponent = InsMezclaComponent;
         break;
-      case 'extursion':
-        miComponent = TrabExtursionComponent;
+      case 'extrusion':
+        miComponent = TrabExtrusionComponent;
         break;
-      case 'insExtur':
-        miComponent = InsExtursionComponent;
+      case 'insExtru':
+        miComponent = InsExtrusionComponent;
+        break;
+      case 'upExtruO':
+        miComponent = UpExtrusionOComponent;
+        break;
+      case 'upExtruC':
+        miComponent = UpExtrusionCComponent;
         break;
       case 'binCol':
         miComponent = TrabBincorComponent;
         break;
+      case 'motivo':
+        miComponent = TrabMovRechazoComponent;
+        break;
+      case 'Ot_Ter':
+        miComponent = TrabOrdenTermoformadoComponent;
+        break;
+      case 'insTermo':
+        miComponent = InsTermoformadoComponent;
+        break;
+      case 'logsys':
+        miComponent = TrabLogComponent;
     }
 
     return miComponent;

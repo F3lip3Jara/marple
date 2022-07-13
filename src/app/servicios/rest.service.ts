@@ -12,16 +12,18 @@ export class RestService {
 
   public get(url:string , token : string , parms : any){
 
-    let headers : HttpHeaders = new HttpHeaders ({"access-token" : token});
-    let parmx : HttpParams = new HttpParams();
+    let headers : HttpHeaders  = new HttpHeaders ({"access-token" : token});
+    let parmx   : HttpParams   = new HttpParams();
     parms.forEach(function (val : any) {
-     parmx =  parmx.set(val.key, val.value);
+     parmx                     =  parmx.set(val.key, val.value);
     });
-    return this.http.get(url , { headers: headers , params: parmx });
+    
+    return this.http.get(url , { headers: headers , params: parmx , reportProgress:true});
+  
   }
 
   public post(url:string , token: string , data : any) : Observable<any> {
     let headers : HttpHeaders = new HttpHeaders ({"access-token" : token , "Content-Type":"application/json"});
-    return this.http.post(url, data, { headers });
+    return this.http.post(url, data, { headers : headers , reportProgress:true });
   }
 }

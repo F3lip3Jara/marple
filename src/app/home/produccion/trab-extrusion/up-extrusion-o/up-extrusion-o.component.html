@@ -1,0 +1,301 @@
+<div class="row" >
+  <div class="col-md-9">
+    <div class="col-md-12">
+      <div class="card card-outline card-primary">
+        <div class="card-header">
+          <h3 class="card-title">Actualizar de Extrusión</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+          <!-- /.card-tools -->
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+          <div class="modal-body">
+            <div class="loading" *ngIf= "loading" >
+              <img src = "../../../assets/Circles-menu-3.gif">
+             </div>
+            <div class="row"  class="{{carga}}">
+              <div class="form-group col-md-4">
+                <label for="">Lote Mezcla</label>
+                <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusionx.lote_mezcla}}"   disabled>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="">Lote Bobina</label>
+                <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusionx.lote_bobina}}"   disabled>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="">Usuario</label>
+                <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusionx.usuario}}"   disabled>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="">Turno</label>
+                <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusionx.turno}}"   disabled>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="">Maquina</label>
+                <input type="text" class="form-control form-control-sm" id="" placeholder="" value="{{extrusionx.maquina}}"   disabled>
+              </div>
+
+            <form  [formGroup] = "inseExt"
+                  (ngSubmit)   = "terminar( inseExt.controls['extAnbob'].value,
+                                            inseExt.controls['extFor'].value,
+                                            inseExt.controls['idEta'].value,
+                                            modalAutoMez)">
+               <div class="col-md-12" *ngIf="isEnabled">
+                <div class="form-group">
+                  <label for="">Ancho Bobina</label>
+                      <input type="text" class="form-control" placeholder="" value="" oninput="this.value = this.value.toUpperCase()" formControlName = 'extAnbob'>
+                </div>
+                <div *ngIf = "inseExt.controls['extAnbob'].hasError('pattern')">
+                  <span class="text-danger">formato incorrecto!</span>
+                </div>
+                <div class="form-group">
+                  <label for="">Formato</label>
+                      <input type="text" class="form-control" placeholder="" value="" oninput="this.value = this.value.toUpperCase()" formControlName = 'extFor'>
+                </div>
+                <div class="form-group">
+                  <label for="">Destino</label>
+                    <div  *ngIf=" !etapas.length ">
+                     <div class="spinner-border spinner-border-sm" role="status">
+                       <span class="sr-only">Loading...</span>
+                     </div>
+                     <div class="spinner-grow spinner-grow-sm" role="status">
+                       <span class="sr-only">Loading...</span>
+                     </div>
+                   </div>
+                    <div class=" input-group-sm" *ngIf="etapas.length > 0">
+                     <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true"  formControlName = idEta >
+                       <option   value="">Seleccione</option>
+                       <option  *ngFor = "let etapa of etapas"  value="{{etapa.idEta}}">{{etapa.etaDes}}</option>
+                     </select>
+                 </div>
+                 <app-sel-producto (onItemAdded) = 'selProducto($event)'></app-sel-producto>
+                </div>
+              <h6>Detalles</h6>
+              <div class="col-md-3">
+                <button type="button" (click)="insOt(modalInsOt)" class="btn btn-danger btn-sm"><i class="fas fa-plus-circle"></i></button>
+              </div>
+              <br>
+              <br>
+              <br>
+              <br>
+              <div class="table-responsive" *ngIf="extrusionDet.length > 0">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                      <tr>
+                          <td>Hora Inicio</td>
+                          <td>Hora Fin</td>
+                          <td>Espesor Izq</td>
+                          <td>Espesor Centro</td>
+                          <td>Espesor Der</td>
+                          <td>Est Operacional</td>
+                          <td>Obs</td>
+                          <td>Acciones</td>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let ext of extrusionDet; let i= index;">
+                          <td>
+                              <span>{{ext.extdHorIni}}</span>
+                          </td>
+                          <td>
+                            <span>{{ext.extdHorFin}}</span>
+                          </td>
+                          <td>
+                            <span>{{ext.extdIzq}}</span>
+                          </td>
+                          <td>
+                            <span>{{ext.extdCen}}</span>
+                          </td>
+                          <td>
+                            <span>{{ext.extdDer}}</span>
+                          </td>
+                          <td *ngIf="ext.extdEst === 'A', else noact">APROBADO</td>
+                              <ng-template #noact> <td>PENDIENTE</td></ng-template>
+                          <td>
+                                <span>{{ext.extdObs}}</span>
+                          </td>
+
+                          <td>
+                              <div *ngIf="ext.extdEst =='P'">
+                                <a style= "margin : 1px ;" (click) = "delPrd(i)"  class="btn btn-warning btn-xs" placeholder="eliminar" ><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
+                              </div>
+                          </td>
+                      </tr>
+                  </tbody>
+                  </table>
+              </div>
+            </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary btn-block" *ngIf="inseExt.valid && extrusionDet.length > 0" [disabled]="val">
+                  <div *ngIf= "val">
+                    Terminando..
+                    <span class="spinner-border spinner-border-sm mr-2"></span>
+                  </div>
+                  <div *ngIf= "!val">
+                    Terminar
+                  </div>
+                </button>
+                 <a href="" (click)="volver()">Volver</a>
+              </div>
+            </form>
+
+           </div>
+
+          </div>
+           <!-- /.card-body -->
+        </div>
+      </div>
+    </div>
+
+</div>
+
+
+<ng-template #modalInsOt let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal ingreso Extrusión</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form
+  [formGroup] = "insdExt"
+  (ngSubmit)  = "modConfirmar(insdExt.controls['extdHorIni'].value ,
+                              insdExt.controls['extdHorFin'].value ,
+                              insdExt.controls['extdEsIzq'].value ,
+                              insdExt.controls['extdEsCen'].value ,
+                              insdExt.controls['extdEsDer'].value,
+                              insdExt.controls['extdObs'].value
+
+              )"
+  >
+  <div class="modal-body" >
+    <div class="row">
+    <div class="col-md-12">
+    <div class="form-group">
+      <label>Hora Inicio</label>
+      <div class="input-group input-group-sm">
+      <ngb-timepicker  [spinners]="spinners" formControlName="extdHorIni"></ngb-timepicker>
+      </div>
+      <div *ngIf = "insdExt.controls['extdHorIni'].hasError('required')">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+   </div>
+   <div class="form-group">
+      <label>Hora Fin</label>
+      <div class="input-group input-group-sm">
+      <ngb-timepicker [spinners]="spinners" formControlName="extdHorFin"></ngb-timepicker>
+      </div>
+      <div *ngIf = "insdExt.controls['extdHorFin'].hasError('required')">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+  </div>
+  <div class="form-group">
+    <label for="">Espesor</label>
+  </div>
+ </div>
+  <hr>
+  <div class="form-group col-md-4">
+    <label for="">Izq</label>
+    <input type="text" class="form-control form-control-sm" id="" placeholder="" value="" formControlName="extdEsIzq"  >
+    <div *ngIf = "insdExt.controls['extdEsIzq'].hasError('required')">
+      <span class="text-danger">Campo obligatorio!</span>
+    </div>
+  </div>
+
+  <div class="form-group col-md-4">
+    <label for="">Centro</label>
+    <input type="text" class="form-control form-control-sm" id="" placeholder="" value=""  formControlName="extdEsCen" >
+    <div *ngIf = "insdExt.controls['extdEsCen'].hasError('required')">
+      <span class="text-danger">Campo obligatorio!</span>
+    </div>
+  </div>
+
+  <div class="form-group col-md-4">
+    <label for="">Der</label>
+    <input type="text" class="form-control form-control-sm" id="" placeholder="" value=""  formControlName="extdEsDer" >
+    <div *ngIf = "insdExt.controls['extdEsDer'].hasError('required')">
+      <span class="text-danger">Campo obligatorio!</span>
+    </div>
+  </div>
+  <div class="form-group col-md-12">
+    <label>Obs</label>
+    <textarea class="form-control" rows="2" placeholder="Observaciones" formControlName="extdObs"></textarea>
+  </div>
+  </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary btn-block" *ngIf="insdExt.valid" [disabled]="val" >
+      <div *ngIf= "val">
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!val">
+        Guardar
+      </div>
+  </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+</ng-template>
+<ng-template #modalAutoMez let-modal>
+  <form [formGroup]="aprobExt" (ngSubmit)="confirmar(aprobExt.controls['extObs'].value,
+                                      aprobExt.controls['extKilApr'].value,
+                                      aprobExt.controls['extKilR'].value)">
+    <div class="modal-header">
+      <h5 class="modal-title">Modal de confirmación Extrusión</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()'>
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="form-group col-md-5">
+          <label for="">Kilos</label>
+          <input type="text" class="form-control form-control-sm" id="" placeholder="" value="" formControlName='extKilApr' >
+          <div *ngIf="aprobExt.controls['extKilApr'].hasError('required')">
+            <span class="text-danger">Campo obligatorio!</span>
+          </div>
+          <div *ngIf="aprobExt.controls['extKilApr'].hasError('pattern')">
+            <span class="text-danger">formato incorrecto!</span>
+          </div>
+        </div>  
+        <div class="form-group col-md-5">
+          <label for="">Kilos Re Proceso</label>
+          <input type="text" class="form-control form-control-sm" id="" placeholder="" value="" formControlName='extKilR'>
+          <div *ngIf="aprobExt.controls['extKilR'].hasError('required')">
+            <span class="text-danger">Campo obligatorio!</span>
+          </div>
+          <div *ngIf="aprobExt.controls['extKilR'].hasError('pattern')">
+            <span class="text-danger">formato incorrecto!</span>
+          </div>
+        </div>
+        <div class="form-group col-md-12">
+          <label>Obs</label>
+          <textarea class="form-control" rows="2" placeholder="" formControlName='extObs'></textarea>
+        </div>
+        <div *ngIf="aprobExt.controls['extObs'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+      </div>
+    </div>    
+    <!-- /.card-body -->    
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary btn-block" *ngIf="aprobExt.valid" [disabled]="val">
+        <div *ngIf="val">
+          Guardando..
+          <span class="spinner-border spinner-border-sm mr-2"></span>
+        </div>
+        <div *ngIf="!val">
+          Guardar
+        </div>
+      </button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+  </form>
+  </ng-template>
+
+
