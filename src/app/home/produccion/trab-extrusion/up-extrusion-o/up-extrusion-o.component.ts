@@ -5,11 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { LinksService } from 'src/app/servicios/links.service';
-<<<<<<< HEAD
-import { Validators, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-=======
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 import { ExtrusionDet } from 'src/app/model/extrusiondet.model';
 import { Component, OnInit } from '@angular/core';
 
@@ -23,11 +19,7 @@ export class UpExtrusionOComponent implements OnInit {
   loading      : boolean              = true;
   carga        : string               = "invisible";
   //insExt       : FormGroup;
-<<<<<<< HEAD
-  inseExt      : UntypedFormGroup;
-=======
   inseExt      : FormGroup;
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   token        : string               = '';
   sacas        : any ;
   parametros   : any []               = [];
@@ -35,11 +27,7 @@ export class UpExtrusionOComponent implements OnInit {
   val          : boolean              = false;
   fechaS       : string               = '';
   config       :any                   = {};
-<<<<<<< HEAD
-  insdExt      : UntypedFormGroup;
-=======
   insdExt      : FormGroup;
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   extrusion    : any;
   extrusionx   : any                  = {};
   extrusionDet : any[]                = [];
@@ -52,21 +40,14 @@ export class UpExtrusionOComponent implements OnInit {
   valJul       : boolean              = false;
   etapas       : any                  = {};
   extTurn      : number               = 0;
-<<<<<<< HEAD
-  aprobExt     :UntypedFormGroup;
-=======
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
+  aprobExt     :FormGroup;
 
 
   constructor( private servicioLink : LinksService ,
                private serviRest    : RestService,
                private servicio     : UsersService,
                private modal        : NgbModal,
-<<<<<<< HEAD
-               private fg           : UntypedFormBuilder ,
-=======
                private fg           : FormBuilder ,
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
                private servicioAlert: AlertasService,
                private serviLoad    : LoadingService,
                private serviExtru   : ExtrusionService
@@ -79,10 +60,6 @@ export class UpExtrusionOComponent implements OnInit {
 
                   this.inseExt = fg.group({
                     extFor    : ['', Validators.compose([
-<<<<<<< HEAD
-=======
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
                     ])],
 
                     extAnbob    :['', Validators.compose([
@@ -96,22 +73,12 @@ export class UpExtrusionOComponent implements OnInit {
                   });
 
                   this.insdExt = fg.group({
-<<<<<<< HEAD
-=======
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
                     extdHorIni    : ['', Validators.compose([
                         Validators.required,
                       ])],
                     extdHorFin : ['', Validators.compose([
                         Validators.required,
-<<<<<<< HEAD
                       ])],
-=======
-
-                      ])],
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
                     extdEsIzq : ['', Validators.compose([
                         Validators.required,
                         Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$'),
@@ -128,7 +95,6 @@ export class UpExtrusionOComponent implements OnInit {
                   ])]
               });
 
-<<<<<<< HEAD
               
               this.aprobExt = fg.group({
                 extObs    : [this.extrusionx.observaciones, Validators.compose([
@@ -144,11 +110,7 @@ export class UpExtrusionOComponent implements OnInit {
               ])],
 
                 });
-
-=======
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
-
-   }
+ }
 
   ngOnInit(): void {
 
@@ -160,10 +122,6 @@ export class UpExtrusionOComponent implements OnInit {
       let extrusion     = data.extrusion;
       this.extrusionDet = data.extrusionDet;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
       extrusion.forEach((element : any) => {
           this.extrusion = element;
           this.producto  = {'idPrd':this.extrusion.extIdPrd , 'prdCod': this.extrusion.extPrdCod , 'prdDes' : this.extrusion.extPrdDes };          this.inseExt.controls['extAnbob'].setValue(this.extrusion.extAnbob);
@@ -181,20 +139,10 @@ export class UpExtrusionOComponent implements OnInit {
     this.serviRest.get('etapasProd' , this.token , this.parametros).subscribe(data =>{
       this.etapas	= data;
   });
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   this.serviLoad.sumar.emit(3);
-
   }
 
-
-
-  selProducto (event : any){
-    console.log(event);
-
+selProducto (event : any){   
     this.producto = event;
   }
 
@@ -216,15 +164,10 @@ export class UpExtrusionOComponent implements OnInit {
   }
 
   modConfirmar(extdHorInix: any , extdHorFinx: any , extdEsIzq:any , extdEsCen:any, extdEsDer:any  , extdObs : any){
-<<<<<<< HEAD
-=======
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
    let horaI     = extdHorInix.hour;
    let horaF     = extdHorFinx.hour;
    let minI      = extdHorInix.minute;
    let minF      = extdHorFinx.minute;
-<<<<<<< HEAD
     if(extdHorInix.hour < 10){
       horaI = '0' + extdHorInix.hour
     }
@@ -233,20 +176,6 @@ export class UpExtrusionOComponent implements OnInit {
     }
     if(extdHorInix.minute  < 10){
       minI = '0' + extdHorInix.minute;
-=======
-
-    if(extdHorInix.hour < 10){
-      horaI = '0' + extdHorInix.hour
-    }
-
-    if(extdHorFinx.hour  < 10){
-      horaF = '0' + extdHorFinx.hour
-    }
-
-    if(extdHorInix.minute  < 10){
-      minI = '0' + extdHorInix.minute;
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     }
     if(extdHorFinx.minute  < 10){
       minF = '0' + extdHorFinx.minute;
@@ -257,11 +186,9 @@ export class UpExtrusionOComponent implements OnInit {
     this.extrusionDet.push(extrusionDet);
     this.modal.dismissAll()
     this.insdExt.reset();
-<<<<<<< HEAD
     //console.log(this.extrusionDet);
-
   }
-
+  
   terminar(extAnbob : any , extFor : any , idEta : any , content:any){
       this.parametros = [];
       this.serviLoad.sumar.emit(1);
@@ -269,33 +196,14 @@ export class UpExtrusionOComponent implements OnInit {
       this.val = true;
       this.parametros  = [{'extAnbob' : extAnbob , 'extFor' : extFor , 'idExt': this.idExt , 'extrusionDet' : this.extrusionDet , 'idEta' : idEta , 'producto' : this.producto} ];   
       this.serviRest.post('insConfirmaO', this.token , this.parametros).subscribe(data=>{       
-=======
-    console.log(this.extrusionDet);
-
-  }
-
-  terminar(extAnbob : any , extFor : any , idEta : any){
-      this.parametros = [];
-      this.serviLoad.sumar.emit(1);
-      console.log(this.producto);
-
-      this.parametros  = [{'extAnbob' : extAnbob , 'extFor' : extFor , 'idExt': this.idExt , 'extrusionDet' : this.extrusionDet , 'idEta' : idEta , 'producto' : this.producto} ] ;
-      this.serviRest.post('insConfirmaO', this.token , this.parametros).subscribe(data=>{
-        this.val = true;
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
         data.forEach((elementx : any)  => {
             if(elementx.error == '0'){
               this.servicioAlert.setAlert('Extrusión caragada manera correcta', 'success');
               this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
               setTimeout(()=> {
                 this.val= false;
-<<<<<<< HEAD
-                this.modal.dismissAll();               
-               this.modal.open(content);
-=======
                 this.modal.dismissAll();
                 this.servicioLink.disparador.emit('extrusion');
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
                 },1000 );
             }else{
               this.carga    = 'visible';
@@ -303,7 +211,6 @@ export class UpExtrusionOComponent implements OnInit {
               this.val      = false;
             }
           });
-<<<<<<< HEAD
       });
   }
   confirmar(extObs :any,extKilApr:any,extKilR:any){
@@ -324,12 +231,4 @@ export class UpExtrusionOComponent implements OnInit {
         this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
     });
   }
-=======
-
-      });
-  }
-
-
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 }

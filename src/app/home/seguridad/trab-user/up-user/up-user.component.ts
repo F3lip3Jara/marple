@@ -5,7 +5,7 @@ import { AlertasService } from 'src/app/servicios/alertas.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormControl } from '@angular/forms';
+import {   Validators,  FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-up-user',
@@ -19,17 +19,12 @@ export class UpUserComponent implements OnInit {
   rol             : string  = '';
   imgName         : string  = '';
   previsualizador : any     = null;
-  updUser         : UntypedFormGroup;
-
+  updUser         : FormGroup;
   val             : boolean = false;
 
   constructor(private servicioUser : UsersService ,
               private  rest        : RestService,
-<<<<<<< HEAD
-              fgUpdUser            : UntypedFormBuilder,
-=======
-              fgUpdUser            : FormBuilder,
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
+               fgUpdUser    : FormBuilder,
               private servicioAler : AlertasService,
               private serLog        : LogSysService) {
 
@@ -53,8 +48,6 @@ export class UpUserComponent implements OnInit {
         this.imgName  = element.imgName;
       });
     });
-
-
   }
 
   capturarFile (event : any){
@@ -70,17 +63,7 @@ export class UpUserComponent implements OnInit {
      console.log(e);
    }
   }
-
-  nombreValidator(control: UntypedFormControl) : { [s : string] : boolean}  | null{
-    const i = control.value.toString().trim().length;
-
-    if(i > 0 && i > 6 && i < 8){
-      return { "invalidNombre" : true};
-    }
-
-    return null;
-  }
-
+  
   public guardar( ){
     this.val        = true;
     let param = [{'imgName' : this.previsualizador }];

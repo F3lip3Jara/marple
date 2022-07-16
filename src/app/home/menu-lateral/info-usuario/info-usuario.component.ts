@@ -69,16 +69,10 @@ export class InfoUsuarioComponent implements OnInit {
   ngOnInit(): void {
     let  usuariox : any ;
 
-<<<<<<< HEAD
     this.rest.get('getUsuario' , this.token, this.parametros).subscribe(respuesta  => {
      usuariox = respuesta;    
 
      Object.values(respuesta).forEach(element=>{
-=======
-    this.rest.get('getUsuario' , this.token, this.parametros).subscribe(respuesta => {
-     usuariox = respuesta;
-      Object.values(respuesta).forEach(element=>{
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
         this.usuario  = element.name;
         this.rol      = element.rolDes;
         this.imgName  = element.imgName;

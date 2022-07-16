@@ -5,11 +5,7 @@ import { LinksService } from './../../../../servicios/links.service';
 import { ExcelService } from './../../../../servicios/excel.service';
 import { RestService } from './../../../../servicios/rest.service';
 import { UsersService } from './../../../../servicios/users.service';
-<<<<<<< HEAD
-import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
-=======
 import { FormGroup, FormBuilder } from '@angular/forms';
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, OperatorFunction, Observable, merge } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
@@ -21,26 +17,18 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
   styleUrls: ['./trab-orden-termoformado.component.css']
 })
 export class TrabOrdenTermoformadoComponent implements OnInit {
-
-
   @ViewChild(DataTableDirective, {static: false})
   datatableElement?: DataTableDirective;
   @ViewChild("orpNumRea")  orpNumRea? : ElementRef;
-
   @ViewChild('instance', {static: true}) instance?: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
-
 
   dtOptions    : DataTables.Settings  = {} ;
   loading      : boolean              = true;
   tblOrdenPrd  : any                  = {};
   producto     : any                  = {};
-<<<<<<< HEAD
-  filtroOp     : UntypedFormGroup;
-=======
   filtroOp     : FormGroup;
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   token        : string               = '';
   parametros   : any []               = [];
   statesx      : any                  ;
@@ -57,11 +45,7 @@ export class TrabOrdenTermoformadoComponent implements OnInit {
 
   constructor(private servicio     : UsersService ,
               private servicioget  : RestService,
-<<<<<<< HEAD
-              private fb           : UntypedFormBuilder,
-=======
               private fb           : FormBuilder,
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               private excel        : ExcelService,
               private servicioLink : LinksService,
               private servicioAlert: AlertasService,
@@ -72,10 +56,7 @@ export class TrabOrdenTermoformadoComponent implements OnInit {
 
                 });
                 this.token = this.servicio.getToken();
-
-
                 }
-
                 search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) => {
                   const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
                   const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance?.isPopupOpen()));
@@ -187,7 +168,4 @@ export class TrabOrdenTermoformadoComponent implements OnInit {
     this.servicioTarea.setExtrusion(termoformado);
     this.servicioLink.disparador.emit('insTermo');
   }
-
-
-
 }

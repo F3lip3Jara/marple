@@ -1,7 +1,7 @@
 import { LoadingService } from './../../../servicios/loading.service';
 import { Moneda } from './../../../model/moneda.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -33,26 +33,18 @@ export class TrabMonedasComponent implements OnInit {
   moneda       : Moneda;
   validCod     : boolean              = false;
   dato         : number               = 0;
-  insMon       : UntypedFormGroup;
-  upMon        : UntypedFormGroup;
+  insMon       : FormGroup;
+  upMon        : FormGroup;
   val          : boolean              = false;
 
-<<<<<<< HEAD
-  constructor(private fb          : UntypedFormBuilder,
-=======
   constructor(private fb          : FormBuilder,
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               private servicio    : UsersService,
               private rest        : RestService,
               private modal       : NgbModal,
               private servicioaler: AlertasService,
               private excel       : ExcelService,
-<<<<<<< HEAD
               private serviLoad   : LoadingService,
               private serLog      : LogSysService) {
-=======
-              private serviLoad   : LoadingService) {
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
       this.token    = this.servicio.getToken();
       this.moneda = new Moneda(0, '' , '');

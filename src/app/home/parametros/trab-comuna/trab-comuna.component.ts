@@ -2,7 +2,7 @@ import { LoadingService } from './../../../servicios/loading.service';
 import { Comuna } from './../../../model/comuna.model';
 import { Region } from 'src/app/model/region.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -32,18 +32,14 @@ export class TrabComunaComponent implements OnInit {
   regiones     : any;
   paises       : any;
   comuna       : Comuna;
-  insComuna    : UntypedFormGroup;
-  updComuna    : UntypedFormGroup;
+  insComuna    : FormGroup;
+  updComuna    : FormGroup;
   val          : boolean              = false;
   dato         : number               = 0;
   validCod     : boolean              = false;
   ciudades     : any;
 
-<<<<<<< HEAD
-  constructor(private fb            : UntypedFormBuilder,
-=======
   constructor(private fb            : FormBuilder,
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               private servicio      : UsersService,
               private rest          : RestService,
               private modal         : NgbModal,

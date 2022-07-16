@@ -9,7 +9,7 @@ import { Subject, OperatorFunction } from 'rxjs';
 import { NgbTypeahead, NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { LogSysService } from 'src/app/servicios/log-sys.service';
 import { LogSys } from 'src/app/model/logSys.model';
@@ -32,8 +32,8 @@ export class TrabCalendarioJulComponent implements OnInit {
   loading      : boolean              = true;
   tblCal       : any                  = {};
   producto     : any                  = {};
-  filtro       : UntypedFormGroup;
-  insCal       : UntypedFormGroup;
+  filtro       : FormGroup;
+  insCal       : FormGroup;
   converJson   : any []               = [] ;
   token        : string               = '';
   parametros   : any []               = [];
@@ -46,10 +46,9 @@ export class TrabCalendarioJulComponent implements OnInit {
   anox         : any;
   nombreArch   : string               = 'Seleccione archivo';
 
-<<<<<<< HEAD
   constructor(private servicio     : UsersService ,
               private servicioget  : RestService,
-              private fb           : UntypedFormBuilder,
+              private fb           : FormBuilder,
               private excel        : ExcelService,
               private modal        : NgbModal,
               private servicioLink : LinksService,
@@ -58,18 +57,6 @@ export class TrabCalendarioJulComponent implements OnInit {
               private serviLoad    : LoadingService,
               private servicioCal   : CalJulService,
               private serLog       : LogSysService) {
-=======
-  constructor(private servicio    : UsersService ,
-              private servicioget  : RestService,
-              private fb           : FormBuilder,
-              private excel        : ExcelService,
-              private modal        : NgbModal,
-              private servicioLink : LinksService,
-              private servicioAlert: AlertasService ,
-              private servicoCal   : CalJulService,
-              private config       : NgbModalConfig,
-              private serviLoad    : LoadingService ) {
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
       config.backdrop = 'static';
       config.keyboard = false;
@@ -163,10 +150,6 @@ export class TrabCalendarioJulComponent implements OnInit {
     this.tblCal   = {};
     this.tblData();
     this.serviLoad.sumar.emit(1);
-<<<<<<< HEAD
-=======
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
    }
     public Excel(){
         this.excel.exportAsExcelFile(this.tblCal, 'calendario_juliano');
@@ -242,11 +225,7 @@ export class TrabCalendarioJulComponent implements OnInit {
             var opcion = confirm("Esta seguro de volver a carga el calendario. Ya existe calendario cargado para el año seleccionado");
                 if (opcion == true) {
                   this.serviLoad.sumar.emit(2);
-<<<<<<< HEAD
                   this.parametros = [{ 'ano' : calAno ,'detalle' : json}];                
-=======
-                  this.parametros = [{ 'ano' : calAno ,'detalle' : json}];
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
                   this.servicioget.post('delCalJul' , this.token , this.parametros).subscribe(resp =>{
                     resp.forEach((elementx : any)  => {
                       if(elementx.error == '0'){

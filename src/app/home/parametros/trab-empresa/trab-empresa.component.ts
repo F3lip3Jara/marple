@@ -3,11 +3,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RestService } from './../../../servicios/rest.service';
 import { UsersService } from './../../../servicios/users.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormBuilder } from '@angular/forms';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { DataTableDirective } from 'angular-datatables';
 import { AlertasService } from 'src/app/servicios/alertas.service';
-import { Alert } from 'src/app/model/alert.model';
 
 @Component({
   selector: 'app-trab-empresa',
@@ -27,11 +25,7 @@ export class TrabEmpresaComponent implements OnInit {
   carga        : string               = "invisible";
 
 
-<<<<<<< HEAD
-  constructor(private fb           : UntypedFormBuilder,
-=======
-  constructor(private fb           : FormBuilder,
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
+  constructor(
               private servicio     : UsersService,
               private rest         : RestService,
               private modal        : NgbModal,

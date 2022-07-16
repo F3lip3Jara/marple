@@ -1,6 +1,6 @@
 import { LoadingService } from './../../../servicios/loading.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Ciudad } from './../../../model/ciudad.model';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
@@ -33,17 +33,13 @@ export class TrabCiudadComponent implements OnInit {
   paises       : any;
   comunas      : any;
   ciudad       : Ciudad;
-  insCiudad    : UntypedFormGroup;
-  updCiudad    : UntypedFormGroup;
+  insCiudad    : FormGroup;
+  updCiudad    : FormGroup;
   val          : boolean              = false;
   dato         : number               = 0;
   validCod     : boolean              = false;
 
-<<<<<<< HEAD
-  constructor(private fb          : UntypedFormBuilder,
-=======
   constructor(private fb          : FormBuilder,
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               private servicio    : UsersService,
               private rest        : RestService,
               private modal       : NgbModal,

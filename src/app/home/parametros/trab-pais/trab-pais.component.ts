@@ -5,7 +5,7 @@ import { UsersService } from './../../../servicios/users.service';
 import { Pais } from './../../../model/pais.model';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -30,15 +30,11 @@ export class TrabPaisComponent implements OnInit {
   pais         : Pais;
   validCod     : boolean              = false;
   dato         : number               = 0;
-  insPais      : UntypedFormGroup;
-  upPais       : UntypedFormGroup;
+  insPais      : FormGroup;
+  upPais       : FormGroup;
   val          : boolean              = false;
 
-<<<<<<< HEAD
-  constructor(private fb          : UntypedFormBuilder,
-=======
   constructor(private fb          : FormBuilder,
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               private servicio    : UsersService,
               private rest        : RestService,
               private modal       : NgbModal,

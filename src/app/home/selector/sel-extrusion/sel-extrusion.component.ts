@@ -11,19 +11,11 @@ import * as $ from 'jquery';
 export class SelExtrusionComponent implements OnInit {
 
   extrusiones  : any;
-<<<<<<< HEAD
   carga        : string                = "";
   dtOptions    : DataTables.Settings   = {};
   parametros   : any []                = [];
   token        : string                = '';
   extLotSal    : string                = '';
-=======
-  carga        : string               = "";
-  dtOptions    : DataTables.Settings  = {} ;
-  parametros   : any []               = [];
-  token        :string                = '';
-  extLotSal    :string                = '';
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
 
   @Output() onItemAdded: EventEmitter<any>;
@@ -74,12 +66,8 @@ export class SelExtrusionComponent implements OnInit {
 
   cambio(extrusion : any){
     this.onItemAdded.emit(extrusion);
-<<<<<<< HEAD
     //$("#modal").hide();
     $("#modal .close").click();
-=======
-    $("#modal").hide();
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     this.extLotSal = extrusion.extLotSal;
     return false;
   }

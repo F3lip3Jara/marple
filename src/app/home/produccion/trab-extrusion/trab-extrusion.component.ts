@@ -5,11 +5,7 @@ import { ExcelService } from 'src/app/servicios/excel.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
-<<<<<<< HEAD
-import { UntypedFormGroup, UntypedFormBuilder, Validators, FormControl } from '@angular/forms';
-=======
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 import { LinksService } from './../../../servicios/links.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -28,22 +24,13 @@ export class TrabExtrusionComponent implements OnInit {
   carga        : string              = "invisible";
   model        : any;
   val          : boolean              = false;
-<<<<<<< HEAD
-  filtro       : UntypedFormGroup;
-  rechExt      : UntypedFormGroup;
-=======
   filtro       : FormGroup;
   rechExt      : FormGroup;
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   extProd      : any                  = {};
   extrusion    : any                  = {};
   ver          : string               = '';
   rechazo      : any                  = {};
-<<<<<<< HEAD
-  aprobExt     :UntypedFormGroup;
-=======
   aprobExt     :FormGroup;
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   isEnabled    : boolean              = true;
 
   constructor(private linkService  : LinksService,
@@ -52,11 +39,7 @@ export class TrabExtrusionComponent implements OnInit {
               private modal        : NgbModal,
               private excel        : ExcelService,
               private servicioAlert: AlertasService,
-<<<<<<< HEAD
-              private fb           : UntypedFormBuilder,
-=======
               private fb           : FormBuilder,
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               private servicioExtru: ExtrusionService,
               private serviLoad    : LoadingService
                       ) {
@@ -71,43 +54,14 @@ export class TrabExtrusionComponent implements OnInit {
                       ])],
                     idMot : ['', Validators.compose([
                          Validators.required,
-<<<<<<< HEAD
                      ])]
             });
-=======
-                     ])],
-                     extKilR : ['', Validators.compose([
-                      Validators.required,
-                      Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$'),
-                      ])],
-                      extKilApr : ['', Validators.compose([
-                        Validators.required,
-                        Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$'),
-                    ])]
-
-                    });
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
              this.aprobExt = fb.group({
                       extObs    : ['', Validators.compose([
                         Validators.required,
-<<<<<<< HEAD
                       ])]
             });
-=======
-                        ])],
-                        extKilApr : ['', Validators.compose([
-                           Validators.required,
-                           Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$'),
-                       ])],
-                       extKilR : ['', Validators.compose([
-                        Validators.required,
-                        Validators.pattern('^-?[0-9]\\d*(\\.\\d{1,2})?$'),
-                    ])],
-
-                      });
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
           this.token = userService.getToken();
   }
@@ -118,10 +72,6 @@ export class TrabExtrusionComponent implements OnInit {
       pagingType: 'full_numbers',
       pageLength: 50,
       lengthMenu : [20,50,100, 200],
-<<<<<<< HEAD
-=======
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
       processing: true,
       language: {
         emptyTable: '',
@@ -138,10 +88,6 @@ export class TrabExtrusionComponent implements OnInit {
           previous: 'Ant.'
         }
       }}
-<<<<<<< HEAD
-=======
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   }
 
   public tblData(){
@@ -152,20 +98,12 @@ export class TrabExtrusionComponent implements OnInit {
 
     this.restService.get('trabExtrusion', this.token , this.parametros).subscribe(data =>{
       this.tblExtrusion = data;
-<<<<<<< HEAD
-=======
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     });
 
      setTimeout(()=> {
         this.carga = 'visible';
         this.loading = false;
      },3000 );
-<<<<<<< HEAD
-=======
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
      this.serviLoad.sumar.emit(2);
   }
 
@@ -203,14 +141,6 @@ export class TrabExtrusionComponent implements OnInit {
   autorizar(content : any, extrusion: any , tipo : string){
     this.extProd       = {};
     this.isEnabled     = true;
-<<<<<<< HEAD
-=======
-    this.aprobExt.controls['extObs'].setValue(extrusion.observaciones);
-    this.aprobExt.controls['extKilR'].setValue(extrusion.kilos_repro);
-    this.aprobExt.controls['extKilApr'].setValue(extrusion.kilos);
-
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     if(extrusion.estado_control == 'PENDIENTE' && tipo == 'A'){
       this.isEnabled     = false;
       this.serviLoad.sumar.emit(1);
@@ -244,24 +174,13 @@ export class TrabExtrusionComponent implements OnInit {
      }
     }
   }
-<<<<<<< HEAD
   confirmar(extrusion: any, extObs: any ){
     let parm   = {id: extrusion.id , extObs : extObs};
-=======
-  confirmar(extrusion: any, extObs: any , extKilApr : any , extKilR : any){
-
-    let parm   = {id: extrusion.id , extObs : extObs , extKilApr : extKilApr , extKilR : extKilR};
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     this.serviLoad.sumar.emit(1);
     this.restService.post('confExtru' , this.token, parm).subscribe(data => {
       this.val = true;
         data.forEach((elementx : any)  => {
           if(elementx.error == '0'){
-<<<<<<< HEAD
-=======
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
             this.tblData();
             setTimeout(()=> {
               this.val= false;
@@ -280,10 +199,7 @@ export class TrabExtrusionComponent implements OnInit {
     if(extrusion.estado_control == 'APROBADA'){
       this.servicioAlert.setAlert('Le Mezcla ya fue autorizada', 'danger');
       this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
-    }else{
-<<<<<<< HEAD
-     
-       
+    }else{      
         if(extrusion.estado_control == 'PENDIENTE'){
            if(tipo == 'O'){
               this.servicioExtru.setExtrusion(extrusion);
@@ -303,41 +219,22 @@ export class TrabExtrusionComponent implements OnInit {
               }
             }
         }     
-=======
-      if(tipo == 'O'){
-        this.servicioExtru.setExtrusion(extrusion);
-        this.linkService.disparador.emit('upExtruO');
-      }else{
-        this.servicioExtru.setExtrusion(extrusion);
-        this.linkService.disparador.emit('upExtruC');
-      }
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     }
    }
 
 
    rechazar(content : any , extrusion: any ){
     this.extrusion    = {};
-<<<<<<< HEAD
     this.rechExt.controls['extObs'].setValue(extrusion.observaciones);
     if(extrusion.estado_control == 'PENDIENTE'){
       this.val           = true
       this.extrusion     = extrusion;
       this.parametros    = [{key:'idExt' , value: extrusion.id}];
-=======
-
-    if(extrusion.estado_control == 'PENDIENTE'){
-      this.extrusion     = extrusion;
-      this.parametros = [{key:'idExt' , value: extrusion.id}];
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
       this.modal.open(content , { size: 'lg' });
       this.serviLoad.sumar.emit(1);
       this.restService.get('extDet' , this.token, this.parametros).subscribe(data=>{
         this.extProd = data;
-<<<<<<< HEAD
         this.val     = false;
-=======
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
       });
 
     }else{
@@ -353,13 +250,8 @@ export class TrabExtrusionComponent implements OnInit {
      }
     }
 
-<<<<<<< HEAD
   rechExtrusion(idMot : any , extObs: any ){
     let extrusion = {'id': this.extrusion.id , 'idMot': idMot ,  'extObs': extObs};
-=======
-  rechExtrusion(idMot : any , extObs: any , extKilR: any , extKilApr: any){
-    let extrusion = {'id': this.extrusion.id , 'idMot': idMot ,  'extObs': extObs, 'extKilR': extKilR , 'extKilApr': extKilApr};
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     this.val      = true;
     this.serviLoad.sumar.emit(1);
       this.restService.post('rechaExtru' , this.token, extrusion).subscribe(data =>{
@@ -376,12 +268,6 @@ export class TrabExtrusionComponent implements OnInit {
         });
         this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
     });
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   }
 
 }

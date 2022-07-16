@@ -62,7 +62,6 @@ import { TrabMovRechazoComponent } from './home/parametros/trab-mov-rechazo/trab
 import { TrabOrdenTermoformadoComponent } from './home/produccion/trab-orden-trabajo/trab-orden-termoformado/trab-orden-termoformado.component';
 import { InsTermoformadoComponent } from './home/produccion/trab-orden-trabajo/trab-orden-termoformado/ins-termoformado/ins-termoformado.component';
 import { SelExtrusionComponent } from './home/selector/sel-extrusion/sel-extrusion.component';
-<<<<<<< HEAD
 import { MenuLateralModuleComponent } from './home/menu-lateral/menu-lateral-module/menu-lateral-module.component';
 import { MenuLateralSubmoduleComponent } from './home/menu-lateral/menu-lateral-module/menu-lateral-submodule/menu-lateral-submodule.component';
 import { TrabModulosComponent } from './home/seguridad/trab-modulos/trab-modulos.component';
@@ -70,9 +69,6 @@ import { TrabOpcionesComponent } from './home/seguridad/trab-opciones/trab-opcio
 import { TrabRolesModulosComponent } from './home/seguridad/trab-roles-modulos/trab-roles-modulos.component';
 import { TrabRolesOpcionesComponent } from './home/seguridad/trab-roles-opciones/trab-roles-opciones.component';
 import { TrabSubopcionesComponent } from './home/seguridad/trab-subopciones/trab-subopciones.component';
-=======
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
 
 const routes: Routes = [
@@ -139,7 +135,6 @@ const routes: Routes = [
     TrabOrdenTermoformadoComponent,
     InsTermoformadoComponent,
     SelExtrusionComponent,
-<<<<<<< HEAD
     MenuLateralModuleComponent,
     MenuLateralSubmoduleComponent,
     TrabModulosComponent,
@@ -147,11 +142,7 @@ const routes: Routes = [
     TrabRolesModulosComponent,
     TrabRolesOpcionesComponent,
     TrabSubopcionesComponent,
-  
-=======
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
-
-  ],
+    ],
   imports: [
     FormsModule,
     ReactiveFormsModule,

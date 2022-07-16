@@ -191,10 +191,6 @@ export class InsMezclaComponent implements OnInit {
                 if(element.prdTip =='B'){
                   valBase        = 0;
                 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
             });
             console.log(valBase);
             if(valBase == 1){
@@ -368,11 +364,7 @@ export class InsMezclaComponent implements OnInit {
   }
 
   confirmar(etapa : any , mezKil : any){
-<<<<<<< HEAD
     this.val = true;
-
-=======
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     this.mezcla?.setEta(etapa);
     this.mezcla?.setmezdKil(mezKil);
     this.serviRest.post('insMezcla', this.token, this.mezcla).subscribe(resp=>{

@@ -1,7 +1,7 @@
 import { LoadingService } from './../../../../servicios/loading.service';
 import { LinksService } from './../../../../servicios/links.service';
 import { Proveedor } from './../../../../model/proveedor.model';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
@@ -16,7 +16,7 @@ import { LogSys } from 'src/app/model/logSys.model';
   styleUrls: ['./ins-proveedores.component.css']
 })
 export class InsProveedoresComponent implements OnInit {
-  insProv      : UntypedFormGroup;
+  insProv      : FormGroup;
   regiones     : any;
   comunas      : any;
   paises       : any;
@@ -29,21 +29,13 @@ export class InsProveedoresComponent implements OnInit {
   valRut       : boolean              = false;
   mensaje      : string               = '';
 
-<<<<<<< HEAD
-  constructor( private fg                 : UntypedFormBuilder,
-=======
   constructor( private fg                 : FormBuilder,
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               private servicio            : UsersService,
               private rest                : RestService,
               private servicioaler        : AlertasService,
               private servicioLink        : LinksService,
-<<<<<<< HEAD
               private serviLoad           : LoadingService,
               private serLog              : LogSysService
-=======
-              private serviLoad           : LoadingService
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   ) {
 
   this.insProv = fg.group({
@@ -237,6 +229,4 @@ public volver():boolean{
     this.servicioLink.disparador.emit(d);
     return false;
   }
-
-
 }

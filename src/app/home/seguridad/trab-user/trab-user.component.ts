@@ -7,7 +7,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
 import { Component,  OnInit,  ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder,  FormGroup,  Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
@@ -34,7 +34,7 @@ export class TrabUserComponent implements OnInit {
   fileToUpload?   : File;
   usuario         : tblUsuario           = new tblUsuario (0 , '', '','','','','','','','', '') ;
   valGuar         : boolean              = false;
-  udpUser         : UntypedFormGroup;
+  udpUser         : FormGroup;
 
   constructor(
     private servicio        : UsersService,
@@ -43,11 +43,8 @@ export class TrabUserComponent implements OnInit {
     private excel           : ExcelService,
     private modal           : NgbModal,
     private alertas         : AlertasService,
-<<<<<<< HEAD
-    fgUpUser                : UntypedFormBuilder,
-=======
     fgUpUser                : FormBuilder,
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
+
     private serLog          : LogSysService,
     private serviLoad       : LoadingService
     ) {
@@ -73,11 +70,7 @@ export class TrabUserComponent implements OnInit {
 
   ngOnInit(): void {
     this.serviLoad.sumar.emit(3);
-<<<<<<< HEAD
     this.tblData();
-=======
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
     this.rest.get('trabRoles', this.token , this.parametros).subscribe(data => {
       this.rol = data;
@@ -88,12 +81,6 @@ export class TrabUserComponent implements OnInit {
   });
 
 
-<<<<<<< HEAD
-=======
-    this.tblData();
-
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
     this.dtOptions = {
       pagingType: 'full_numbers',

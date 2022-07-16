@@ -8,7 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormBuilder } from '@angular/forms';
+
 import { DataTableDirective } from 'angular-datatables';
 import { ExcelService } from 'src/app/servicios/excel.service';
 
@@ -35,11 +35,7 @@ export class TrabEtapaDetalleComponent implements OnInit {
 
 
 
-<<<<<<< HEAD
-  constructor(private fb           : UntypedFormBuilder,
-=======
-  constructor(private fb           : FormBuilder,
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
+  constructor(
               private servicio     : UsersService,
               private rest         : RestService,
               private modal        : NgbModal,

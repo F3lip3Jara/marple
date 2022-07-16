@@ -1,7 +1,7 @@
 import { LoadingService } from './../../../servicios/loading.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -31,17 +31,13 @@ export class TrabRegionComponent implements OnInit {
   carga        : string               = "invisible";
   region       : Region;
   paises       : any                  ={};
-  insRegion    : UntypedFormGroup;
-  upRegion     : UntypedFormGroup;
+  insRegion    : FormGroup;
+  upRegion     : FormGroup;
   val          : boolean              = false;
   dato         : number               = 0;
   validCod     : boolean              = false;
 
-<<<<<<< HEAD
-  constructor(private fb          : UntypedFormBuilder,
-=======
   constructor(private fb          : FormBuilder,
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               private servicio    : UsersService,
               private rest        : RestService,
               private modal       : NgbModal,

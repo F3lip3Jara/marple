@@ -4,7 +4,7 @@ import { LinksService } from 'src/app/servicios/links.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { LogSysService } from 'src/app/servicios/log-sys.service';
@@ -17,7 +17,7 @@ import { LogSys } from 'src/app/model/logSys.model';
 })
 export class InsProductosComponent implements OnInit {
 
-  insProd      : UntypedFormGroup;
+  insProd      : FormGroup;
   loading      : boolean              = true;
   medidas      :any;
   monedas      :any;
@@ -33,21 +33,13 @@ export class InsProductosComponent implements OnInit {
   mensaje      : string               = '';
 
 
-<<<<<<< HEAD
-  constructor(private fg            : UntypedFormBuilder,
-=======
   constructor(private fg            : FormBuilder,
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               private servicio      : UsersService,
               private rest          : RestService,
               private servicioaler  : AlertasService,
               private servicioLink  : LinksService,
-<<<<<<< HEAD
               private serviLoad     : LoadingService,
               private serLog        : LogSysService
-=======
-              private serviLoad     : LoadingService
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               ) {
 
       this.medidas       = {};
