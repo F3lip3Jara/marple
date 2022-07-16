@@ -1,5 +1,4 @@
 import { LoadingService } from './../../../servicios/loading.service';
-
 import { Proveedor } from './../../../model/proveedor.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LinksService } from 'src/app/servicios/links.service';
@@ -53,12 +52,8 @@ export class TrabProveedoresComponent implements OnInit {
     private fg              : UntypedFormBuilder,
     private router          : Router,
     private serProveedor    : ProveedoresService,
-<<<<<<< HEAD
     private serviLoad       : LoadingService,
     private serLog          : LogSysService
-=======
-    private serviLoad       : LoadingService
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     )
      {
     this.token = this.servicio.getToken();

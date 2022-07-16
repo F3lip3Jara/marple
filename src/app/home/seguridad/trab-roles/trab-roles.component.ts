@@ -38,11 +38,7 @@ export class TrabRolesComponent implements OnInit {
     private modal         : NgbModal,
     private excel         : ExcelService,
     private servicioaler  : AlertasService,
-<<<<<<< HEAD
     private serLog        : LogSysService,
-=======
-    private serLogSys     : LogSysService,
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     private serviLoad     : LoadingService
     ) {
       this.token = this.servicio.getToken();
@@ -135,10 +131,6 @@ export class TrabRolesComponent implements OnInit {
               const log  : LogSys    = new LogSys(1, '' , idEtaDes, lgDes  , des);
               this.serLog.insLog(log);
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
             },1500);
         }else {
           this.carga    = 'visible';
@@ -155,10 +147,6 @@ export class TrabRolesComponent implements OnInit {
      let url      = 'delRoles';
      this.carga   = 'invisible';
      this.loading = true;
-<<<<<<< HEAD
-
-=======
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
      this.serviLoad.sumar.emit(1);
       this.rest.post(url ,this.token, rol).subscribe(resp => {
           resp.forEach((elementx : any)  => {
@@ -173,20 +161,11 @@ export class TrabRolesComponent implements OnInit {
                 this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
                   dtInstance.destroy().draw();
                 });
-<<<<<<< HEAD
                 this.carga     = 'visible';
                 this.loading   = false;
                 let des        = 'Rol ' + rol.rolDes + ' fue eliminado.'
                 let log        = new LogSys(1, '' , 8 , 'ELIMINAR ROL' , des);
                 this.serLog.insLog(log);
-=======
-                this.carga    = 'visible';
-                this.loading  = false;
-                let des     = 'Rol ' + rol.rolDes + ' fue eliminado.'
-                let serLog  = new LogSys(1, '' , 8 , 'ELIMINAR ROL' , des);
-
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               },1500);
             }else{
               this.carga    = 'visible';

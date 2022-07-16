@@ -1,9 +1,7 @@
 import { LoadingService } from './../../../servicios/loading.service';
-<<<<<<< HEAD
-import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
-=======
+
 import { FormGroup, FormBuilder } from '@angular/forms';
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
+
 import { AlertasService } from './../../../servicios/alertas.service';
 import { ExcelService } from './../../../servicios/excel.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -32,7 +30,7 @@ export class TrabMezclaComponent implements OnInit {
   mezcla       : any;
   mezProd      : any                  = {};
   ver          : string               = '';
-  filtro       : UntypedFormGroup;
+  filtro       : FormGroup;
 
   constructor( private linkService  : LinksService,
                private restService  : RestService,
@@ -40,11 +38,7 @@ export class TrabMezclaComponent implements OnInit {
                private modal        : NgbModal,
                private excel        : ExcelService,
                private servicioAlert: AlertasService,
-<<<<<<< HEAD
-               private fb           : UntypedFormBuilder,
-=======
                private fb           : FormBuilder,
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
                private serviLoad    : LoadingService){
             this.filtro = fb.group({
               lote_salida : ['']
@@ -99,11 +93,6 @@ export class TrabMezclaComponent implements OnInit {
 
   autorizar(content : any, mezcla: any , tipo : string){
     this.mezProd    = {};
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     if(mezcla.estado_control == 'PENDIENTE' && tipo == 'A'){
       this.serviLoad.sumar.emit(1);
       this.mezcla     = mezcla;

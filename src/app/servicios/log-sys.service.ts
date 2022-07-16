@@ -11,26 +11,12 @@ export class LogSysService {
 
   constructor(private rest          : RestService,
               private servicioUser  : UsersService){
-<<<<<<< HEAD
   }
 
   public insLog(log : LogSys){
     this.token           = this.servicioUser.getToken();
     this.rest.post('insLogSys', this.token, log).subscribe(data =>{
     });
-=======
-
-
-  }
-
-
-  public insLog(log : LogSys){
-    this.token           = this.servicioUser.getToken();
-    this.rest.post('insLogSys', this.token, log).subscribe(data =>{
-
-    });
-
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
   }
 
 }

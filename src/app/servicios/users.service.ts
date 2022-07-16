@@ -41,15 +41,12 @@ import { Observable } from "rxjs";
 import { Usuario } from "../model/usuario.model";
 import {CookieService} from "ngx-cookie-service";
 import { TrabMovRechazoComponent } from '../home/parametros/trab-mov-rechazo/trab-mov-rechazo.component';
-<<<<<<< HEAD
 import { TrabLogComponent } from '../home/seguridad/trab-log/trab-log.component';
 import { TrabModulosComponent } from '../home/seguridad/trab-modulos/trab-modulos.component';
 import { TrabOpcionesComponent } from '../home/seguridad/trab-opciones/trab-opciones.component';
 import { TrabRolesModulosComponent } from '../home/seguridad/trab-roles-modulos/trab-roles-modulos.component';
 import { TrabRolesOpcionesComponent } from '../home/seguridad/trab-roles-opciones/trab-roles-opciones.component';
 import { TrabSubopcionesComponent } from '../home/seguridad/trab-subopciones/trab-subopciones.component';
-=======
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
 @Injectable({
   providedIn: "root"
@@ -196,17 +193,12 @@ export class UsersService {
         miComponent = UpExtrusionOComponent;
         break;
       case 'upExtruC':
-<<<<<<< HEAD
         miComponent = UpExtrusionCComponent;
-=======
-        miComponent = UpExtrusionCComponent
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
         break;
       case 'binCol':
         miComponent = TrabBincorComponent;
         break;
       case 'motivo':
-<<<<<<< HEAD
         miComponent = TrabMovRechazoComponent;
         break;
       case 'Ot_Ter':
@@ -217,16 +209,6 @@ export class UsersService {
         break;
       case 'logsys':
         miComponent = TrabLogComponent;
-=======
-          miComponent = TrabMovRechazoComponent;
-          break;
-      case 'Ot_Ter':
-          miComponent = TrabOrdenTermoformadoComponent;
-          break;
-      case 'insTermo':
-          miComponent = InsTermoformadoComponent;
-          break;
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
     }
 
     return miComponent;

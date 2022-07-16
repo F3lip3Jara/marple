@@ -6,7 +6,7 @@ import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators'
 import { Observable, OperatorFunction, merge } from 'rxjs';
 import { Subject } from 'rxjs';
 import { NgbTypeahead, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -34,12 +34,12 @@ export class TrabProductosComponent implements OnInit {
   loading      : boolean              = true;
   tblProductos : any                  = {};
   producto     : any                  = {};
-  filtroPrd    : UntypedFormGroup;
+  filtroPrd    : FormGroup;
   token        : string               = '';
   parametros   : any []               = [];
   statesx      : any                  ;
   states       : string[]             = [];
-  upPrd        : UntypedFormGroup             ;
+  upPrd        : FormGroup             ;
   carga        : string              = "invisible";
   model        : any;
 
@@ -47,11 +47,7 @@ export class TrabProductosComponent implements OnInit {
   constructor(private servicio     : UsersService ,
               private servicioget  : RestService,
               private modal        : NgbModal,
-<<<<<<< HEAD
-              private fb           : UntypedFormBuilder,
-=======
               private fb           : FormBuilder,
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
               private excel        : ExcelService,
               private servicioLink : LinksService,
               private servicioAlert: AlertasService,

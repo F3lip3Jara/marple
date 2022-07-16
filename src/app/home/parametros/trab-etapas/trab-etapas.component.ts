@@ -2,10 +2,8 @@ import { LoadingService } from './../../../servicios/loading.service';
 import { LinksService } from 'src/app/servicios/links.service';
 import { EtapasdetService } from './../../../servicios/etapasdet.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormBuilder } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
-import { Alert } from 'src/app/model/alert.model';
 import { Etapas } from 'src/app/model/etapas.model';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
@@ -29,11 +27,7 @@ export class TrabEtapasComponent implements OnInit {
   carga        : string               = "invisible";
   etapas       : Etapas;
 
-<<<<<<< HEAD
-  constructor(private fb           : UntypedFormBuilder,
-=======
-  constructor(private fb           : FormBuilder,
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
+  constructor(
               private servicio     : UsersService,
               private rest         : RestService,
               private modal        : NgbModal,

@@ -20,20 +20,10 @@ export interface MensajesSystem{
 })
 export class InterceptorsErrorService implements HttpInterceptor  {
 
-<<<<<<< HEAD
 
 //private servidor: string = 'https://www.marpleapp.agileti.cl/';
 //private servidor: string = 'https://www.marpleappuser.agileti.cl/';
 private servidor: string = 'http://127.0.0.1:8000/';
-=======
-private servidor: string = 'https://marpleapp.agileticl.com/';
-//private servidor: string = 'https://marpleuserapp.agileticl.com/';
-//private servidor: string = 'http://127.0.0.1:8000/';
-
-//Nuevo servidor
-
-//private servidor: string = 'https://marpleapp.agileti.cl/';
->>>>>>> 3a629026ca5e04e1d05975795fe6b23bf253a8dd
 
 //Nuevo servidor
 
